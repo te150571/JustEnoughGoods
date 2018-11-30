@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button30"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="45dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:background="@color/colorPrimary"
+        android:text="設定を初期化"
+        app:layout_constraintBottom_toTopOf="@+id/button32"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/button32"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="51dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:background="@color/colorPrimary"
+        android:text="戻る"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</android.support.constraint.ConstraintLayout>

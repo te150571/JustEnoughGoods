@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/button22"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="70dp"
+        android:background="@color/colorPrimary"
+        android:text="残量通知ライン設定"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/button23"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:text="異常検知ライン設定"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button22" />
+
+    <Button
+        android:id="@+id/button24"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:text="親機・子機設定"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button23" />
+
+    <Button
+        android:id="@+id/button25"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:text="設定を初期化"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button24" />
+
+    <Button
+        android:id="@+id/button26"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="110dp"
+        android:layout_marginStart="110dp"
+        android:layout_marginTop="40dp"
+        android:background="@color/colorPrimary"
+        android:text="戻る"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button25" />
+</android.support.constraint.ConstraintLayout>

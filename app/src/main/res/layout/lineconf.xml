@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="17dp"
+        android:layout_marginTop="24dp"
         android:text="子機6"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp"
+        android:layout_marginTop="24dp"
         android:text="子機5"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="21dp"
+        android:layout_marginTop="24dp"
         android:text="子機4"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
@@ -47,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="24dp"
         android:text="子機3"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
@@ -59,7 +59,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="24dp"
         android:text="子機2"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
@@ -71,21 +71,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="38dp"
+        android:layout_marginTop="24dp"
         android:text="子機1"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/title"
         android:layout_width="291dp"
         android:layout_height="47dp"
-        android:layout_marginStart="51dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="42dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="47dp"
+        android:layout_marginBottom="24dp"
         android:gravity="center"
         android:text="残量通知ライン設定"
         android:textColor="@color/colorPrimary"
@@ -96,30 +96,27 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/button23"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="51dp"
+        android:layout_marginStart="48dp"
         android:layout_marginTop="24dp"
-        android:layout_marginEnd="114dp"
-        android:layout_marginBottom="39dp"
+        android:layout_marginBottom="24dp"
         android:text="設定完了"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBar24" />
 
     <Button
-        android:id="@+id/button5"
+        android:id="@+id/button24"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="43dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="24dp"
         android:text="取り消し"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button4"
         app:layout_constraintTop_toBottomOf="@+id/progressBar24" />
 
     <ProgressBar
@@ -127,23 +124,19 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="230dp"
         android:layout_height="28dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="22dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView23"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <ProgressBar
         android:id="@+id/progressBar20"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="230dp"
         android:layout_height="30dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="22dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView24"
         app:layout_constraintTop_toBottomOf="@+id/progressBar19" />
 
     <ProgressBar
@@ -151,11 +144,9 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="229dp"
         android:layout_height="28dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView25"
         app:layout_constraintTop_toBottomOf="@+id/progressBar20" />
 
     <ProgressBar
@@ -163,11 +154,9 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="229dp"
         android:layout_height="24dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="19dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView31"
         app:layout_constraintTop_toBottomOf="@+id/progressBar21" />
 
     <ProgressBar
@@ -175,11 +164,9 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="229dp"
         android:layout_height="27dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView32"
         app:layout_constraintTop_toBottomOf="@+id/progressBar22" />
 
     <ProgressBar
@@ -187,11 +174,9 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="229dp"
         android:layout_height="29dp"
-        android:layout_marginStart="65dp"
-        android:layout_marginTop="17dp"
-        android:layout_marginEnd="23dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView33"
         app:layout_constraintTop_toBottomOf="@+id/progressBar23" />
 
 </android.support.constraint.ConstraintLayout>

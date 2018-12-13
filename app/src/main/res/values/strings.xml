@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">JustEnoughGoods</string>
+
+
+    <string name="chargecheck_child1_title">子機1</string>
+    <string name="chargecheck_child2_title">子機2</string>
+    <string name="chargecheck_child3_title">子機3</string>
+    <string name="chargecheck_child4_title">子機4</string>
+    <string name="chargecheck_child5_title">子機5</string>
+    <string name="chargecheck_child6_title">子機6</string>
+
+    <string name="return_button">戻る</string>
+    <string name="chargecheck_title">残量チェック</string>
+
 </resources>

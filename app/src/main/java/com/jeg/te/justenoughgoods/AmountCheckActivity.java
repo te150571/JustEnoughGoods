@@ -64,7 +64,7 @@ public class AmountCheckActivity extends Activity{
      */
     // 残量画面表示
     private void displayCheckAmount(){
-        setContentView(R.layout.amount_check);
+        setContentView(R.layout.amount_view);
 
         // GUIアイテム設定
     }

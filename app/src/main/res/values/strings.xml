@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">JustEnoughGoods</string>]
+    <string name="app_name_log">JustEnoughGoods ログ確認</string>
+    <string name="app_name_amount_config">JustEnoughGoods 残量通知設定</string>
+    <string name="app_name_slaves_config">JustEnoughGoods 子機登録名設定</string>
+    <string name="app_name_fail_config">JustEnoughGoods 子機異常通知設定</string>
+    <string name="app_name_raspberry_config">JustEnoughGoods 親機設定</string>
 
     <!-- common -->
     <string name="notification">通知</string>

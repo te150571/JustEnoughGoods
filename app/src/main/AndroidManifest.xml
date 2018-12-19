@@ -21,30 +21,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LogViewActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".AmountConfigurationActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".SlavesConfigurationActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".FailConfigurationActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".RaspberryConfigurationActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name=".BluetoothDeviceListActivity"
-            android:label="@string/app_name" >
-        </activity>
+        <activity android:name=".LogViewActivity"></activity>
+        <activity android:name=".AmountConfigurationActivity"></activity>
+        <activity android:name=".SlavesConfigurationActivity"></activity>
+        <activity android:name=".FailConfigurationActivity"></activity>
+        <activity android:name=".RaspberryConfigurationActivity"></activity>
+        <activity android:name=".BluetoothDeviceListActivity"></activity>
     </application>
 
 </manifest>

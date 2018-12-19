@@ -12,7 +12,7 @@ public class AmountCheckActivity extends Activity{
         super.onCreate(savedInstanceState);
 
         // タイトル設定
-        setTitle("Just Enough Goods");
+        setTitle(R.string.app_name);
         // メイン画面表示
         displayCheckAmount();
     }

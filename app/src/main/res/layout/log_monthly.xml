@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AmountCheckActivity">
+
+    <TextView
+        android:id="@+id/textView_title"
+        android:layout_width="291dp"
+        android:layout_height="47dp"
+        android:layout_marginStart="47dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:text="@string/log_monthly"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <Button
+        android:id="@+id/bt_logPrevious"
+        android:layout_width="122dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="220dp"
+        android:text="@string/log_previous"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_logNext"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="220dp"
+        android:layout_marginEnd="48dp"
+        android:text="@string/log_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_logRecently"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/log_recently"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logPrevious"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="46dp" />
+
+    <Button
+        android:id="@+id/bt_logYearly"
+        android:layout_width="124dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="@string/log_yearly"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logNext"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="212dp" />
+
+    <Button
+        android:id="@+id/bt_logBack"
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logYearly"
+        tools:ignore="MissingConstraints" />
+
+</android.support.constraint.ConstraintLayout>

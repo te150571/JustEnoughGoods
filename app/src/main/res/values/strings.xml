@@ -1,7 +1,20 @@
 <resources>
-    <string name="app_name">JustEnoughGoods</string>
+    <string name="app_name">JustEnoughGoods</string>]
 
+    <!-- common -->
+    <string name="notification">通知</string>
+    <string name="done">完了</string>
+    <string name="cancel">取り消して戻る</string>
+    <string name="back">戻る</string>
+    <string name="slave">子機</string>
 
+    <!-- main -->
+    <string name="main_amount">最新の残量状況を見る</string>
+    <string name="main_log">過去のログ</string>
+    <string name="copy">Copyright©JEG.Co.Ltd</string>
+
+    <!-- amount -->
+    <string name="amount_title">残量チェック</string>
     <string name="chargecheck_child1_title">子機1</string>
     <string name="chargecheck_child2_title">子機2</string>
     <string name="chargecheck_child3_title">子機3</string>
@@ -9,7 +22,30 @@
     <string name="chargecheck_child5_title">子機5</string>
     <string name="chargecheck_child6_title">子機6</string>
 
-    <string name="return_button">戻る</string>
-    <string name="chargecheck_title">残量チェック</string>
+    <!-- logs -->
+    <string name="log_recently">最近</string>
+    <string name="log_monthly">月間</string>
+    <string name="log_yearly">年間</string>
+    <string name="log_previous">前</string>
+    <string name="log_next">次</string>
+
+    <!-- menu -->
+    <string name="config_title">設定</string>
+    <string name="title_log">過去ログ</string>
+    <string name="config_amount">残量通知設定</string>
+    <string name="config_slaves">子機登録名設定</string>
+    <string name="config_fail">子機異常通知設定</string>
+    <string name="config_raspberry">親機設定</string>
+    <string name="config_initialize">設定を初期化</string>
+
+    <!-- config-slaves -->
+    <string name="config_slaves_interval">計測間隔設定</string>
+    <string name="config_slaves_label">子機登録名設定</string>
+    <string name="config_slaves_management">子機追加・削除</string>
+
+    <!-- config-fail -->
+    <string name="fail_title">子機異常通知設定</string>
+    <string name="comm_disruption">通信途絶通知</string>
+    <string name="abnormal_weight">重量異常通知</string>
 
 </resources>

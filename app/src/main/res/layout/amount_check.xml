@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".AmountCheckActivity">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/textView_title"
         android:layout_width="291dp"
         android:layout_height="47dp"
         android:layout_marginStart="47dp"
@@ -15,7 +15,7 @@
         android:layout_marginEnd="46dp"
         android:layout_marginBottom="24dp"
         android:gravity="center"
-        android:text="@string/chargecheck_title"
+        android:text="@string/amount_title"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/subchild1"
@@ -34,7 +34,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
         tools:ignore="MissingConstraints" />
 
     <TextView
@@ -102,21 +102,6 @@
         app:layout_constraintTop_toBottomOf="@+id/subchild5"
         tools:ignore="MissingConstraints" />
 
-    <Button
-        android:id="@+id/button4"
-        android:layout_width="216dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="24dp"
-        android:text="@string/return_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/childbar6"
-        tools:ignore="MissingConstraints" />
-
 
     <ProgressBar
         android:id="@+id/childbar1"
@@ -126,7 +111,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="52dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
         tools:ignore="MissingConstraints" />
 
     <ProgressBar

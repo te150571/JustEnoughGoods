@@ -4,32 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
-
-    <Button
-        android:id="@+id/button17"
-        android:layout_width="216dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="47dp"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginBottom="24dp"
-        android:text="戻る"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button15"
-        tools:ignore="MissingConstraints" />
+    tools:context=".AmountCheckActivity">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/textView_title"
         android:layout_width="291dp"
         android:layout_height="47dp"
         android:layout_marginStart="47dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="46dp"
         android:gravity="center"
-        android:text="年間ログ閲覧"
+        android:text="@string/log_yearly"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,25 +22,40 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button15"
+        android:id="@+id/bt_logRecently"
         android:layout_width="122dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="220dp"
-        android:text="直近データ"
+        android:layout_marginTop="292dp"
+        android:text="@string/log_recently"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
         tools:ignore="MissingConstraints" />
 
     <Button
-        android:id="@+id/button16"
+        android:id="@+id/bt_logMonthly"
         android:layout_width="124dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="220dp"
+        android:layout_marginTop="292dp"
         android:layout_marginEnd="48dp"
-        android:text="月間データ"
+        android:text="@string/log_monthly"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title"
+        app:layout_constraintTop_toBottomOf="@+id/textView_title"
+        tools:ignore="MissingConstraints" />
+
+    <Button
+        android:id="@+id/bt_logBack"
+        android:layout_width="216dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="27dp"
+        android:text="@string/back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/bt_logRecently"
         tools:ignore="MissingConstraints" />
 
 

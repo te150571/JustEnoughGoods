@@ -9,12 +9,12 @@
     <string name="slave">子機</string>
 
     <!-- main -->
-    <string name="main_amount">最新の残量状況を見る</string>
-    <string name="main_log">過去のログ</string>
+    <string name="main_amount">最新の残量状況を見る</string> <!-- 不要（？） -->
+    <string name="main_log">過去のログ</string> <!-- 不要（？） -->
     <string name="copy">Copyright©JEG.Co.Ltd</string>
 
     <!-- amount -->
-    <string name="amount_title">残量チェック</string>
+    <string name="amount_title">残量確認</string>
     <string name="chargecheck_child1_title">子機1</string>
     <string name="chargecheck_child2_title">子機2</string>
     <string name="chargecheck_child3_title">子機3</string>
@@ -39,13 +39,33 @@
     <string name="config_initialize">設定を初期化</string>
 
     <!-- config-slaves -->
-    <string name="config_slaves_interval">計測間隔設定</string>
+    <string name="config_slaves_interval">計測間隔設定</string> <!-- 不要（？） -->
     <string name="config_slaves_label">子機登録名設定</string>
-    <string name="config_slaves_management">子機追加・削除</string>
+    <string name="config_slaves_management">子機追加・削除</string> <!-- 不要（？） -->
 
     <!-- config-fail -->
     <string name="fail_title">子機異常通知設定</string>
     <string name="comm_disruption">通信途絶通知</string>
     <string name="abnormal_weight">重量異常通知</string>
+
+    <!-- Bluetooth トースト用 -->
+    <string name="bluetooth_is_not_supported">Bluetooth is not supported.</string>
+    <string name="bluetooth_is_not_working">Bluetooth is not working.</string>
+
+    <!-- Bluetooth 接続用 -->
+    <string name="search">Search</string>
+
+    <!-- Bluetooth ラベル用 -->
+    <string name="device_name">Device Name : </string>
+    <string name="device_address">Device Address : </string>
+    <string name="connect">Connect</string>
+    <string name="disconnect">Disconnect</string>
+
+    <!-- BluetoothDeviceListActivity トースト用 -->
+    <string name="unknown_device">Unknown device</string>
+
+    <!-- BluetoothDeviceListActivity メニュー用 -->
+    <string name="scan">Scan</string>
+    <string name="stop">Stop</string>
 
 </resources>

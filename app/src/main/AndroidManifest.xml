@@ -41,6 +41,10 @@
             android:name=".RaspberryConfigurationActivity"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name=".BluetoothDeviceListActivity"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

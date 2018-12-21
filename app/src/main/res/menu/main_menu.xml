@@ -3,25 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/menu_item_log"
-        android:title="@string/title_log"
-        android:orderInCategory="100"/>
-    <item
-        android:id="@+id/menu_item_amount_config"
-        android:title="@string/config_amount"
-        android:orderInCategory="101"/>
-    <item
-        android:id="@+id/menu_item_slaves_config"
-        android:title="@string/config_slaves"
-        android:orderInCategory="102"/>
-    <item
-        android:id="@+id/menu_item_fail_config"
-        android:title="@string/config_fail"
-        android:orderInCategory="103"/>
-    <item
         android:id="@+id/menu_item_raspberry_config"
         android:title="@string/config_raspberry"
-        android:orderInCategory="104"/>
+        android:orderInCategory="100"/>
     <item
         android:id="@+id/menu_item_init_config"
         android:title="@string/config_initialize"

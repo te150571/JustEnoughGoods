@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Widget.AppCompat.ActionBar">
-        <activity android:name=".AmountCheckActivity">
+        <activity android:name=".AmountViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,7 +23,7 @@
         </activity>
         <activity android:name=".LogViewActivity"></activity>
         <activity android:name=".AmountConfigurationActivity"></activity>
-        <activity android:name=".SlavesConfigurationActivity"></activity>
+        <activity android:name=".SlaveConfigurationActivity"></activity>
         <activity android:name=".FailConfigurationActivity"></activity>
         <activity android:name=".RaspberryConfigurationActivity"></activity>
         <activity android:name=".BluetoothDeviceListActivity"></activity>

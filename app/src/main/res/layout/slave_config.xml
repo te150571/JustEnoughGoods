@@ -236,7 +236,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="12sp"
                     android:gravity="center"
-                    android:text="@string/slave_config_fault_now_status" />
+                    android:text="@string/slave_config_fault_now_status_ok" />
             </LinearLayout>
 
             <LinearLayout

@@ -1,8 +1,8 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">JustEnoughGoods</string>
-    <string name="app_name_log_monthly">JustEnoughGoods ログ確認（月間）</string>
-    <string name="app_name_log_yearly">JustEnoughGoods ログ確認（年間）</string>
+    <string name="app_name_log_monthly">JustEnoughGoods 月間ログ</string>
+    <string name="app_name_log_yearly">JustEnoughGoods 年間ログ</string>
     <string name="app_name_slave_configuration">JustEnoughGoods 子機設定</string>
     <string name="app_name_amount_config">JustEnoughGoods 残量通知設定</string> <!-- 不要（？） -->
     <string name="app_name_fail_config">JustEnoughGoods 子機異常通知設定</string> <!-- 不要（？） -->
@@ -33,11 +33,15 @@
     <string name="chargecheck_child6_title">子機6</string> <!-- 不要（？） -->
 
     <!-- logs -->
+    <string name="log_title">ラベル名</string> <!-- 表示テスト用 -->
+    <string name="log_back">一覧へ戻る</string>
     <string name="log_recently">最近</string> <!-- 不要（？） -->
     <string name="log_monthly">月間</string>
     <string name="log_yearly">年間</string>
-    <string name="log_previous">前</string>
-    <string name="log_next">次</string>
+    <string name="log_previous">前の月</string>
+    <string name="log_next">次の月</string>
+    <string name="sine_wave">Sine Wave</string>
+    <string name="pi_label">%1$dπ</string>
 
     <!-- menu -->
     <string name="config_title">設定</string> <!-- 不要（？） -->
@@ -59,7 +63,8 @@
     <string name="slave_config_notification_amount">通知する残量(g)</string>
     <string name="slave_config_notification_amount_hint">100</string>
     <string name="slave_config_fault_now">現在の状態</string>
-    <string name="slave_config_fault_now_status">不具合通知無し</string><!-- 表示テスト用 -->
+    <string name="slave_config_fault_now_status_ok">不具合通知なし</string>
+    <string name="slave_config_fault_now_status_ng">不具合通知あり</string>
     <string name="slave_config_fault_notification_toggle">不具合通知</string>
 
     <!-- Preset List -->

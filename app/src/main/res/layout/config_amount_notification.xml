@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".AmountViewActivity">
 
+    <!-- 未使用レイアウト -->
+
     <TextView
         android:id="@+id/textView_title"
         android:layout_width="291dp"

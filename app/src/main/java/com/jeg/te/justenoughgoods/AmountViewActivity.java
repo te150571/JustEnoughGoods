@@ -8,6 +8,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toolbar;
 
 public class AmountViewActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
     private SlavesListAdapter slavesListAdapter;    // リストビューの内容
@@ -64,13 +65,14 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
     // 画面表示
     private void displayCheckAmount(){
-        setContentView(R.layout.amount_view);
+        setContentView(R.layout.amount_list);
+        setActionBar((Toolbar) findViewById(R.id.toolbar_main));
 
         // GUIアイテム設定
         // リストビューの設定
         slavesListAdapter = new SlavesListAdapter( this ); // ビューアダプターの初期化
         ListView listView = findViewById( R.id.listView_slavesAmount);    // リストビューの取得
-        listView.setAdapter( slavesListAdapter );    // リストビューにビューアダプターをセット
+        listView.setAdapter( slavesListAdapter ); // リストビューにビューアダプターをセット
         listView.setOnItemClickListener( this ); // クリックリスナーオブジェクトのセット
         listView.setOnItemLongClickListener( this ); // ロングクリックリスナーオブジェクトのセット
 

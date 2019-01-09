@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".AmountViewActivity">
 
+    <!-- 未使用レイアウト -->
+
     <Button
         android:id="@+id/bt_slaveAdd"
         android:layout_width="wrap_content"

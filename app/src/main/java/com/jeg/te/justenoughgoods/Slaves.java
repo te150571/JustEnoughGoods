@@ -1,17 +1,17 @@
 package com.jeg.te.justenoughgoods;
 
 public class Slaves {
-    private String cId;
+    private String sId;
     private String name;
     private Double amount;
     private Double notificationAmount;
-    private Integer amountNotificationFlag;
+    private Integer amountNotificationEnable;
     private Integer failFlag;
     private Integer failNotificationFlag;
-    private String recentDate;
+    private Long lastUpdate;
 
-    public String getCId() {
-        return cId;
+    public String getSId() {
+        return sId;
     }
 
     public String getName() {
@@ -26,8 +26,8 @@ public class Slaves {
         return notificationAmount;
     }
 
-    public Integer getAmountNotificationFlag() {
-        return amountNotificationFlag;
+    public Integer getAmountNotificationEnable() {
+        return amountNotificationEnable;
     }
 
     public Integer getFailFlag() {
@@ -38,12 +38,12 @@ public class Slaves {
         return failNotificationFlag;
     }
 
-    public String getRecentDate() {
-        return recentDate;
+    public Long getLastUpdate() {
+        return lastUpdate;
     }
 
-    public void setCId(String cId) {
-        this.cId = cId;
+    public void setSId(String sId) {
+        this.sId = sId;
     }
 
     public void setAmount(Double amount) {
@@ -58,8 +58,8 @@ public class Slaves {
         this.notificationAmount = notificationAmount;
     }
 
-    public void setAmountNotificationFlag(Integer amountNotificationFlag) {
-        this.amountNotificationFlag = amountNotificationFlag;
+    public void setAmountNotificationEnable(Integer amountNotificationEnable) {
+        this.amountNotificationEnable = amountNotificationEnable;
     }
 
     public void setFailFlag(Integer failFlag) {
@@ -70,7 +70,7 @@ public class Slaves {
         this.failNotificationFlag = failNotificationFlag;
     }
 
-    public void setRecentDate(String recentDate) {
-        this.recentDate = recentDate;
+    public void setLastUpdate(Long lastUpdate) {
+        this.lastUpdate = lastUpdate;
     }
 }

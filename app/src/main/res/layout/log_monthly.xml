@@ -12,86 +12,69 @@
         android:id="@+id/toolbar_logMonthly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"></Toolbar>
+        android:background="@color/colorPrimary" />
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="10dp" />
 
-    <TextView
-        android:id="@+id/textView_logTitleYearly"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="20sp"
-        android:text="@string/log_title" />
+        android:orientation="horizontal">
 
-    <ScrollView
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/bt_logPrevious"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/log_previous" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/textView_logMonthNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:text="@string/log_month_num" />
+
+        <Space
+            android:layout_width="20dp"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/bt_logNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/log_next" />
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp">
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <LinearLayout
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_StaticLineGraph"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical" >
+            android:layout_height="match_parent" />
 
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart_StaticLineGraph"
-                android:layout_width="match_parent"
-                android:layout_height="300dp" />
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <Space
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/bt_logPrevious"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/log_previous" />
-
-                <Space
-                    android:layout_width="50dp"
-                    android:layout_height="match_parent" />
-
-                <Button
-                    android:id="@+id/bt_logNext"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/log_next" />
-
-                <Space
-                    android:layout_width="10dp"
-                    android:layout_height="match_parent" />
-            </LinearLayout>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-
-            <Button
-                android:id="@+id/bt_logBack"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/log_back" />
-        </LinearLayout>
-    </ScrollView>
+    </LinearLayout>
 </LinearLayout>

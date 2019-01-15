@@ -1,12 +1,11 @@
 <resources>
     <!-- Titles -->
     <string name="app_name">JustEnoughGoods</string>
-    <string name="app_name_log_monthly">JustEnoughGoods 月間ログ</string>
-    <string name="app_name_log_yearly">JustEnoughGoods 年間ログ</string>
-    <string name="app_name_slave_configuration">JustEnoughGoods 子機設定</string>
+    <string name="app_name_log_monthly">%s 月間ログ</string>
+    <string name="app_name_log_yearly">%s 年間ログ</string>
     <string name="app_name_amount_config">JustEnoughGoods 残量通知設定</string> <!-- 不要（？） -->
     <string name="app_name_fail_config">JustEnoughGoods 子機異常通知設定</string> <!-- 不要（？） -->
-    <string name="app_name_raspberry_config">JustEnoughGoods 親機設定</string>
+    <string name="app_name_raspberry_config">親機設定</string>
 
     <!-- common -->
     <string name="notification">通知</string>
@@ -24,6 +23,18 @@
     <string name="copy">Copyright©JEG.Co.Ltd</string>
 
     <!-- amount -->
+    <string name="amount_cid">子機ID :</string>
+    <string name="amount_cid_value">%s</string>
+    <string name="amount_date">最終計測日時 :</string>
+    <string name="amount_date_value">%s</string>
+    <!--<string name="amount_date_value">%4d/%2d/%2d %2d:%2d</string>-->
+    <string name="amount_now">残量 :</string>
+    <string name="amount_now_value"> %8dg</string>
+    <string name="amount_now_over"> >=2000g</string>
+    <string name="amount_margin">通知まで : </string>
+    <string name="amount_margin_value"> %8dg</string>
+    <string name="amount_notification">通知量 :</string>
+    <string name="amount_notification_value"> %8dg</string>
     <string name="amount_title">残量確認</string> <!-- 不要（？） -->
     <string name="chargecheck_child1_title">子機1</string> <!-- 不要（？） -->
     <string name="chargecheck_child2_title">子機2</string> <!-- 不要（？） -->
@@ -33,7 +44,8 @@
     <string name="chargecheck_child6_title">子機6</string> <!-- 不要（？） -->
 
     <!-- logs -->
-    <string name="log_title">ラベル名</string> <!-- 表示テスト用 -->
+    <string name="log_month_num">%d月</string>
+    <string name="log_year_num">%d年</string>
     <string name="log_back">一覧へ戻る</string>
     <string name="log_recently">最近</string> <!-- 不要（？） -->
     <string name="log_monthly">月間</string>
@@ -53,8 +65,8 @@
     <string name="config_initialize">設定を初期化</string>
 
     <!-- slave-config -->
-    <string name="slave_config_title1">子機</string>
-    <string name="slave_config_title2">の設定</string>
+    <string name="app_name_slave_configuration">子機設定</string>
+    <string name="slave_config_id">子機ID : %s</string>
     <string name="slave_config_name">子機登録名</string>
     <string name="slave_config_name_hint">表示名</string>
     <string name="slave_config_notification_amount_now">現在の残量(g)</string>
@@ -103,7 +115,7 @@
     <string name="unknown_device">不明なBluetooth機器</string>
 
     <!-- BluetoothDeviceListActivity メニュー用 -->
-    <string name="scan">スキャン開始</string>
-    <string name="stop">スキャン停止</string>
+    <string name="scan">scan</string>
+    <string name="stop">stop</string>
 
 </resources>

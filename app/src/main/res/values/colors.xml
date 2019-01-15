@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574b</color>
+    <color name="colorPrimary">#5485da</color>
+    <color name="colorPrimaryDark">#3265ba</color>
     <color name="colorAccent">#d81b60</color>
 
+    <!-- Text -->
+    <color name="defaultNormal">#333333</color>
+
     <!-- ProgressBar -->
-    <color name="progress_amount">#66ddff</color>
-    <color name="progress_notification">#ff0000</color>
+    <color name="progressAmount">#3377ff</color>
+    <color name="progressNotification">#dd2266</color>
+
+    <!-- Amount -->
+    <color name="amountWarning">#ff2233</color>
 
     <!-- Graph -->
     <color name="defaultBlue">#44aaff</color>

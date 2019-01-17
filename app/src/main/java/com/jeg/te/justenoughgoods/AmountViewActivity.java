@@ -21,6 +21,8 @@ import com.jeg.te.justenoughgoods.database.DbOpenHelper;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import static com.jeg.te.justenoughgoods.Utilities.convertLongToDateFormatDefault;
+
 public class AmountViewActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
     // 子機データベース
     private DbOpenHelper dbOpenHelper = null;
@@ -57,13 +59,6 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 startActivity(intent);
                 return true;
             case R.id.menu_item_init_config:
-                SQLiteDatabase writer = dbOpenHelper.getWritableDatabase();
-                // DELETE
-                String deleteSelection = " 1 = 1"; // WHERE 句
-//                String[] deleteSelectionArgs = { "5" };
-                writer.delete(SlavesTable.TABLE_NAME, deleteSelection, null);
-                slavesListAdapter.clearSlaves();
-                getAndSetSlavesAmountData();
                 return true;
         }
         return false;
@@ -72,6 +67,9 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     @Override
     public void onItemClick( AdapterView<?> parent, View view, int position, long id ){
         Intent slaveLogIntent = new Intent(getApplication(), LogViewActivity.class);
+        // タップされた項目のSIDを次のアクティビティへ
+        slaveLogIntent.putExtra("sid", (String) ((TextView) view.findViewById(R.id.textView_slaveId)).getText());
+        slaveLogIntent.putExtra("name", (String) ((TextView) view.findViewById(R.id.textView_slaveName)).getText());
         startActivity(slaveLogIntent);
         return;
     }
@@ -79,7 +77,8 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     @Override
     public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ){
         Intent slaveConfigIntent = new Intent(getApplication(), SlaveConfigurationActivity.class);
-        slaveConfigIntent.putExtra("sid", (String) ((TextView) findViewById(R.id.textView_slaveId)).getText());
+        // ロングタップされた項目のSIDを次のアクティビティへ
+        slaveConfigIntent.putExtra("sid", (String) ((TextView) view.findViewById(R.id.textView_slaveId)).getText());
         startActivity(slaveConfigIntent);
         return true;
     }
@@ -119,9 +118,8 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
     // データの取得と表示
     private void getAndSetSlavesAmountData() {
-
-//        dbOpenHelper = new DbOpenHelper(getApplicationContext());
-//        SQLiteDatabase.deleteDatabase(getApplication().getDatabasePath(dbOpenHelper.getDatabaseName()));
+        dbOpenHelper = new DbOpenHelper(getApplicationContext());
+        SQLiteDatabase.deleteDatabase(getApplication().getDatabasePath(dbOpenHelper.getDatabaseName()));
 
         // テストデータをデータベースへ登録
         dbOpenHelper = new DbOpenHelper(getApplicationContext());
@@ -133,65 +131,85 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         slave1.put(SlavesTable.S_ID, "ID00001A");
         slave1.put(SlavesTable.NAME, "醤油（DEBUG）");
         slave1.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.2));
-        slave1.put(SlavesTable.AMOUNT_NOTIFICATION_ENABLE, 1);
-        slave1.put(SlavesTable.EXCEPTION_FLAG, 0);
-        slave1.put(SlavesTable.EXCEPTION_NOTIFICATION_ENABLE, 1);
         writer.insert(SlavesTable.TABLE_NAME, null, slave1);
 
         ContentValues slave2 = new ContentValues();
         slave2.put(SlavesTable.S_ID, "ID00002A");
         slave2.put(SlavesTable.NAME, "酢（DEBUG）");
         slave2.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.1));
-        slave2.put(SlavesTable.AMOUNT_NOTIFICATION_ENABLE, 1);
-        slave2.put(SlavesTable.EXCEPTION_FLAG, 0);
-        slave2.put(SlavesTable.EXCEPTION_NOTIFICATION_ENABLE, 1);
         writer.insert(SlavesTable.TABLE_NAME, null, slave2);
 
         ContentValues slave3 = new ContentValues();
         slave3.put(SlavesTable.S_ID, "ID00003A");
         slave3.put(SlavesTable.NAME, "サラダ油（DEBUG）");
         slave3.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.5));
-        slave3.put(SlavesTable.AMOUNT_NOTIFICATION_ENABLE, 1);
-        slave3.put(SlavesTable.EXCEPTION_FLAG, 0);
-        slave3.put(SlavesTable.EXCEPTION_NOTIFICATION_ENABLE, 1);
         writer.insert(SlavesTable.TABLE_NAME, null, slave3);
 
         ContentValues slave4 = new ContentValues();
         slave4.put(SlavesTable.S_ID, "ID00004A");
         slave4.put(SlavesTable.NAME, "シャンプー（DEBUG）");
         slave4.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.5));
-        slave4.put(SlavesTable.AMOUNT_NOTIFICATION_ENABLE, 1);
-        slave4.put(SlavesTable.EXCEPTION_FLAG, 0);
-        slave4.put(SlavesTable.EXCEPTION_NOTIFICATION_ENABLE, 1);
         writer.insert(SlavesTable.TABLE_NAME, null, slave4);
 
         // 計測データ
         // 現在日時を取得
         long nowTime = System.currentTimeMillis();
-        System.out.println("DEBUG DATETIME : " + MyApplication.convertLongToDateFormat(nowTime));
+        System.out.println("DEBUG DATETIME : " + convertLongToDateFormatDefault(nowTime));
 
         ContentValues value1 = new ContentValues();
         value1.put(MeasurementDataTable.S_ID, "ID00001A");
-        value1.put(MeasurementDataTable.AMOUNT, new Double(0.52345));
-        value1.put(MeasurementDataTable.DATETIME, nowTime);
+        value1.put(MeasurementDataTable.AMOUNT, new Double(0.524));
+        value1.put(MeasurementDataTable.DATETIME, nowTime - 86400000 * 2);
+        value1.put(MeasurementDataTable.MONTH_NUM, 1);
         writer.insert(MeasurementDataTable.TABLE_NAME, null, value1);
+
+        ContentValues value5 = new ContentValues();
+        value5.put(MeasurementDataTable.S_ID, "ID00001A");
+        value5.put(MeasurementDataTable.AMOUNT, new Double(0.449));
+        value5.put(MeasurementDataTable.DATETIME, nowTime - 86400000);
+        value5.put(MeasurementDataTable.MONTH_NUM, 1);
+        writer.insert(MeasurementDataTable.TABLE_NAME, null, value5);
+
+        ContentValues value6 = new ContentValues();
+        value6.put(MeasurementDataTable.S_ID, "ID00001A");
+        value6.put(MeasurementDataTable.AMOUNT, new Double(0.403));
+        value6.put(MeasurementDataTable.DATETIME, nowTime);
+        value6.put(MeasurementDataTable.MONTH_NUM, 1);
+        writer.insert(MeasurementDataTable.TABLE_NAME, null, value6);
+
+        ContentValues value7 = new ContentValues();
+        value7.put(MeasurementDataTable.S_ID, "ID00001A");
+        value7.put(MeasurementDataTable.AMOUNT, new Double(0.803));
+        value7.put(MeasurementDataTable.DATETIME, nowTime - 86400000 * 2);
+        value7.put(MeasurementDataTable.MONTH_NUM, 2);
+        writer.insert(MeasurementDataTable.TABLE_NAME, null, value7);
+
+        ContentValues value8 = new ContentValues();
+        value8.put(MeasurementDataTable.S_ID, "ID00001A");
+        value8.put(MeasurementDataTable.AMOUNT, new Double(0.603));
+        value8.put(MeasurementDataTable.DATETIME, nowTime - 86400000);
+        value8.put(MeasurementDataTable.MONTH_NUM, 2);
+        writer.insert(MeasurementDataTable.TABLE_NAME, null, value8);
 
         ContentValues value2 = new ContentValues();
         value2.put(MeasurementDataTable.S_ID, "ID00002A");
         value2.put(MeasurementDataTable.AMOUNT, new Double(0.32345));
         value2.put(MeasurementDataTable.DATETIME, nowTime);
+        value2.put(MeasurementDataTable.MONTH_NUM, 1);
         writer.insert(MeasurementDataTable.TABLE_NAME, null, value2);
 
         ContentValues value3 = new ContentValues();
         value3.put(MeasurementDataTable.S_ID, "ID00003A");
         value3.put(MeasurementDataTable.AMOUNT, new Double(2.0));
         value3.put(MeasurementDataTable.DATETIME, nowTime);
+        value3.put(MeasurementDataTable.MONTH_NUM, 1);
         writer.insert(MeasurementDataTable.TABLE_NAME, null, value3);
 
         ContentValues value4 = new ContentValues();
         value4.put(MeasurementDataTable.S_ID, "ID00004A");
         value4.put(MeasurementDataTable.AMOUNT, new Double(0.45));
         value4.put(MeasurementDataTable.DATETIME, nowTime);
+        value4.put(MeasurementDataTable.MONTH_NUM, 1);
         writer.insert(MeasurementDataTable.TABLE_NAME, null, value4);
 
         // データベースから取得しSlavesクラスへ
@@ -210,7 +228,7 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         };
 //        String selection = ""; // WHERE
 //        String[] selectionArgs = { "" };
-        String sortOrder = "s." + SlavesTable.S_ID + " DESC"; // ORDER
+        String sortOrder = "s." + SlavesTable.S_ID + " ASC"; // ORDER
 
         // JOIN
         String tableJoin = " as s LEFT JOIN (" +
@@ -238,9 +256,8 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
             testSlaves.add(slave);
         }
 
-        Iterator<Slaves> slaves = testSlaves.iterator();
-        while (slaves.hasNext()){
-            slavesListAdapter.addSlaves(slaves.next());
+        for (Slaves slave : testSlaves){
+            slavesListAdapter.addSlaves(slave);
         }
         cursor.close();
 

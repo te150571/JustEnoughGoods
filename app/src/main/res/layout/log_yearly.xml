@@ -12,7 +12,7 @@
         android:id="@+id/toolbar_logYearly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"></Toolbar>
+        android:background="@color/colorPrimary"/>
 
     <Space
         android:layout_width="match_parent"

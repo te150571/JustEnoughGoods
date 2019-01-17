@@ -24,17 +24,15 @@
 
     <!-- amount -->
     <string name="amount_cid">子機ID :</string>
-    <string name="amount_cid_value">%s</string>
     <string name="amount_date">最終計測日時 :</string>
     <string name="amount_date_value">%s</string>
-    <!--<string name="amount_date_value">%4d/%2d/%2d %2d:%2d</string>-->
     <string name="amount_now">残量 :</string>
-    <string name="amount_now_value"> %8dg</string>
+    <string name="amount_now_value">%8dg</string>
     <string name="amount_now_over"> >=2000g</string>
-    <string name="amount_margin">通知まで : </string>
-    <string name="amount_margin_value"> %8dg</string>
+    <string name="amount_margin">通知まで :</string>
+    <string name="amount_margin_value">%8dg</string>
     <string name="amount_notification">通知量 :</string>
-    <string name="amount_notification_value"> %8dg</string>
+    <string name="amount_notification_value">%8dg</string>
     <string name="amount_title">残量確認</string> <!-- 不要（？） -->
     <string name="chargecheck_child1_title">子機1</string> <!-- 不要（？） -->
     <string name="chargecheck_child2_title">子機2</string> <!-- 不要（？） -->
@@ -66,20 +64,26 @@
 
     <!-- slave-config -->
     <string name="app_name_slave_configuration">子機設定</string>
-    <string name="slave_config_id">子機ID : %s</string>
+    <string name="slave_config_id">子機ID :</string>
+    <string name="slave_config_id_value">%s</string>
     <string name="slave_config_name">子機登録名</string>
     <string name="slave_config_name_hint">表示名</string>
     <string name="slave_config_notification_amount_now">現在の残量(g)</string>
-    <string name="slave_config_notification_amount_now_num">1260</string> <!-- 表示テスト用 -->
     <string name="slave_config_amount_notification_toggle">残量通知</string>
     <string name="slave_config_notification_amount">通知する残量(g)</string>
     <string name="slave_config_notification_amount_hint">100</string>
-    <string name="slave_config_fault_now">現在の状態</string>
-    <string name="slave_config_fault_now_status_ok">不具合通知なし</string>
-    <string name="slave_config_fault_now_status_ng">不具合通知あり</string>
-    <string name="slave_config_fault_notification_toggle">不具合通知</string>
+    <string name="slave_config_exception_now">現在の状態</string>
+    <string name="slave_config_exception_now_status_ok">不具合通知なし</string>
+    <string name="slave_config_exception_now_status_ng">不具合通知あり</string>
+    <string name="slave_config_exception_notification_toggle">不具合通知</string>
 
-    <!-- Preset List -->
+    <!-- 子機設定トースト用 -->
+    <string name="slave_config_amount_notification_on">残量通知をONにしました。</string>
+    <string name="slave_config_amount_notification_off">残量通知をOFFにしました。</string>
+    <string name="slave_config_exception_notification_on">不具合通知をONにしました。</string>
+    <string name="slave_config_exception_notification_off">不具合通知をOFFにしました。</string>
+
+    <!-- プリセット用 List -->
     <string name="slave_config_preset">設定プリセット</string>
     <string-array name="presets">
         <item>カスタム</item>

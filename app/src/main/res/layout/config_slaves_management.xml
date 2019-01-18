@@ -4,77 +4,79 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".AmountViewActivity">
+
+    <!-- 未使用レイアウト -->
 
     <Button
-        android:id="@+id/button25"
+        android:id="@+id/bt_slaveAdd"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:text="子機追加"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button21" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_configInitialize" />
 
     <Button
-        android:id="@+id/button19"
+        android:id="@+id/bt_configFail"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="96dp"
         android:text="削除"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
     <Button
-        android:id="@+id/button20"
+        android:id="@+id/bt_configMachines"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:text="削除"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button23" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_amountNotifiDone" />
 
     <Button
-        android:id="@+id/button21"
+        android:id="@+id/bt_configInitialize"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:text="削除"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button24" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_amountNotifiCancel" />
 
     <Button
-        android:id="@+id/button22"
+        android:id="@+id/bt_amountBack"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:text="削除"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button19" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_configFail" />
 
     <Button
-        android:id="@+id/button23"
+        android:id="@+id/bt_amountNotifiDone"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:text="削除"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button22" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_amountBack" />
 
     <Button
-        android:id="@+id/button24"
+        android:id="@+id/bt_amountNotifiCancel"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="96dp"
         android:text="削除"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button20" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_configMachines" />
 
     <TextView
         android:id="@+id/textView47"
@@ -86,7 +88,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
     <TextView
         android:id="@+id/textView48"
@@ -149,7 +151,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView51" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/textView_title"
         android:layout_width="291dp"
         android:layout_height="47dp"
         android:layout_marginStart="47dp"

@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".AmountViewActivity">
+
+    <!-- 未使用レイアウト -->
 
     <EditText
         android:id="@+id/editText11"
@@ -105,10 +107,10 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_disruption" />
 
     <TextView
-        android:id="@+id/textView25"
+        android:id="@+id/textView_disruption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -117,10 +119,10 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView24" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_abnWeight" />
 
     <TextView
-        android:id="@+id/textView24"
+        android:id="@+id/textView_abnWeight"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -129,10 +131,10 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView23" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_failNotification" />
 
     <TextView
-        android:id="@+id/textView23"
+        android:id="@+id/textView_failNotification"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -141,10 +143,10 @@
         android:textColor="@color/colorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/textView_title"
         android:layout_width="291dp"
         android:layout_height="47dp"
         android:layout_marginStart="47dp"
@@ -192,7 +194,7 @@
         android:inputType="textPersonName"
         android:text="1440"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/title" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_title" />
 
     <TextView
         android:id="@+id/textView2"

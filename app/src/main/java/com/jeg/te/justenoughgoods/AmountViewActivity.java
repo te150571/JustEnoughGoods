@@ -1,34 +1,71 @@
 package com.jeg.te.justenoughgoods;
 
 import android.app.Activity;
-import android.content.ContentValues;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.jeg.te.justenoughgoods.bluetooth.BluetoothConnection;
+import com.jeg.te.justenoughgoods.bluetooth.BluetoothDeviceListActivity;
 import com.jeg.te.justenoughgoods.database.DbContract.SlavesTable;
 import com.jeg.te.justenoughgoods.database.DbContract.MeasurementDataTable;
-import com.jeg.te.justenoughgoods.database.DbOpenHelper;
+import com.jeg.te.justenoughgoods.database.DbOperation;
+import com.jeg.te.justenoughgoods.raspberry.RaspberryConfigurationActivity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import static com.jeg.te.justenoughgoods.Utilities.convertLongToDateFormatDefault;
 
 public class AmountViewActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
+
+    // 定数
+    private static final int REQUEST_ENABLE_BLUETOOTH = 1; // Bluetooth機能の有効化要求時の識別コード
+    private static final int REQUEST_CONNECT_DEVICE = 2; // デバイス接続要求時の識別コード
+
+    // Bluetooth関係
+    private BluetoothConnection raspberryBluetoothConnection;
+
     // 子機データベース
-    private DbOpenHelper dbOpenHelper = null;
+    private DbOperation dbOperation = null;
 
     // リストビューの内容
     private SlavesListAdapter slavesListAdapter;
+
+    final Handler handler = new Handler();
+    final Runnable updateCheck = new Runnable() {
+        @Override
+        public void run()
+        {
+            System.out.println("DEBUG HANDLER RUNNING.");
+            if(raspberryBluetoothConnection.checkUpdatable()){
+                System.out.println("DEBUG UPDATABLE.");
+                if(raspberryBluetoothConnection.checkReceiving()){
+                    // データ受信待ち
+                    System.out.println("DEBUG RECEIVING.");
+                }
+                else {
+                    System.out.println("DEBUG UPDATE.");
+                    updateData();
+                    return;
+                }
+            }
+            else {
+                System.out.println("DEBUG CHECK UPDATE.");
+                checkUpdate();
+            }
+
+            handler.postDelayed(this, 3000);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +73,18 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
         // タイトル設定
         setTitle(R.string.app_name);
+
+        // Bluetoothインスタンス取得
+        raspberryBluetoothConnection = BluetoothConnection.getBluetoothConnection();
+
+        // Bluetoothにデバイスが対応しているか
+        if(raspberryBluetoothConnection.checkBluetoothSupport() == null){
+            Toast.makeText( this, R.string.bluetooth_is_not_supported, Toast.LENGTH_SHORT ).show();
+        }
+
+        // データベース
+        dbOperation = DbOperation.getDbOperation();
+
         // メイン画面表示
         displayAmounts();
     }
@@ -59,11 +108,16 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 startActivity(intent);
                 return true;
             case R.id.menu_item_init_config:
+                handler.post(updateCheck);
+                return true;
+            case R.id.menu_re:
+                dbOperation.initDatabase();
                 return true;
         }
         return false;
     }
 
+    // 子機のリストがタップされた
     @Override
     public void onItemClick( AdapterView<?> parent, View view, int position, long id ){
         Intent slaveLogIntent = new Intent(getApplication(), LogViewActivity.class);
@@ -71,9 +125,9 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         slaveLogIntent.putExtra("sid", (String) ((TextView) view.findViewById(R.id.textView_slaveId)).getText());
         slaveLogIntent.putExtra("name", (String) ((TextView) view.findViewById(R.id.textView_slaveName)).getText());
         startActivity(slaveLogIntent);
-        return;
     }
 
+    // 子機のリストがロングタップされた
     @Override
     public boolean onItemLongClick( AdapterView<?> parent, View view, int position, long id ){
         Intent slaveConfigIntent = new Intent(getApplication(), SlaveConfigurationActivity.class);
@@ -83,26 +137,180 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         return true;
     }
 
+    // 初回表示時、および、ポーズからの復帰時
     @Override
-    protected void onPause()
+    protected void onResume()
     {
-        if(dbOpenHelper != null) {
-            dbOpenHelper.close(); // コネクションを閉じる。
+        // Android端末のBluetooth機能の有効化要求
+        requestBluetoothFeature();
+
+        if(raspberryBluetoothConnection.getRaspberryAddress().equals("")) {
+            BluetoothPairingStartDialog bluetoothPairingStartDialog = new BluetoothPairingStartDialog();
+            bluetoothPairingStartDialog.show(getFragmentManager(), "bluetoothPairingStartDialog");
         }
-        super.onPause();
+
+        raspberryBluetoothConnection.connect();
+
+        super.onResume();
     }
 
+    // アプリがバックグラウンドへ
+    @Override
+    protected void onPause() {
+        handler.removeCallbacks(updateCheck);
+
+        if(dbOperation != null)
+            dbOperation.closeConnection();
+
+        super.onPause();
+
+        // Bluetooth切断
+        if(raspberryBluetoothConnection != null )
+            raspberryBluetoothConnection.disconnect();
+    }
+
+    // アプリが終了する直前
     @Override
     protected void onDestroy() {
-        if(dbOpenHelper != null) {
-            dbOpenHelper.close(); // コネクションを閉じる。
-        }
+        handler.removeCallbacks(updateCheck);
+
+        if(dbOperation != null)
+            dbOperation.closeConnection();
+
         super.onDestroy();
+
+        // Bluetooth切断
+        if(raspberryBluetoothConnection != null )
+            raspberryBluetoothConnection.disconnect();
+    }
+
+    // Android端末のBluetooth機能の有効化要求
+    private void requestBluetoothFeature()
+    {
+        if( raspberryBluetoothConnection.checkBluetoothEnable() )
+        {
+            return;
+        }
+        // デバイスのBluetooth機能が有効になっていないときは、有効化要求（ダイアログ表示）
+        Intent enableBtIntent = new Intent( BluetoothAdapter.ACTION_REQUEST_ENABLE );
+        startActivityForResult( enableBtIntent, REQUEST_ENABLE_BLUETOOTH);
+    }
+
+    // 機能の有効化ダイアログの操作結果
+    @Override
+    protected void onActivityResult( int requestCode, int resultCode, Intent data )
+    {
+        switch( requestCode )
+        {
+            case REQUEST_ENABLE_BLUETOOTH: // Bluetooth有効化要求
+                if( Activity.RESULT_CANCELED == resultCode )
+                {    // 有効にされなかった
+                    Toast.makeText( this, R.string.bluetooth_is_not_working, Toast.LENGTH_SHORT ).show();
+//                    finish();    // アプリ終了宣言
+                    return;
+                }
+                break;
+            case REQUEST_CONNECT_DEVICE: // デバイス接続要求
+                if( Activity.RESULT_OK == resultCode )
+                {
+                    // デバイスリストアクティビティからの情報の取得
+//                    strDeviceName = data.getStringExtra( BluetoothDeviceListActivity.EXTRAS_DEVICE_NAME );
+//                    mDeviceAddress = data.getStringExtra( BluetoothDeviceListActivity.EXTRAS_DEVICE_ADDRESS );
+                }
+                break;
+        }
+        super.onActivityResult( requestCode, resultCode, data );
+    }
+
+    // Bluetoothデバイスのペアリング選択アクティビティ
+    public void showBluetoothDeviceListActivity(){
+            Intent bluetoothDeviceListActivityIntent = new Intent(getApplication(), BluetoothDeviceListActivity.class);
+            startActivityForResult(bluetoothDeviceListActivityIntent, REQUEST_CONNECT_DEVICE);
+    }
+
+    // データの更新を確認
+    private void checkUpdate(){
+        String[][] lastUpdate = dbOperation.selectData(
+                false,
+                MeasurementDataTable.TABLE_NAME,
+                null,
+                new String[]{"max(" + MeasurementDataTable.DATETIME + ")"},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+                );
+        raspberryBluetoothConnection.write(lastUpdate[0][0]);
+        if(raspberryBluetoothConnection.checkUpdatable()){
+            handler.post(updateCheck);
+        }
+    }
+
+    // データの更新を行う
+    private void updateData(){
+        System.out.println("DEBUG UPDATING.");
+        ArrayList<String> update = raspberryBluetoothConnection.getUpdateData();
+        update.remove(0);
+        update.remove(update.size() - 1);
+        System.out.println("DEBUG UPDATE RAW : " + update.get(0));
+        for (String data : update) {
+            String[] splitData = data.split(",", 0);
+            System.out.println("DEBUG UPDATE RAW : " + data);
+            System.out.println("DEBUG UPDATE DATA SPLIT : " + splitData[0] + splitData[1] + splitData[2] + splitData[3]);
+            dbOperation.insertData(
+                    MeasurementDataTable.TABLE_NAME,
+                    new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                    new String[]{splitData[0], splitData[1], splitData[2], splitData[3]},
+                    new String[]{"string", "double", "long", "int"}
+            );
+        }
+
+        // 子機IDの照合をして新規を検出
+        String[][] havingSlavesSId = dbOperation.selectData(false, SlavesTable.TABLE_NAME, null, new String[]{SlavesTable.S_ID}, null, null, null, null, null, null);
+        String[][] receivedSlavesSId = dbOperation.selectData(true, MeasurementDataTable.TABLE_NAME, null, new String[]{MeasurementDataTable.S_ID}, null, null, null, null, null, null);
+
+        // 二次元配列を１次元に
+        ArrayList<String> _havingSlavesSId = new ArrayList<>();
+        for(String[] tmp : havingSlavesSId){
+            _havingSlavesSId.add(tmp[0]);
+        }
+        ArrayList<String> _receivedSlavesSId = new ArrayList<>();
+        for(String[] tmp : receivedSlavesSId){
+            _receivedSlavesSId.add(tmp[0]);
+        }
+
+        // 比較
+        ArrayList<String> newSIds = new ArrayList<>();
+        for(String sid : _receivedSlavesSId){
+            if(!_havingSlavesSId.contains(sid)){
+                newSIds.add(sid);
+            }
+        }
+
+        if(newSIds.size() != 0)
+            registrationNewSlaves(newSIds);
+    }
+
+    // 子機の新規登録
+    public void registrationNewSlaves(ArrayList<String> newSlaveSIds){
+        // とりあえず登録
+        for(String sid : newSlaveSIds){
+            dbOperation.insertData(
+                    SlavesTable.TABLE_NAME,
+                    new String[]{SlavesTable.S_ID, SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT},
+                    new String[]{sid, "子機" + sid, "0.01"},
+                    new String[]{"string", "string", "double"}
+            );
+        }
+
+        getAndSetSlavesAmountData();
     }
 
     // 画面表示
     private void displayAmounts(){
-        setContentView(R.layout.amount_list);
+        setContentView(R.layout.amount_view);
         setActionBar((Toolbar) findViewById(R.id.toolbar_main));
 
         // GUIアイテム設定
@@ -118,103 +326,85 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
     // データの取得と表示
     private void getAndSetSlavesAmountData() {
-        dbOpenHelper = new DbOpenHelper(getApplicationContext());
-        SQLiteDatabase.deleteDatabase(getApplication().getDatabasePath(dbOpenHelper.getDatabaseName()));
-
-        // テストデータをデータベースへ登録
-        dbOpenHelper = new DbOpenHelper(getApplicationContext());
-        SQLiteDatabase writer = dbOpenHelper.getWritableDatabase();
-
+        slavesListAdapter.clearSlaves();
         // INSERT
         // 子機設定データ
-        ContentValues slave1 = new ContentValues();
-        slave1.put(SlavesTable.S_ID, "ID00001A");
-        slave1.put(SlavesTable.NAME, "醤油（DEBUG）");
-        slave1.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.2));
-        writer.insert(SlavesTable.TABLE_NAME, null, slave1);
+        dbOperation.insertData(
+                SlavesTable.TABLE_NAME,
+                new String[]{SlavesTable.S_ID, SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT},
+                new String[]{"ID00001A", "醤油", "0.2"},
+                new String[]{"string", "string", "double"}
+                );
 
-        ContentValues slave2 = new ContentValues();
-        slave2.put(SlavesTable.S_ID, "ID00002A");
-        slave2.put(SlavesTable.NAME, "酢（DEBUG）");
-        slave2.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.1));
-        writer.insert(SlavesTable.TABLE_NAME, null, slave2);
+        dbOperation.insertData(
+                SlavesTable.TABLE_NAME,
+                new String[]{SlavesTable.S_ID, SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT},
+                new String[]{"ID00002A", "酢", "0.1"},
+                new String[]{"string", "string", "double"}
+        );
 
-        ContentValues slave3 = new ContentValues();
-        slave3.put(SlavesTable.S_ID, "ID00003A");
-        slave3.put(SlavesTable.NAME, "サラダ油（DEBUG）");
-        slave3.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.5));
-        writer.insert(SlavesTable.TABLE_NAME, null, slave3);
+        dbOperation.insertData(
+                SlavesTable.TABLE_NAME,
+                new String[]{SlavesTable.S_ID, SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT},
+                new String[]{"ID00003A", "サラダ油", "0.5"},
+                new String[]{"string", "string", "double"}
+        );
 
-        ContentValues slave4 = new ContentValues();
-        slave4.put(SlavesTable.S_ID, "ID00004A");
-        slave4.put(SlavesTable.NAME, "シャンプー（DEBUG）");
-        slave4.put(SlavesTable.NOTIFICATION_AMOUNT, new Double(0.5));
-        writer.insert(SlavesTable.TABLE_NAME, null, slave4);
+        dbOperation.insertData(
+                SlavesTable.TABLE_NAME,
+                new String[]{SlavesTable.S_ID, SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT},
+                new String[]{"ID00004A", "シャンプー", "0.5"},
+                new String[]{"string", "string", "double"}
+        );
 
         // 計測データ
         // 現在日時を取得
         long nowTime = System.currentTimeMillis();
         System.out.println("DEBUG DATETIME : " + convertLongToDateFormatDefault(nowTime));
 
-        ContentValues value1 = new ContentValues();
-        value1.put(MeasurementDataTable.S_ID, "ID00001A");
-        value1.put(MeasurementDataTable.AMOUNT, new Double(0.524));
-        value1.put(MeasurementDataTable.DATETIME, nowTime - 86400000 * 2);
-        value1.put(MeasurementDataTable.MONTH_NUM, 1);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value1);
+        dbOperation.insertData(
+                MeasurementDataTable.TABLE_NAME,
+                new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00001A", "0.524", String.valueOf(nowTime - 86400000 * 3), "1"},
+                new String[]{"string", "double", "long", "int"}
+        );
 
-        ContentValues value5 = new ContentValues();
-        value5.put(MeasurementDataTable.S_ID, "ID00001A");
-        value5.put(MeasurementDataTable.AMOUNT, new Double(0.449));
-        value5.put(MeasurementDataTable.DATETIME, nowTime - 86400000);
-        value5.put(MeasurementDataTable.MONTH_NUM, 1);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value5);
+        dbOperation.insertData(
+                MeasurementDataTable.TABLE_NAME,
+                new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00001A", "0.449", String.valueOf(nowTime - 86400000 * 2), "1"},
+                new String[]{"string", "double", "long", "int"}
+        );
 
-        ContentValues value6 = new ContentValues();
-        value6.put(MeasurementDataTable.S_ID, "ID00001A");
-        value6.put(MeasurementDataTable.AMOUNT, new Double(0.403));
-        value6.put(MeasurementDataTable.DATETIME, nowTime);
-        value6.put(MeasurementDataTable.MONTH_NUM, 1);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value6);
+        dbOperation.insertData(
+                MeasurementDataTable.TABLE_NAME,
+                new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00001A", "0.403", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"string", "double", "long", "int"}
+        );
 
-        ContentValues value7 = new ContentValues();
-        value7.put(MeasurementDataTable.S_ID, "ID00001A");
-        value7.put(MeasurementDataTable.AMOUNT, new Double(0.803));
-        value7.put(MeasurementDataTable.DATETIME, nowTime - 86400000 * 2);
-        value7.put(MeasurementDataTable.MONTH_NUM, 2);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value7);
+        dbOperation.insertData(
+                MeasurementDataTable.TABLE_NAME,
+                new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00002A", "0.32345", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"string", "double", "long", "int"}
+        );
 
-        ContentValues value8 = new ContentValues();
-        value8.put(MeasurementDataTable.S_ID, "ID00001A");
-        value8.put(MeasurementDataTable.AMOUNT, new Double(0.603));
-        value8.put(MeasurementDataTable.DATETIME, nowTime - 86400000);
-        value8.put(MeasurementDataTable.MONTH_NUM, 2);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value8);
+        dbOperation.insertData(
+                MeasurementDataTable.TABLE_NAME,
+                new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00003A", "2.0", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"string", "double", "long", "int"}
+        );
 
-        ContentValues value2 = new ContentValues();
-        value2.put(MeasurementDataTable.S_ID, "ID00002A");
-        value2.put(MeasurementDataTable.AMOUNT, new Double(0.32345));
-        value2.put(MeasurementDataTable.DATETIME, nowTime);
-        value2.put(MeasurementDataTable.MONTH_NUM, 1);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value2);
-
-        ContentValues value3 = new ContentValues();
-        value3.put(MeasurementDataTable.S_ID, "ID00003A");
-        value3.put(MeasurementDataTable.AMOUNT, new Double(2.0));
-        value3.put(MeasurementDataTable.DATETIME, nowTime);
-        value3.put(MeasurementDataTable.MONTH_NUM, 1);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value3);
-
-        ContentValues value4 = new ContentValues();
-        value4.put(MeasurementDataTable.S_ID, "ID00004A");
-        value4.put(MeasurementDataTable.AMOUNT, new Double(0.45));
-        value4.put(MeasurementDataTable.DATETIME, nowTime);
-        value4.put(MeasurementDataTable.MONTH_NUM, 1);
-        writer.insert(MeasurementDataTable.TABLE_NAME, null, value4);
+        dbOperation.insertData(
+                MeasurementDataTable.TABLE_NAME,
+                new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00004A", "0.45", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"string", "double", "long", "int"}
+        );
 
         // データベースから取得しSlavesクラスへ
-        SQLiteDatabase reader = dbOpenHelper.getReadableDatabase();
-
         // SELECT
         String[] projection = { // SELECT する列
                 "s." + SlavesTable.S_ID,
@@ -226,41 +416,45 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 "m." + MeasurementDataTable.AMOUNT,
                 "m." + MeasurementDataTable.DATETIME
         };
-//        String selection = ""; // WHERE
-//        String[] selectionArgs = { "" };
-        String sortOrder = "s." + SlavesTable.S_ID + " ASC"; // ORDER
-
         // JOIN
-        String tableJoin = " as s LEFT JOIN (" +
+        String tableJoin = "as s LEFT JOIN (" +
                 "SELECT * FROM "+ MeasurementDataTable.TABLE_NAME + " a " +
                 "WHERE NOT EXISTS ( SELECT 1 FROM " + MeasurementDataTable.TABLE_NAME + " b WHERE a.s_id = b.s_id AND a.datetime < b.datetime ) ) as m ON s.s_id = m.s_id";
+        String sortOrder = "s." + SlavesTable.S_ID + " ASC"; // ORDER
 
-        Cursor cursor = reader.query(
-                SlavesTable.TABLE_NAME + tableJoin, // The table to query
-                projection,         // The columns to return
-                null,          // The columns for the WHERE clause
-                null,      // The values for the WHERE clause
-                null,               // don't group the rows
-                null,               // don't filter by row groups
-                sortOrder           // The sort order
+        String[][] selectResult = dbOperation.selectData(
+                false,
+                SlavesTable.TABLE_NAME,
+                tableJoin,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder,
+                null
         );
 
         ArrayList<Slaves> testSlaves = new ArrayList<>();
-        while(cursor.moveToNext()) {
+        for(int row=0; row<selectResult.length; row++){
             Slaves slave = new Slaves();
-            slave.setSId( cursor.getString(cursor.getColumnIndexOrThrow(SlavesTable.S_ID)) );
-            slave.setName( cursor.getString(cursor.getColumnIndexOrThrow(SlavesTable.NAME)) );
-            slave.setAmount( cursor.getDouble(cursor.getColumnIndexOrThrow(MeasurementDataTable.AMOUNT)) );
-            slave.setNotificationAmount( cursor.getDouble(cursor.getColumnIndexOrThrow(SlavesTable.NOTIFICATION_AMOUNT)) );
-            slave.setLastUpdate( cursor.getLong(cursor.getColumnIndexOrThrow(MeasurementDataTable.DATETIME)) );
+            slave.setSId( selectResult[row][0] );
+            slave.setName( selectResult[row][1] );
+            slave.setAmount( Double.valueOf(selectResult[row][6]) );
+            slave.setNotificationAmount( Double.valueOf(selectResult[row][2]) );
+            slave.setLastUpdate( Long.valueOf(selectResult[row][7]) );
             testSlaves.add(slave);
+            for(int column=0; column<selectResult[row].length; column++){
+                System.out.println("DEBUG SELECTED : " + selectResult[row][column]);
+            }
         }
 
         for (Slaves slave : testSlaves){
             slavesListAdapter.addSlaves(slave);
         }
-        cursor.close();
+    }
 
+    private void checkDB(){
         // DEBUG
         String[] pro = {
                 MeasurementDataTable._ID,
@@ -269,24 +463,25 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 MeasurementDataTable.DATETIME
         };
 
-        Cursor cur = reader.query(
-                MeasurementDataTable.TABLE_NAME, // The table to query
-                pro,         // The columns to return
-                null,          // The columns for the WHERE clause
-                null,      // The values for the WHERE clause
-                null,               // don't group the rows
-                null,               // don't filter by row groups
-                null           // The sort order
+        String[][] debug = dbOperation.selectData(
+                false,
+                MeasurementDataTable.TABLE_NAME,
+                null,
+                pro,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
         );
 
-        while(cur.moveToNext()) {
-            System.out.println("DEBUG M_DATA ID : " + cur.getInt(cur.getColumnIndexOrThrow(MeasurementDataTable._ID)) );
-            System.out.println("DEBUG M_DATA SID : " + cur.getString(cur.getColumnIndexOrThrow(MeasurementDataTable.S_ID)) );
-            System.out.println("DEBUG M_DATA AMOUNT : " + cur.getDouble(cur.getColumnIndexOrThrow(MeasurementDataTable.AMOUNT)) );
-            System.out.println("DEBUG M_DATA DATETIME : " + cur.getLong(cur.getColumnIndexOrThrow(MeasurementDataTable.DATETIME)) );
+        for(int row=0; row<debug.length; row++){
+            System.out.println("DEBUG M_DATA ID : " + debug[row][0] );
+            System.out.println("DEBUG M_DATA SID : " + debug[row][1] );
+            System.out.println("DEBUG M_DATA AMOUNT : " + debug[row][2] );
+            System.out.println("DEBUG M_DATA DATETIME : " + debug[row][3] );
         }
-
-        cur.close();
     }
 }
 

@@ -26,10 +26,10 @@
             android:parentActivityName=".AmountViewActivity"></activity>
         <activity android:name=".SlaveConfigurationActivity"
             android:parentActivityName=".AmountViewActivity"></activity>
-        <activity android:name=".RaspberryConfigurationActivity"
+        <activity android:name=".raspberry.RaspberryConfigurationActivity"
             android:parentActivityName=".AmountViewActivity"></activity>
-        <activity android:name=".BluetoothDeviceListActivity"
-            android:parentActivityName=".RaspberryConfigurationActivity"></activity>
+        <activity android:name=".bluetooth.BluetoothDeviceListActivity"
+            android:parentActivityName=".AmountViewActivity"></activity>
     </application>
 
 </manifest>

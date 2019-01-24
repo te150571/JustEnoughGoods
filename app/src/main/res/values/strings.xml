@@ -1,13 +1,10 @@
 <resources>
     <!-- Title -->
     <string name="app_name">JustEnoughGoods</string>
-    <string name="app_name_amount_config">JustEnoughGoods 残量通知設定</string> <!-- 不要（？） -->
-    <string name="app_name_fail_config">JustEnoughGoods 子機異常通知設定</string> <!-- 不要（？） -->
 
     <!-- Common -->
     <string name="notification">通知</string>
     <string name="confirm">確定</string>
-    <string name="cancel">取り消して戻る</string> <!-- 不要（？） -->
     <string name="back">戻る</string>
     <string name="slave">子機</string>
     <string name="unknown_slave">不明な子機</string>
@@ -18,8 +15,6 @@
     <string name="ok">OK</string>
 
     <!-- main -->
-    <string name="main_amount">最新の残量状況を見る</string> <!-- 不要（？） -->
-    <string name="main_log">過去のログ</string> <!-- 不要（？） -->
     <string name="copy">Copyright©JEG.Co.Ltd</string>
 
     <!-- Amount -->
@@ -38,13 +33,6 @@
 
     <string name="amount_lack_notification_title">不足している物があります</string>
     <string name="amount_lack_notification_text">以上の残量を確認してください。</string>
-    <string name="amount_title">残量確認</string> <!-- 不要（？） -->
-    <string name="chargecheck_child1_title">子機1</string> <!-- 不要（？） -->
-    <string name="chargecheck_child2_title">子機2</string> <!-- 不要（？） -->
-    <string name="chargecheck_child3_title">子機3</string> <!-- 不要（？） -->
-    <string name="chargecheck_child4_title">子機4</string> <!-- 不要（？） -->
-    <string name="chargecheck_child5_title">子機5</string> <!-- 不要（？） -->
-    <string name="chargecheck_child6_title">子機6</string> <!-- 不要（？） -->
 
     <!-- Log -->
     <string name="app_name_log_monthly">%s 月間ログ</string>
@@ -52,7 +40,6 @@
     <string name="log_month_num">%d月</string>
     <string name="log_year_num">%d年</string>
     <string name="log_back">一覧へ戻る</string>
-    <string name="log_recently">最近</string> <!-- 不要（？） -->
     <string name="log_monthly">月間</string>
     <string name="log_yearly">年間</string>
     <string name="log_previous">前の月</string>
@@ -61,11 +48,6 @@
     <string name="pi_label">%1$dπ</string>
 
     <!-- Menu -->
-    <string name="config_title">設定</string> <!-- 不要（？） -->
-    <string name="title_log">過去ログ</string> <!-- 不要（？） -->
-    <string name="config_amount">残量通知設定</string> <!-- 不要（？） -->
-    <string name="config_slaves">子機登録名設定</string> <!-- 不要（？） -->
-    <string name="config_fail">子機異常通知設定</string> <!-- 不要（？） -->
     <string name="config_raspberry">親機設定</string>
     <string name="config_initialize">設定を初期化</string>
 
@@ -121,15 +103,6 @@
     <string name="raspberry_device_delete_title">機器情報消去</string>
     <string name="raspberry_device_delete_text">親機の接続情報を消去しますか？</string>
     <string name="raspberry_device_delete_done">親機の接続情報を消去しました。</string>
-
-    <string name="config_slaves_interval">計測間隔設定</string> <!-- 不要（？） -->
-    <string name="config_slaves_label">子機登録名設定</string> <!-- 不要（？） -->
-    <string name="config_slaves_management">子機追加・削除</string> <!-- 不要（？） -->
-
-    <!-- config-fail -->
-    <string name="fail_title">子機異常通知設定</string> <!-- 不要（？） -->
-    <string name="comm_disruption">通信途絶通知</string> <!-- 不要（？） -->
-    <string name="abnormal_weight">重量異常通知</string> <!-- 不要（？） -->
 
     <!-- Bluetooth トースト用 -->
     <string name="bluetooth_is_not_supported">Bluetoothがサポートされていません。</string>

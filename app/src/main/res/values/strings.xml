@@ -1,13 +1,10 @@
 <resources>
-    <!-- Titles -->
+    <!-- Title -->
     <string name="app_name">JustEnoughGoods</string>
-    <string name="app_name_log_monthly">%s 月間ログ</string>
-    <string name="app_name_log_yearly">%s 年間ログ</string>
     <string name="app_name_amount_config">JustEnoughGoods 残量通知設定</string> <!-- 不要（？） -->
     <string name="app_name_fail_config">JustEnoughGoods 子機異常通知設定</string> <!-- 不要（？） -->
-    <string name="app_name_raspberry_config">親機設定</string>
 
-    <!-- common -->
+    <!-- Common -->
     <string name="notification">通知</string>
     <string name="confirm">確定</string>
     <string name="cancel">取り消して戻る</string> <!-- 不要（？） -->
@@ -16,13 +13,16 @@
     <string name="unknown_slave">不明な子機</string>
     <string name="enable">有効</string>
     <string name="disabled">無効</string>
+    <string name="yes">はい</string>
+    <string name="no">いいえ</string>
+    <string name="ok">OK</string>
 
     <!-- main -->
     <string name="main_amount">最新の残量状況を見る</string> <!-- 不要（？） -->
     <string name="main_log">過去のログ</string> <!-- 不要（？） -->
     <string name="copy">Copyright©JEG.Co.Ltd</string>
 
-    <!-- amount -->
+    <!-- Amount -->
     <string name="amount_cid">子機ID :</string>
     <string name="amount_date">最終計測日時 :</string>
     <string name="amount_date_value">%s</string>
@@ -33,6 +33,11 @@
     <string name="amount_margin_value">%8dg</string>
     <string name="amount_notification">通知量 :</string>
     <string name="amount_notification_value">%8dg</string>
+    <string name="amount_start_update">更新を開始します。</string>
+    <string name="amount_finish_update">更新が完了しました。</string>
+
+    <string name="amount_lack_notification_title">不足している物があります</string>
+    <string name="amount_lack_notification_text">以上の残量を確認してください。</string>
     <string name="amount_title">残量確認</string> <!-- 不要（？） -->
     <string name="chargecheck_child1_title">子機1</string> <!-- 不要（？） -->
     <string name="chargecheck_child2_title">子機2</string> <!-- 不要（？） -->
@@ -41,7 +46,9 @@
     <string name="chargecheck_child5_title">子機5</string> <!-- 不要（？） -->
     <string name="chargecheck_child6_title">子機6</string> <!-- 不要（？） -->
 
-    <!-- logs -->
+    <!-- Log -->
+    <string name="app_name_log_monthly">%s 月間ログ</string>
+    <string name="app_name_log_yearly">%s 年間ログ</string>
     <string name="log_month_num">%d月</string>
     <string name="log_year_num">%d年</string>
     <string name="log_back">一覧へ戻る</string>
@@ -53,7 +60,7 @@
     <string name="sine_wave">Sine Wave</string>
     <string name="pi_label">%1$dπ</string>
 
-    <!-- menu -->
+    <!-- Menu -->
     <string name="config_title">設定</string> <!-- 不要（？） -->
     <string name="title_log">過去ログ</string> <!-- 不要（？） -->
     <string name="config_amount">残量通知設定</string> <!-- 不要（？） -->
@@ -62,7 +69,7 @@
     <string name="config_raspberry">親機設定</string>
     <string name="config_initialize">設定を初期化</string>
 
-    <!-- slave-config -->
+    <!-- Slave Configuration -->
     <string name="app_name_slave_configuration">子機設定</string>
     <string name="slave_config_id">子機ID :</string>
     <string name="slave_config_id_value">%s</string>
@@ -77,13 +84,14 @@
     <string name="slave_config_exception_now_status_ng">不具合通知あり</string>
     <string name="slave_config_exception_notification_toggle">不具合通知</string>
 
-    <!-- 子機設定トースト用 -->
+    <!-- Slave Configuration toast -->
     <string name="slave_config_amount_notification_on">残量通知をONにしました。</string>
     <string name="slave_config_amount_notification_off">残量通知をOFFにしました。</string>
     <string name="slave_config_exception_notification_on">不具合通知をONにしました。</string>
     <string name="slave_config_exception_notification_off">不具合通知をOFFにしました。</string>
+    <string name="slave_config_done">設定を保存しました。</string>
 
-    <!-- プリセット用 List -->
+    <!-- slave-config preset List -->
     <string name="slave_config_preset">設定プリセット</string>
     <string-array name="presets">
         <item>カスタム</item>
@@ -92,6 +100,27 @@
         <item>プリセット3</item>
         <item>プリセット4</item>
     </string-array>
+
+    <!-- Raspberry Configuration -->
+    <string name="app_name_raspberry_config">親機設定</string>
+    <string name="raspberry_config_title">設定中の親機</string>
+    <string name="raspberry_config_device_name">機器名 : </string>
+    <string name="raspberry_config_device_address">機器アドレス : </string>
+    <string name="raspberry_config_search">機器検索</string>
+    <string name="raspberry_config_delete">機器設定削除</string>
+
+    <!-- Bluetooth Device List -->
+    <string name="bluetooth_device_list_title">Bluetooth機器検索</string>
+
+    <!-- Dialog and Toast -->
+    <string name="bluetooth_pairing_start_title">親機が未設定</string>
+    <string name="bluetooth_pairing_start_text">親機を検索しペアリングしますか？</string>
+    <string name="bluetooth_pairing_confirm_title">確認</string>
+    <string name="bluetooth_pairing_confirm_text">この機器を親機として\n登録しますか？\n\nName : %s\nAddress : %s</string>
+    <string name="bluetooth_pairing_confirm_done">親機を登録しました。</string>
+    <string name="raspberry_device_delete_title">機器情報消去</string>
+    <string name="raspberry_device_delete_text">親機の接続情報を消去しますか？</string>
+    <string name="raspberry_device_delete_done">親機の接続情報を消去しました。</string>
 
     <string name="config_slaves_interval">計測間隔設定</string> <!-- 不要（？） -->
     <string name="config_slaves_label">子機登録名設定</string> <!-- 不要（？） -->
@@ -105,15 +134,6 @@
     <!-- Bluetooth トースト用 -->
     <string name="bluetooth_is_not_supported">Bluetoothがサポートされていません。</string>
     <string name="bluetooth_is_not_working">Bluetoothが有効になっていません。</string>
-
-    <!-- Bluetooth 接続用 -->
-    <string name="search">Bluetooth機器検索</string>
-
-    <!-- Bluetooth ラベル用 -->
-    <string name="device_name">機器名 : </string>
-    <string name="device_address">機器アドレス : </string>
-    <string name="connect">接続</string>
-    <string name="disconnect">切断</string>
 
     <!-- BluetoothDeviceListActivity トースト用 -->
     <string name="unknown_device">不明なBluetooth機器</string>

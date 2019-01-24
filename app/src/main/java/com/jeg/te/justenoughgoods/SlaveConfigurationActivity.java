@@ -209,7 +209,7 @@ public class SlaveConfigurationActivity extends Activity {
         long result = dbOperation.updateData(
                 SlavesTable.TABLE_NAME,
                 new String[]{SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT, SlavesTable.AMOUNT_NOTIFICATION_ENABLE, SlavesTable.EXCEPTION_NOTIFICATION_ENABLE},
-                new String[]{String.valueOf(editTextName.getText()), String.valueOf(editTextNotificationAmount.getText()), (switchAmountNotification.isChecked() ? "1" : "0"), (switchExceptionNotification.isChecked() ? "1" : "0")},
+                new String[]{String.valueOf(editTextName.getText()), String.valueOf(Double.valueOf(String.valueOf(editTextNotificationAmount.getText())) / 1000), (switchAmountNotification.isChecked() ? "1" : "0"), (switchExceptionNotification.isChecked() ? "1" : "0")},
                 new String[]{"string", "double", "int", "int"},
                 "S_ID = ?",
                 new String[]{sId}

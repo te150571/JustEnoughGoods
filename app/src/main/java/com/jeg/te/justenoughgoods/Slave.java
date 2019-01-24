@@ -1,6 +1,6 @@
 package com.jeg.te.justenoughgoods;
 
-public class Slaves {
+public class Slave {
     private String sId;
     private String name;
     private Double amount;

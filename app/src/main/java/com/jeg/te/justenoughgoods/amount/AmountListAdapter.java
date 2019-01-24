@@ -1,4 +1,4 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.amount;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -8,60 +8,64 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.jeg.te.justenoughgoods.MyApplication;
+import com.jeg.te.justenoughgoods.R;
+import com.jeg.te.justenoughgoods.Slave;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
 import static com.jeg.te.justenoughgoods.Utilities.convertLongToDateFormatDefault;
 
-public class SlavesListAdapter extends BaseAdapter {
-    private ArrayList<Slaves> slavesList;
+public class AmountListAdapter extends BaseAdapter {
+    private ArrayList<Slave> slaveList;
     private LayoutInflater slavesInflater;
 
-    public SlavesListAdapter( Activity activity )
+    public AmountListAdapter(Activity activity )
     {
         super();
-        slavesList = new ArrayList();
+        slaveList = new ArrayList<>();
         slavesInflater = activity.getLayoutInflater();
     }
 
     // 子機リストへの追加
-    public void addSlaves(Slaves slaves){
-        if( !slavesList.contains( slaves ) )
+    public void addSlaves(Slave slave){
+        if( !slaveList.contains(slave) )
         {    // 加えられていなければ加える
-            slavesList.add( slaves );
+            slaveList.add(slave);
             notifyDataSetChanged();    // ListViewの更新
         }
     }
 
     // 子機リストのクリア
     public void clearSlaves(){
-        slavesList.clear();
+        slaveList.clear();
         notifyDataSetChanged();    // ListViewの更新
     }
 
     // 子機リストのソート
     public void sortSlaves(){
-        Comparator<Slaves> slavesComparator = new Comparator<Slaves>() {
+        Comparator<Slave> slavesComparator = new Comparator<Slave>() {
             @Override
-            public int compare(Slaves o1, Slaves o2) {
+            public int compare(Slave o1, Slave o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         };
-        Collections.sort(slavesList, slavesComparator);
+        Collections.sort(slaveList, slavesComparator);
         notifyDataSetChanged();    // ListViewの更新
     }
 
     @Override
     public int getCount()
     {
-        return slavesList.size();
+        return slaveList.size();
     }
 
     @Override
     public Object getItem( int position )
     {
-        return slavesList.get( position );
+        return slaveList.get( position );
     }
 
     @Override
@@ -84,12 +88,12 @@ public class SlavesListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent )
     {
-        SlavesListAdapter.ViewHolder viewHolder;
+        AmountListAdapter.ViewHolder viewHolder;
         // General ListView optimization code.
         if( null == convertView )
         {
             convertView = slavesInflater.inflate( R.layout.amount_view_listitem, parent, false );
-            viewHolder = new SlavesListAdapter.ViewHolder();
+            viewHolder = new AmountListAdapter.ViewHolder();
             viewHolder.viewSlaveId = convertView.findViewById( R.id.textView_slaveId);
             viewHolder.viewSlaveName = convertView.findViewById( R.id.textView_slaveName );
             viewHolder.viewSlaveAmountBar = convertView.findViewById( R.id.progressBar_amount );
@@ -101,14 +105,14 @@ public class SlavesListAdapter extends BaseAdapter {
         }
         else
         {
-            viewHolder = (SlavesListAdapter.ViewHolder)convertView.getTag();
+            viewHolder = (AmountListAdapter.ViewHolder)convertView.getTag();
         }
 
-        Slaves slaves     = slavesList.get( position );
+        Slave slave = slaveList.get( position );
 
         // 子機CID（非表示）と登録名
-        viewHolder.viewSlaveId.setText( slaves.getSId() );
-        String slaveName = slaves.getName();
+        viewHolder.viewSlaveId.setText( slave.getSId() );
+        String slaveName = slave.getName();
         if( null != slaveName && 0 < slaveName.length() )
         {
             viewHolder.viewSlaveName.setText( slaveName );
@@ -119,9 +123,10 @@ public class SlavesListAdapter extends BaseAdapter {
         }
 
         // 残量などの計算
-        viewHolder.viewSlaveAmountBar.setMax((int) (slaves.getNotificationAmount() * 5000.0));
-        int amount = (int) (slaves.getAmount() * 1000.0);
-        int notification = (int) (slaves.getNotificationAmount() * 1000.0);
+        viewHolder.viewSlaveAmountBar.setMax((int) (slave.getNotificationAmount() * 5000.0));
+        int amount = (int) (slave.getAmount() * 1000.0);
+        int notification = (int) (slave.getNotificationAmount() * 1000.0);
+
         viewHolder.viewSlaveAmountBar.setSecondaryProgress( amount );
         viewHolder.viewSlaveAmountBar.setProgress( notification );
         // 残量の表示
@@ -133,11 +138,12 @@ public class SlavesListAdapter extends BaseAdapter {
         }
         // 通知量までの表示
         viewHolder.viewSlaveMarginValue.setText( MyApplication.getContext().getResources().getString(R.string.amount_margin_value, (amount - notification)) );
+
         // 通知量の表示
         viewHolder.viewSlaveNotificationValue.setText( MyApplication.getContext().getResources().getString(R.string.amount_notification_value, notification) );
 
         // 最終更新日時
-        viewHolder.viewSlaveLastUpdateValue.setText( MyApplication.getContext().getResources().getString( R.string.amount_date_value, convertLongToDateFormatDefault(slaves.getLastUpdate())) );
+        viewHolder.viewSlaveLastUpdateValue.setText( MyApplication.getContext().getResources().getString( R.string.amount_date_value, convertLongToDateFormatDefault(slave.getLastUpdate())) );
 
         // 色の変更
         if(amount < notification){
@@ -151,5 +157,16 @@ public class SlavesListAdapter extends BaseAdapter {
             viewHolder.viewSlaveMarginValue.setTextColor( MyApplication.getContext().getColor(R.color.defaultNormal) );
         }
         return convertView;
+    }
+
+    // 不足しているリストを取得
+    public ArrayList<String> getLackList(){
+        ArrayList<String> lackList = new ArrayList<>();
+        for(Slave slave : slaveList){
+            if((slave.getAmount() - slave.getNotificationAmount()) <= 0){
+                lackList.add(slave.getName());
+            }
+        }
+        return lackList;
     }
 }

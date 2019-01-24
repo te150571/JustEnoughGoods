@@ -1,10 +1,13 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.bluetooth;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+
+import com.jeg.te.justenoughgoods.amount.AmountViewActivity;
+import com.jeg.te.justenoughgoods.R;
 
 public class BluetoothPairingStartDialog extends DialogFragment {
     // ダイアログが生成された時に呼ばれるメソッド

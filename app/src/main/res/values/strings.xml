@@ -15,6 +15,7 @@
     <string name="disabled">無効</string>
     <string name="yes">はい</string>
     <string name="no">いいえ</string>
+    <string name="ok">OK</string>
 
     <!-- main -->
     <string name="main_amount">最新の残量状況を見る</string> <!-- 不要（？） -->
@@ -32,6 +33,11 @@
     <string name="amount_margin_value">%8dg</string>
     <string name="amount_notification">通知量 :</string>
     <string name="amount_notification_value">%8dg</string>
+    <string name="amount_start_update">更新を開始します。</string>
+    <string name="amount_finish_update">更新が完了しました。</string>
+
+    <string name="amount_lack_notification_title">不足している物があります</string>
+    <string name="amount_lack_notification_text">以上の残量を確認してください。</string>
     <string name="amount_title">残量確認</string> <!-- 不要（？） -->
     <string name="chargecheck_child1_title">子機1</string> <!-- 不要（？） -->
     <string name="chargecheck_child2_title">子機2</string> <!-- 不要（？） -->

@@ -24,6 +24,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.jeg.te.justenoughgoods.database.DbContract.MeasurementDataTable;
 import com.jeg.te.justenoughgoods.database.DbOpenHelper;
+import com.jeg.te.justenoughgoods.database.DbOperation;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ import static com.jeg.te.justenoughgoods.Utilities.getDifferenceFromNow;
 
 public class LogViewActivity extends Activity implements View.OnClickListener {
     // 子機データベース
-    private DbOpenHelper dbOpenHelper = null;
+    private DbOperation dbOperation = null;
 
     // 子機データ
     private String sId;
@@ -60,6 +61,8 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        dbOperation = DbOperation.getDbOperation();
 
         Intent intent = getIntent();
         sId = intent.getStringExtra("sid");
@@ -132,17 +135,13 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
 
     @Override
     protected void onPause() {
-        if(dbOpenHelper != null) {
-            dbOpenHelper.close(); // コネクションを閉じる。
-        }
+        dbOperation.closeConnection();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
-        if(dbOpenHelper != null) {
-            dbOpenHelper.close(); // コネクションを閉じる。
-        }
+        dbOperation.closeConnection();
         super.onDestroy();
     }
 
@@ -177,6 +176,8 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         logYearNum.setText(getResources().getString(R.string.log_year_num, calendar.get(Calendar.YEAR)));
 
         setButtonListener(); // ボタンアクション設定
+
+        drawingGraph(false); // データを取得しグラフを描画
     }
 
     // ボタンのリスナ登録
@@ -215,7 +216,7 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
     // グラフの描画
     private void drawingGraph(boolean monthly){
         // 初回にグラフオブジェクトを格納
-        if(logChart == null) logChart = findViewById(R.id.chart_StaticLineGraph);
+        logChart = findViewById(R.id.chart_StaticLineGraph);
 
         // データベースから計測データを取得
         ArrayList<Entry> measurementData = getMeasurementData(monthly);
@@ -260,8 +261,6 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
      */
     private ArrayList<Entry> getMeasurementData(boolean monthly){
         // データ取得
-        dbOpenHelper = new DbOpenHelper(getApplicationContext());
-        SQLiteDatabase reader = dbOpenHelper.getReadableDatabase();
         // SELECT
         String[] projection = {
                 MeasurementDataTable.AMOUNT,
@@ -270,37 +269,43 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         };
 
         // WHERE
-        String selection = MeasurementDataTable.S_ID + " = ?";
-        String[] selectionArgs = {sId, ""};
+        String selection = null;
+        String[] selectionArgs = new String[(monthly ? 2 : 1)];
         // 月間だったらWHEREをに月を追加
         if(monthly){
-            selection += " AND " + MeasurementDataTable.MONTH_NUM + " = ?";
+            selection = MeasurementDataTable.S_ID + " = ? AND " + MeasurementDataTable.MONTH_NUM + " = ?";
+            selectionArgs[0] = sId;
             selectionArgs[1] = String.valueOf(month_num);
+        }
+        else{
+            selection = MeasurementDataTable.S_ID + " = ?";
+            selectionArgs[0] = sId;
         }
 
         // ORDER BY
         String sortOrder = MeasurementDataTable.DATETIME + " ASC";
 
-        Cursor cursor = reader.query(
-                MeasurementDataTable.TABLE_NAME, // The table to query
-                projection,         // The columns to return
-                selection,          // The columns for the WHERE clause
-                selectionArgs,      // The values for the WHERE clause
-                null,               // don't group the rows
-                null,               // don't filter by row groups
-                sortOrder           // The sort order
+        String[][] mData = dbOperation.selectData(
+            false,
+                MeasurementDataTable.TABLE_NAME,
+                null,
+                projection,
+                selection,
+                selectionArgs,
+                null,
+                null,
+                sortOrder,
+                null
         );
 
-        ArrayList<Entry> data = new ArrayList<>(cursor.getCount());
-        while(cursor.moveToNext()) {
-            // 日付データ
-            float datetime = getDifferenceFromNow(cursor.getLong(cursor.getColumnIndexOrThrow(MeasurementDataTable.DATETIME)));
+        ArrayList<Entry> data = new ArrayList<>();
+        for(String[] value : mData) {
+            float datetime = getDifferenceFromNow(Long.valueOf(value[1]));
             System.out.println("DEBUG ENTRY DATETIME : " + datetime);
             // データを少数第三位で四捨五入
-            String value = String.valueOf(new BigDecimal(cursor.getDouble(cursor.getColumnIndexOrThrow(MeasurementDataTable.AMOUNT))  * 1000.0 ).setScale(3, BigDecimal.ROUND_HALF_UP));
-            data.add(new Entry(datetime, Float.valueOf(value))); // データ追加
+            String amount = String.valueOf(new BigDecimal(Double.valueOf(value[0])  * 1000.0 ).setScale(3, BigDecimal.ROUND_HALF_UP));
+            data.add(new Entry(datetime, Float.valueOf(amount))); // データ追加
         }
-        cursor.close();
         return data;
     }
 

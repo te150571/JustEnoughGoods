@@ -1,4 +1,4 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.amount;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
@@ -14,8 +14,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.jeg.te.justenoughgoods.LogViewActivity;
+import com.jeg.te.justenoughgoods.R;
+import com.jeg.te.justenoughgoods.Slave;
+import com.jeg.te.justenoughgoods.SlaveConfigurationActivity;
 import com.jeg.te.justenoughgoods.bluetooth.BluetoothConnection;
 import com.jeg.te.justenoughgoods.bluetooth.BluetoothDeviceListActivity;
+import com.jeg.te.justenoughgoods.bluetooth.BluetoothPairingStartDialog;
 import com.jeg.te.justenoughgoods.database.DbContract.SlavesTable;
 import com.jeg.te.justenoughgoods.database.DbContract.MeasurementDataTable;
 import com.jeg.te.justenoughgoods.database.DbOperation;
@@ -38,7 +43,8 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     private DbOperation dbOperation = null;
 
     // リストビューの内容
-    private SlavesListAdapter slavesListAdapter;
+    private AmountListAdapter amountListAdapter;
+    ArrayList<String> lacks;
 
     final Handler handler = new Handler();
     final Runnable updateCheck = new Runnable() {
@@ -46,21 +52,33 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         public void run()
         {
             System.out.println("DEBUG HANDLER RUNNING.");
+            raspberryBluetoothConnection.connect();
             if(raspberryBluetoothConnection.checkUpdatable()){
                 System.out.println("DEBUG UPDATABLE.");
-                if(raspberryBluetoothConnection.checkReceiving()){
-                    // データ受信待ち
-                    System.out.println("DEBUG RECEIVING.");
-                }
-                else {
-                    System.out.println("DEBUG UPDATE.");
-                    updateData();
-                    return;
-                }
+                handler.removeCallbacks(updateCheck);
+                startUpdate();
             }
             else {
                 System.out.println("DEBUG CHECK UPDATE.");
                 checkUpdate();
+            }
+
+            handler.postDelayed(this, 3000);
+        }
+    };
+
+    final Runnable updateWait = new Runnable() {
+        @Override
+        public void run(){
+            if(raspberryBluetoothConnection.checkReceiving()){
+                // データ受信待ち
+                System.out.println("DEBUG RECEIVING.");
+            }
+            else {
+                System.out.println("DEBUG UPDATE.");
+                handler.removeCallbacks(updateWait);
+                updateData();
+                return;
             }
 
             handler.postDelayed(this, 3000);
@@ -108,7 +126,7 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 startActivity(intent);
                 return true;
             case R.id.menu_item_init_config:
-                handler.post(updateCheck);
+                insertTestData();
                 return true;
             case R.id.menu_re:
                 dbOperation.initDatabase();
@@ -149,9 +167,9 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
             bluetoothPairingStartDialog.show(getFragmentManager(), "bluetoothPairingStartDialog");
         }
 
-        raspberryBluetoothConnection.connect();
-
         super.onResume();
+
+        handler.post(updateCheck);
     }
 
     // アプリがバックグラウンドへ
@@ -206,7 +224,6 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 if( Activity.RESULT_CANCELED == resultCode )
                 {    // 有効にされなかった
                     Toast.makeText( this, R.string.bluetooth_is_not_working, Toast.LENGTH_SHORT ).show();
-//                    finish();    // アプリ終了宣言
                     return;
                 }
                 break;
@@ -242,55 +259,64 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 null,
                 null
                 );
-        raspberryBluetoothConnection.write(lastUpdate[0][0]);
-        if(raspberryBluetoothConnection.checkUpdatable()){
-            handler.post(updateCheck);
-        }
+        if(lastUpdate[0][0] == null)
+            raspberryBluetoothConnection.write("10");
+        else
+            raspberryBluetoothConnection.write(lastUpdate[0][0]);
     }
 
     // データの更新を行う
     private void updateData(){
         System.out.println("DEBUG UPDATING.");
         ArrayList<String> update = raspberryBluetoothConnection.getUpdateData();
-        update.remove(0);
-        update.remove(update.size() - 1);
-        System.out.println("DEBUG UPDATE RAW : " + update.get(0));
-        for (String data : update) {
-            String[] splitData = data.split(",", 0);
-            System.out.println("DEBUG UPDATE RAW : " + data);
-            System.out.println("DEBUG UPDATE DATA SPLIT : " + splitData[0] + splitData[1] + splitData[2] + splitData[3]);
-            dbOperation.insertData(
-                    MeasurementDataTable.TABLE_NAME,
-                    new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
-                    new String[]{splitData[0], splitData[1], splitData[2], splitData[3]},
-                    new String[]{"string", "double", "long", "int"}
-            );
-        }
 
-        // 子機IDの照合をして新規を検出
-        String[][] havingSlavesSId = dbOperation.selectData(false, SlavesTable.TABLE_NAME, null, new String[]{SlavesTable.S_ID}, null, null, null, null, null, null);
-        String[][] receivedSlavesSId = dbOperation.selectData(true, MeasurementDataTable.TABLE_NAME, null, new String[]{MeasurementDataTable.S_ID}, null, null, null, null, null, null);
-
-        // 二次元配列を１次元に
-        ArrayList<String> _havingSlavesSId = new ArrayList<>();
-        for(String[] tmp : havingSlavesSId){
-            _havingSlavesSId.add(tmp[0]);
-        }
-        ArrayList<String> _receivedSlavesSId = new ArrayList<>();
-        for(String[] tmp : receivedSlavesSId){
-            _receivedSlavesSId.add(tmp[0]);
-        }
-
-        // 比較
-        ArrayList<String> newSIds = new ArrayList<>();
-        for(String sid : _receivedSlavesSId){
-            if(!_havingSlavesSId.contains(sid)){
-                newSIds.add(sid);
+        if(update.size() > 1) {
+            System.out.println("DEBUG UPDATE RAW : " + update.get(0));
+            for (String data : update) {
+                if(!data.equals("1")) {
+                    System.out.println("DEBUG UPDATE RAW : " + data.equals("1"));
+                    String[] splitData = data.split(",", 0);
+                    System.out.println("DEBUG UPDATE RAW : " + data);
+                    System.out.println("DEBUG UPDATE DATA SPLIT : " + splitData[0] + splitData[1] + splitData[2] + splitData[3]);
+                    dbOperation.insertData(
+                            MeasurementDataTable.TABLE_NAME,
+                            new String[]{MeasurementDataTable.S_ID, MeasurementDataTable.AMOUNT, MeasurementDataTable.DATETIME, MeasurementDataTable.MONTH_NUM},
+                            new String[]{splitData[0], splitData[1], splitData[2], splitData[3]},
+                            new String[]{"string", "double", "long", "int"}
+                    );
+                }
             }
+
+            // 子機IDの照合をして新規を検出
+            String[][] havingSlavesSId = dbOperation.selectData(false, SlavesTable.TABLE_NAME, null, new String[]{SlavesTable.S_ID}, null, null, null, null, null, null);
+            String[][] receivedSlavesSId = dbOperation.selectData(true, MeasurementDataTable.TABLE_NAME, null, new String[]{MeasurementDataTable.S_ID}, null, null, null, null, null, null);
+
+            // 二次元配列を１次元に
+            ArrayList<String> _havingSlavesSId = new ArrayList<>();
+            for (String[] tmp : havingSlavesSId) {
+                _havingSlavesSId.add(tmp[0]);
+            }
+            ArrayList<String> _receivedSlavesSId = new ArrayList<>();
+            for (String[] tmp : receivedSlavesSId) {
+                _receivedSlavesSId.add(tmp[0]);
+            }
+
+            // 比較
+            ArrayList<String> newSIds = new ArrayList<>();
+            for (String sid : _receivedSlavesSId) {
+                if (!_havingSlavesSId.contains(sid)) {
+                    newSIds.add(sid);
+                }
+            }
+
+            // 新しく検出した子機を登録する
+            if (newSIds.size() != 0)
+                registrationNewSlaves(newSIds);
+
+            Toast.makeText(this, R.string.amount_finish_update, Toast.LENGTH_SHORT).show();
         }
 
-        if(newSIds.size() != 0)
-            registrationNewSlaves(newSIds);
+        handler.post(updateCheck); // アップデート確認を開始
     }
 
     // 子機の新規登録
@@ -308,6 +334,12 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         getAndSetSlavesAmountData();
     }
 
+    // アップデートを開始する
+    private void startUpdate(){
+        Toast.makeText( this, R.string.amount_start_update, Toast.LENGTH_SHORT ).show();
+        handler.post(updateWait); // アップデート待機を登録
+    }
+
     // 画面表示
     private void displayAmounts(){
         setContentView(R.layout.amount_view);
@@ -315,9 +347,9 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
         // GUIアイテム設定
         // リストビューの設定
-        slavesListAdapter = new SlavesListAdapter( this ); // ビューアダプターの初期化
+        amountListAdapter = new AmountListAdapter( this ); // ビューアダプターの初期化
         ListView listView = findViewById( R.id.listView_slavesAmount);    // リストビューの取得
-        listView.setAdapter( slavesListAdapter ); // リストビューにビューアダプターをセット
+        listView.setAdapter(amountListAdapter); // リストビューにビューアダプターをセット
         listView.setOnItemClickListener( this ); // クリックリスナーオブジェクトのセット
         listView.setOnItemLongClickListener( this ); // ロングクリックリスナーオブジェクトのセット
 
@@ -326,7 +358,69 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
     // データの取得と表示
     private void getAndSetSlavesAmountData() {
-        slavesListAdapter.clearSlaves();
+        amountListAdapter.clearSlaves();
+
+        // データベースから取得しSlavesクラスへ
+        // SELECT
+        String[] projection = { // SELECT する列
+                "s." + SlavesTable.S_ID,
+                "s." + SlavesTable.NAME,
+                "s." + SlavesTable.NOTIFICATION_AMOUNT,
+                "s." + SlavesTable.AMOUNT_NOTIFICATION_ENABLE,
+                "s." + SlavesTable.EXCEPTION_FLAG,
+                "s." + SlavesTable.EXCEPTION_NOTIFICATION_ENABLE,
+                "m." + MeasurementDataTable.AMOUNT,
+                "m." + MeasurementDataTable.DATETIME
+        };
+        // JOIN
+        String tableJoin = "as s LEFT JOIN (" +
+                "SELECT * FROM "+ MeasurementDataTable.TABLE_NAME + " a " +
+                "WHERE NOT EXISTS ( SELECT 1 FROM " + MeasurementDataTable.TABLE_NAME + " b WHERE a.s_id = b.s_id AND a.datetime < b.datetime ) ) as m ON s.s_id = m.s_id";
+        String sortOrder = "s." + SlavesTable.S_ID + " ASC"; // ORDER
+
+        String[][] selectResult = dbOperation.selectData(
+                false,
+                SlavesTable.TABLE_NAME,
+                tableJoin,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder,
+                null
+        );
+
+        ArrayList<Slave> testSlaves = new ArrayList<>();
+        for(int row=0; row<selectResult.length; row++){
+            Slave slave = new Slave();
+            slave.setSId( selectResult[row][0] );
+            slave.setName( selectResult[row][1] );
+            slave.setAmount( Double.valueOf(selectResult[row][6]) );
+            slave.setNotificationAmount( Double.valueOf(selectResult[row][2]) );
+            slave.setLastUpdate( Long.valueOf(selectResult[row][7]) );
+            testSlaves.add(slave);
+        }
+
+        for (Slave slave : testSlaves){
+            amountListAdapter.addSlaves(slave);
+        }
+
+        // 不足を通知
+        lacks = amountListAdapter.getLackList();
+        if(lacks.size() > 0){
+            System.out.println("DEBUG LACK AMOUNT : " + lacks.size());
+            AmountLackNotificationDialog amountLackNotificationDialog = new AmountLackNotificationDialog();
+            amountLackNotificationDialog.show(getFragmentManager(), "amountLackNotificationDialog");
+        }
+    }
+
+    // 不足リストを取得
+    public ArrayList<String> getLacks(){
+        return lacks;
+    }
+
+    private void insertTestData(){
         // INSERT
         // 子機設定データ
         dbOperation.insertData(
@@ -334,7 +428,7 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 new String[]{SlavesTable.S_ID, SlavesTable.NAME, SlavesTable.NOTIFICATION_AMOUNT},
                 new String[]{"ID00001A", "醤油", "0.2"},
                 new String[]{"string", "string", "double"}
-                );
+        );
 
         dbOperation.insertData(
                 SlavesTable.TABLE_NAME,
@@ -403,59 +497,27 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 new String[]{"ID00004A", "0.45", String.valueOf(nowTime - 86400000), "1"},
                 new String[]{"string", "double", "long", "int"}
         );
-
-        // データベースから取得しSlavesクラスへ
-        // SELECT
-        String[] projection = { // SELECT する列
-                "s." + SlavesTable.S_ID,
-                "s." + SlavesTable.NAME,
-                "s." + SlavesTable.NOTIFICATION_AMOUNT,
-                "s." + SlavesTable.AMOUNT_NOTIFICATION_ENABLE,
-                "s." + SlavesTable.EXCEPTION_FLAG,
-                "s." + SlavesTable.EXCEPTION_NOTIFICATION_ENABLE,
-                "m." + MeasurementDataTable.AMOUNT,
-                "m." + MeasurementDataTable.DATETIME
-        };
-        // JOIN
-        String tableJoin = "as s LEFT JOIN (" +
-                "SELECT * FROM "+ MeasurementDataTable.TABLE_NAME + " a " +
-                "WHERE NOT EXISTS ( SELECT 1 FROM " + MeasurementDataTable.TABLE_NAME + " b WHERE a.s_id = b.s_id AND a.datetime < b.datetime ) ) as m ON s.s_id = m.s_id";
-        String sortOrder = "s." + SlavesTable.S_ID + " ASC"; // ORDER
-
-        String[][] selectResult = dbOperation.selectData(
-                false,
-                SlavesTable.TABLE_NAME,
-                tableJoin,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                sortOrder,
-                null
-        );
-
-        ArrayList<Slaves> testSlaves = new ArrayList<>();
-        for(int row=0; row<selectResult.length; row++){
-            Slaves slave = new Slaves();
-            slave.setSId( selectResult[row][0] );
-            slave.setName( selectResult[row][1] );
-            slave.setAmount( Double.valueOf(selectResult[row][6]) );
-            slave.setNotificationAmount( Double.valueOf(selectResult[row][2]) );
-            slave.setLastUpdate( Long.valueOf(selectResult[row][7]) );
-            testSlaves.add(slave);
-            for(int column=0; column<selectResult[row].length; column++){
-                System.out.println("DEBUG SELECTED : " + selectResult[row][column]);
-            }
-        }
-
-        for (Slaves slave : testSlaves){
-            slavesListAdapter.addSlaves(slave);
-        }
     }
 
     private void checkDB(){
         // DEBUG
+        String[][] debugSlaves = dbOperation.selectData(
+                false,
+                SlavesTable.TABLE_NAME,
+                null,
+                new String[]{SlavesTable.S_ID, SlavesTable.NAME},
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        for(int row=0; row<debugSlaves.length; row++){
+            System.out.println("DEBUG SLAVES SID : " + debugSlaves[row][0] );
+            System.out.println("DEBUG SLAVES NAME : " + debugSlaves[row][1] );
+        }
+
         String[] pro = {
                 MeasurementDataTable._ID,
                 MeasurementDataTable.S_ID,

@@ -505,6 +505,7 @@ public class BluetoothConnection {
         if(received.equals("1")){
             receivingData = true;
             updatable = true;
+            measurementData.clear();
         }
 
         if(receivingData){

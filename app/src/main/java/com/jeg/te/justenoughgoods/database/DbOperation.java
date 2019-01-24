@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.jeg.te.justenoughgoods.MyApplication;
 
+import java.util.ArrayList;
+
 public class DbOperation {
 
     private static DbOperation dbOperation = new DbOperation();

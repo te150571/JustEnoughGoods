@@ -47,7 +47,9 @@
     <string name="sine_wave">Sine Wave</string>
     <string name="pi_label">%1$dπ</string>
 
-    <!-- Menu -->
+    <!-- Navigation -->
+    <string name="nav_main">トップ</string>
+    <string name="nav_remaining_amount_list_all">子機残量一覧</string>
     <string name="config_raspberry">親機設定</string>
     <string name="config_initialize">設定を初期化</string>
 

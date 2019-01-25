@@ -16,6 +16,7 @@ android {
             file('src/main/res-screen')
                     .listFiles()
                     .each { res.srcDirs += it.path }
+
         }
     }
     buildTypes {

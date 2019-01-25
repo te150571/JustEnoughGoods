@@ -18,11 +18,11 @@ import java.util.Comparator;
 
 import static com.jeg.te.justenoughgoods.Utilities.convertLongToDateFormatDefault;
 
-public class AmountListAdapter extends BaseAdapter {
+public class SlavesRemainingAmountListAdapter extends BaseAdapter {
     private ArrayList<Slave> slaveList;
     private LayoutInflater slavesInflater;
 
-    public AmountListAdapter(Activity activity )
+    public SlavesRemainingAmountListAdapter(Activity activity )
     {
         super();
         slaveList = new ArrayList<>();
@@ -88,12 +88,12 @@ public class AmountListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent )
     {
-        AmountListAdapter.ViewHolder viewHolder;
+        SlavesRemainingAmountListAdapter.ViewHolder viewHolder;
         // General ListView optimization code.
         if( null == convertView )
         {
-            convertView = slavesInflater.inflate( R.layout.amount_view_listitem, parent, false );
-            viewHolder = new AmountListAdapter.ViewHolder();
+            convertView = slavesInflater.inflate( R.layout.fragment_remaining_amount_listitem, parent, false );
+            viewHolder = new SlavesRemainingAmountListAdapter.ViewHolder();
             viewHolder.viewSlaveId = convertView.findViewById( R.id.textView_slaveId);
             viewHolder.viewSlaveName = convertView.findViewById( R.id.textView_slaveName );
             viewHolder.viewSlaveAmountBar = convertView.findViewById( R.id.progressBar_amount );
@@ -105,7 +105,7 @@ public class AmountListAdapter extends BaseAdapter {
         }
         else
         {
-            viewHolder = (AmountListAdapter.ViewHolder)convertView.getTag();
+            viewHolder = (SlavesRemainingAmountListAdapter.ViewHolder)convertView.getTag();
         }
 
         Slave slave = slaveList.get( position );

@@ -6,22 +6,13 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context=".LogViewActivity">
-
-    <Toolbar
-        android:id="@+id/toolbar_logYearly"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:titleTextColor="@color/colorTitle"/>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="10dp" />
+    tools:context=".log.LogViewActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal">
 
         <Space

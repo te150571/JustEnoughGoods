@@ -1,39 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/menu_item_raspberry_config"
-        android:title="@string/config_raspberry"
-        android:orderInCategory="100"/>
-    <item
-        android:id="@+id/menu_item_init_config"
-        android:title="@string/config_initialize"
-        android:orderInCategory="110"/>
+    <group
+        android:orderInCategory="100">
+
+        <item
+            android:id="@+id/nav_main"
+            android:title="@string/nav_main"
+            android:orderInCategory="100"/>
+
+        <item
+            android:id="@+id/nav_remaining_amount_list_all"
+            android:title="@string/nav_remaining_amount_list_all"
+            android:orderInCategory="110"/>
+
+        <item
+            android:id="@+id/menu_item_raspberry_config"
+            android:title="@string/config_raspberry"
+            android:orderInCategory="180"/>
+        <item
+            android:id="@+id/menu_item_init_config"
+            android:title="@string/config_initialize"
+            android:orderInCategory="190"/>
+
+    </group>
 
     <item
-        android:id="@+id/menu_re"
-        android:title="受信"
-        android:orderInCategory="111"/>
+        android:title="デバック用"
+        android:orderInCategory="200">
+        <menu>
+            <item
+                android:id="@+id/menu_debug_select_data"
+                android:title="テストデータ確認"
+                android:orderInCategory="210"/>
+
+            <item
+                android:id="@+id/menu_debug_insert_data"
+                android:title="テストデータ挿入"
+                android:orderInCategory="220"/>
+
+            <item
+                android:id="@+id/menu_debug_init_database"
+                android:title="データベース初期化"
+                android:orderInCategory="230"/>
+
+        </menu>
+    </item>
 
     <!--<group android:checkableBehavior="single">-->
 
-        <!--<item-->
-            <!--android:id="@+id/nav_item_category_1"-->
-            <!--android:icon="@drawable/ic_launcher_foreground"-->
-            <!--android:title="CATEGORY_1" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_item_category_1"-->
+    <!--android:icon="@drawable/ic_launcher_foreground"-->
+    <!--android:title="CATEGORY_1" />-->
 
-        <!--<item-->
-            <!--android:id="@+id/nav_item_category_2"-->
-            <!--android:icon="@drawable/ic_launcher_foreground"-->
-            <!--android:title="CATEGORY_2" />-->
+    <!--<item-->
+    <!--android:id="@+id/nav_item_category_2"-->
+    <!--android:icon="@drawable/ic_launcher_foreground"-->
+    <!--android:title="CATEGORY_2" />-->
     <!--</group>-->
 
     <!--<item android:title="Sub items">-->
-        <!--<menu>-->
-            <!--<item-->
-                <!--android:id="@+id/nav_sub_item_1"-->
-                <!--android:icon="@drawable/ic_launcher_foreground"-->
-                <!--android:title="SUB_ITEM_1" />-->
-        <!--</menu>-->
+    <!--<menu>-->
+    <!--<item-->
+    <!--android:id="@+id/nav_sub_item_1"-->
+    <!--android:icon="@drawable/ic_launcher_foreground"-->
+    <!--android:title="SUB_ITEM_1" />-->
+    <!--</menu>-->
     <!--</item>-->
 
 </menu>

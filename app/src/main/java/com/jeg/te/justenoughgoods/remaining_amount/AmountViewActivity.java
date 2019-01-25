@@ -18,7 +18,6 @@ import android.widget.Toast;
 
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
-import com.jeg.te.justenoughgoods.LogViewActivity;
 import com.jeg.te.justenoughgoods.R;
 import com.jeg.te.justenoughgoods.Slave;
 import com.jeg.te.justenoughgoods.SlaveConfigurationActivity;
@@ -44,7 +43,7 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     private DbOperation dbOperation = null;
 
     // リストビューの内容
-    private AmountListAdapter amountListAdapter;
+    private SlavesRemainingAmountListAdapter slavesRemainingAmountListAdapter;
     ArrayList<String> lacks;
 
     private AwesomeBar toolbar_main;
@@ -142,11 +141,11 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     // 子機のリストがタップされた
     @Override
     public void onItemClick( AdapterView<?> parent, View view, int position, long id ){
-        Intent slaveLogIntent = new Intent(getApplication(), LogViewActivity.class);
-        // タップされた項目のSIDを次のアクティビティへ
-        slaveLogIntent.putExtra("sid", (String) ((TextView) view.findViewById(R.id.textView_slaveId)).getText());
-        slaveLogIntent.putExtra("name", (String) ((TextView) view.findViewById(R.id.textView_slaveName)).getText());
-        startActivity(slaveLogIntent);
+//        Intent slaveLogIntent = new Intent(getApplication(), LogViewActivity.class);
+//        // タップされた項目のSIDを次のアクティビティへ
+//        slaveLogIntent.putExtra("sid", (String) ((TextView) view.findViewById(R.id.textView_slaveId)).getText());
+//        slaveLogIntent.putExtra("name", (String) ((TextView) view.findViewById(R.id.textView_slaveName)).getText());
+//        startActivity(slaveLogIntent);
     }
 
     // 子機のリストがロングタップされた
@@ -385,9 +384,9 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
         // GUIアイテム設定
         // リストビューの設定
-        amountListAdapter = new AmountListAdapter( this ); // ビューアダプターの初期化
+        slavesRemainingAmountListAdapter = new SlavesRemainingAmountListAdapter( this ); // ビューアダプターの初期化
         ListView listView = findViewById( R.id.listView_slavesAmount);    // リストビューの取得
-        listView.setAdapter(amountListAdapter); // リストビューにビューアダプターをセット
+        listView.setAdapter(slavesRemainingAmountListAdapter); // リストビューにビューアダプターをセット
         listView.setOnItemClickListener( this ); // クリックリスナーオブジェクトのセット
         listView.setOnItemLongClickListener( this ); // ロングクリックリスナーオブジェクトのセット
 
@@ -397,7 +396,6 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     /**
      * Set a navigation view.
      */
-
     private void setNavigationView() {
         NavigationView navigationView = findViewById(R.id.left_drawer);
         navigationView.setNavigationItemSelectedListener(
@@ -412,7 +410,7 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
     // データの取得と表示
     private void getAndSetSlavesAmountData() {
-        amountListAdapter.clearSlaves();
+        slavesRemainingAmountListAdapter.clearSlaves();
 
         // データベースから取得しSlavesクラスへ
         // SELECT
@@ -457,11 +455,11 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         }
 
         for (Slave slave : testSlaves){
-            amountListAdapter.addSlaves(slave);
+            slavesRemainingAmountListAdapter.addSlaves(slave);
         }
 
         // 不足を通知
-        lacks = amountListAdapter.getLackList();
+        lacks = slavesRemainingAmountListAdapter.getLackList();
         if(lacks.size() > 0){
             AmountLackNotificationDialog amountLackNotificationDialog = new AmountLackNotificationDialog();
             amountLackNotificationDialog.show(getFragmentManager(), "amountLackNotificationDialog");

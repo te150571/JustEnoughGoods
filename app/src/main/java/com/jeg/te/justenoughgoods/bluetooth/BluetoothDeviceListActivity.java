@@ -95,7 +95,7 @@ public class BluetoothDeviceListActivity extends Activity implements AdapterView
             // General ListView optimization code.
             if( null == convertView )
             {
-                convertView = deviceListLayoutInflater.inflate( R.layout.bluetooth_device_listitem, parent, false );
+                convertView = deviceListLayoutInflater.inflate( R.layout.fragment_bluetooth_device_listitem, parent, false );
                 viewHolder = new ViewHolder();
                 viewHolder.deviceAddress = convertView.findViewById( R.id.textView_deviceAddress);
                 viewHolder.deviceName = convertView.findViewById( R.id.textView_deviceName);

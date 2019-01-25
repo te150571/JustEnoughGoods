@@ -8,7 +8,7 @@
         android:id="@+id/toolbar_raspberry"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"/>
+        android:titleTextColor="@color/colorTitle"/>
 
     <Space
         android:layout_width="match_parent"

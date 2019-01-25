@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.util.Log;
 
 import com.jeg.te.justenoughgoods.MyApplication;
 
@@ -76,7 +77,7 @@ public class BluetoothConnection {
                 }
                 catch( IOException e )
                 {
-                    System.out.println("DEBUG : Connection Error.");
+                    Log.w("Failed", "Connection Error.");
                 }
             }
 
@@ -100,7 +101,7 @@ public class BluetoothConnection {
                             }
                             catch( IOException e )
                             {    // 接続失敗
-                                System.out.println("DEBUG Failed : mBluetoothSocket.connect()");
+                                Log.w("Failed", "mBluetoothSocket.connect()");
                                 setState( STATE_CONNECT_FAILED );
                                 cancel();    // スレッド終了。
                                 return;
@@ -114,15 +115,11 @@ public class BluetoothConnection {
                         case STATE_CONNECTED:        // 接続済み（Bluetoothデバイスから送信されるデータ受信）
                             try
                             {
-                                System.out.println("DEBUG MASSAGE READ.");
                                 availableBytes = mInput.available();
-                                System.out.println("DEBUG AVAILABLE BYTES : " + availableBytes);
                                 if(availableBytes > 0){
                                     byte[] buf = new byte[availableBytes];
                                     bytes = mInput.read( buf );
-                                    System.out.println("DEBUG MASSAGE READ2.");
                                     mHandler.obtainMessage( MESSAGE_READ, bytes, -1, buf ).sendToTarget();
-                                    System.out.println("DEBUG MASSAGE READ3.");
                                 }
                                 else SystemClock.sleep(500);
                             }
@@ -159,7 +156,7 @@ public class BluetoothConnection {
                 }
                 catch( IOException e )
                 {
-                    System.out.println("DEBUG Failed : mBluetoothSocket.close()");
+                    Log.w("Failed", "mBluetoothSocket.close()");
                 }
                 setState( STATE_DISCONNECTED );
             }
@@ -177,7 +174,7 @@ public class BluetoothConnection {
                 }
                 catch( IOException e )
                 {
-                    System.out.println("Failed : mBluetoothSocket.close()");
+                    Log.w("Failed", "mBluetoothSocket.close()");
                 }
             }
 
@@ -204,7 +201,6 @@ public class BluetoothConnection {
         // 接続開始時の処理
         public synchronized void connect()
         {
-            System.out.println("DEBUG CONNECTING.");
             if( STATE_NONE != mState )
             {   // １つのBluetoothServiceオブジェクトに対して、connect()は１回だけ呼べる。
                 // ２回目以降の呼び出しは、処理しない。
@@ -213,13 +209,11 @@ public class BluetoothConnection {
 
             // ステータス設定
             setState( STATE_CONNECT_START );
-            System.out.println("DEBUG CONNECTED.");
         }
 
         // 接続切断時の処理
         public synchronized void disconnect()
         {
-            System.out.println("DEBUG DISCONNECTING.");
             if( STATE_CONNECTED != mState )
             {    // 接続中以外は、処理しない。
                 return;
@@ -234,7 +228,6 @@ public class BluetoothConnection {
         // バイト列送信（非同期）
         public void write( byte[] out )
         {
-            System.out.println("DEBUG WRITING.");
             ConnectionThread connectionThread;
             synchronized( this )
             {
@@ -262,23 +255,16 @@ public class BluetoothConnection {
         {
             String action = intent.getAction();
 
-            System.out.println("DEBUG RECEIVED.");
-            System.out.println("DEBUG ACTION : " + action);
-
             // Bluetooth端末発見
             if( BluetoothDevice.ACTION_FOUND.equals( action ) )
             {
                 final BluetoothDevice device = intent.getParcelableExtra( BluetoothDevice.EXTRA_DEVICE );
                 bluetoothDevices.add(device);
-                System.out.println("DEBUG DEVICE FOUND.");
-                System.out.println("DEBUG DEVICE ADDRESS : " + device.getAddress());
-                System.out.println("DEBUG DEVICE LIST COUNT : " + bluetoothDevices.size());
                 return;
             }
             // Bluetooth端末検索終了
             if( BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals( action ) )
             {
-                System.out.println("DEBUG FINISH BROADCAST.");
                 scanning = false;
                 return;
             }
@@ -409,7 +395,6 @@ public class BluetoothConnection {
     public String getRaspberryAddress(){
         // アプリのデータから親機の情報を取得する
         SharedPreferences data = MyApplication.getContext().getSharedPreferences("jegAppData", MODE_PRIVATE);
-        System.out.println("DEBUG BLUETOOTH ADDRESS : " + data.getString("raspberryAddress", ""));
         return data.getString("raspberryAddress", "");
     }
 
@@ -447,7 +432,6 @@ public class BluetoothConnection {
 
     // スキャンの開始
     private void startScan(){
-        System.out.println("DEBUG START SCAN.");
         scanning = true;
         if (bluetoothDevices != null)
             bluetoothDevices.clear();
@@ -456,7 +440,6 @@ public class BluetoothConnection {
 
     // スキャンの停止
     private void stopScan(){
-        System.out.println("DEBUG STOP SCAN.");
         scanning = false;
         mBluetoothAdapter.cancelDiscovery();
     }
@@ -501,7 +484,7 @@ public class BluetoothConnection {
 
     // 文字列受信処理
     private void dataRead(String received){
-        System.out.println("DEBUG RECEIVED : " + received);
+        Log.d("RECEIVED String", received);
         if(received.equals("1")){
             receivingData = true;
             updatable = true;
@@ -511,9 +494,6 @@ public class BluetoothConnection {
         if(receivingData){
             if(received.equals("0")){
                 receivingData = false;
-                for(String data : measurementData){
-                    System.out.println("DEBUG M_DATA : " + data);
-                }
             }
             else{
                 measurementData.add(received);

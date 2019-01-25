@@ -9,10 +9,10 @@
     tools:context=".LogViewActivity">
 
     <Toolbar
-        android:id="@+id/toolbar_logYearly"
+        android:id="@+id/toolbar_logMonthly"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"/>
+        android:titleTextColor="@color/colorTitle"/>
 
     <Space
         android:layout_width="match_parent"
@@ -29,37 +29,35 @@
             android:layout_height="match_parent" />
 
         <Button
-            android:id="@+id/bt_logPreviousYear"
+            android:id="@+id/bt_logPrevious"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/log_previous"
-            android:visibility="invisible"/>
+            android:text="@string/log_previous" />
 
         <Space
             android:layout_width="20dp"
             android:layout_height="match_parent" />
 
         <TextView
-            android:id="@+id/textView_logYearNum"
+            android:id="@+id/textView_logMonthNum"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
             android:textSize="20sp"
-            android:text="@string/log_year_num" />
+            android:text="@string/log_month_num" />
 
         <Space
             android:layout_width="20dp"
             android:layout_height="match_parent" />
 
         <Button
-            android:id="@+id/bt_logNextYear"
+            android:id="@+id/bt_logNext"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/log_next"
-            android:visibility="invisible"/>
+            android:text="@string/log_next" />
 
         <Space
             android:layout_width="10dp"

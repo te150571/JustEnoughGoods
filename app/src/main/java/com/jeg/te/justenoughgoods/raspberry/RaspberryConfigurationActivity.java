@@ -32,7 +32,7 @@ public class RaspberryConfigurationActivity extends Activity implements View.OnC
         // タイトル設定
         setTitle(R.string.app_name_raspberry_config);
 
-        setContentView( R.layout.raspberry_configuration);
+        setContentView( R.layout.fragment_raspberry_configuration);
         setActionBar((Toolbar) findViewById(R.id.toolbar_raspberry));
         getActionBar().setDisplayHomeAsUpEnabled(true);
 

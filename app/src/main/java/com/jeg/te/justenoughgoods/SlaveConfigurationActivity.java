@@ -86,7 +86,7 @@ public class SlaveConfigurationActivity extends Activity {
 
     // 画面表示
     private void displaySlavesLabelNameConfig(){
-        setContentView(R.layout.slave_configuration);
+        setContentView(R.layout.fragment_slave_configuration);
 
         setActionBar((Toolbar) findViewById(R.id.toolbar_slaveConfig));
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -190,7 +190,7 @@ public class SlaveConfigurationActivity extends Activity {
         for(String[] value : data) {
             name = value[1];
             amount = Double.valueOf(value[6]);
-            notificationAmount = Double.valueOf(value[6]);
+            notificationAmount = Double.valueOf(value[2]);
             amountNotificationEnable = Integer.valueOf(value[3]);
             slaveExceptionFlag = Integer.valueOf(value[4]);
             slaveExceptionNotificationEnable = Integer.valueOf(value[5]);

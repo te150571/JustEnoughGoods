@@ -2,8 +2,6 @@ package com.jeg.te.justenoughgoods;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -23,7 +21,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.jeg.te.justenoughgoods.database.DbContract.MeasurementDataTable;
-import com.jeg.te.justenoughgoods.database.DbOpenHelper;
 import com.jeg.te.justenoughgoods.database.DbOperation;
 
 import java.math.BigDecimal;
@@ -49,7 +46,6 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
     // ボタンの宣言
     private Button btLogPrevious;
     private Button btLogNext;
-    private Button btLogBack;
 
     // グラフの宣言
     private LineChart logChart = null;
@@ -150,7 +146,7 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         // タイトル設定
         setTitle(getResources().getString(R.string.app_name_log_monthly, name));
         // 画面表示とGUI設定
-        setContentView(R.layout.log_monthly);
+        setContentView(R.layout.fragment_log_monthly);
         setActionBar((Toolbar) findViewById(R.id.toolbar_logMonthly));
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -166,7 +162,7 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         // タイトル設定
         setTitle((getResources().getString(R.string.app_name_log_yearly, name)));
         // 画面表示とGUI設定
-        setContentView(R.layout.log_yearly);
+        setContentView(R.layout.fragment_log_yearly);
         setActionBar((Toolbar) findViewById(R.id.toolbar_logYearly));
         getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -187,8 +183,6 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         if(btLogPrevious != null) btLogPrevious.setOnClickListener(this);
         btLogNext = findViewById(R.id.bt_logNext);
         if(btLogNext != null) btLogNext.setOnClickListener(this);
-        btLogBack = findViewById(R.id.bt_logBack);
-        if(btLogBack != null) btLogBack.setOnClickListener(this);
     }
 
     // 月取得とタイトル表示
@@ -248,11 +242,6 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         //        initChart(yMax, 0, 10); // グラフの初期化
         initChart(yMax + 100, measurementData.get(0).getX(), measurementData.get(measurementData.size() - 1).getX()); // グラフの初期化
 
-        System.out.println("DEBUG X_MIN : " + measurementData.get(0).getX());
-        System.out.println("DEBUG X_MAX : " + measurementData.get(measurementData.size() - 1).getX());
-        System.out.println("DEBUG Y_MIN : " + measurementData.get(0).getY());
-        System.out.println("DEBUG Y_MAX : " + measurementData.get(measurementData.size() - 1).getY());
-
         logChart.invalidate(); // グラフの更新
     }
 
@@ -301,7 +290,6 @@ public class LogViewActivity extends Activity implements View.OnClickListener {
         ArrayList<Entry> data = new ArrayList<>();
         for(String[] value : mData) {
             float datetime = getDifferenceFromNow(Long.valueOf(value[1]));
-            System.out.println("DEBUG ENTRY DATETIME : " + datetime);
             // データを少数第三位で四捨五入
             String amount = String.valueOf(new BigDecimal(Double.valueOf(value[0])  * 1000.0 ).setScale(3, BigDecimal.ROUND_HALF_UP));
             data.add(new Entry(datetime, Float.valueOf(amount))); // データ追加

@@ -5,15 +5,19 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.Menu;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
+import com.github.florent37.awesomebar.ActionItem;
+import com.github.florent37.awesomebar.AwesomeBar;
 import com.jeg.te.justenoughgoods.LogViewActivity;
 import com.jeg.te.justenoughgoods.R;
 import com.jeg.te.justenoughgoods.Slave;
@@ -24,11 +28,8 @@ import com.jeg.te.justenoughgoods.bluetooth.BluetoothPairingStartDialog;
 import com.jeg.te.justenoughgoods.database.DbContract.SlavesTable;
 import com.jeg.te.justenoughgoods.database.DbContract.MeasurementDataTable;
 import com.jeg.te.justenoughgoods.database.DbOperation;
-import com.jeg.te.justenoughgoods.raspberry.RaspberryConfigurationActivity;
 
 import java.util.ArrayList;
-
-import static com.jeg.te.justenoughgoods.Utilities.convertLongToDateFormatDefault;
 
 public class AmountViewActivity extends Activity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener{
 
@@ -45,6 +46,9 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
     // リストビューの内容
     private AmountListAdapter amountListAdapter;
     ArrayList<String> lacks;
+
+    private AwesomeBar toolbar_main;
+    private DrawerLayout main_navigation;
 
     final Handler handler = new Handler();
     final Runnable updateCheck = new Runnable() {
@@ -107,33 +111,33 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         displayAmounts();
     }
 
-    // オプションメニュー作成時の処理
-    @Override
-    public boolean onCreateOptionsMenu( Menu menu )
-    {
-        getMenuInflater().inflate( R.menu.main_menu, menu );
-        return true;
-    }
-
-    // オプションメニューのアイテム選択時の処理
-    @Override
-    public boolean onOptionsItemSelected( MenuItem item )
-    {
-        switch( item.getItemId() )
-        {
-            case R.id.menu_item_raspberry_config:
-                Intent intent = new Intent(getApplication(), RaspberryConfigurationActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.menu_item_init_config:
-                insertTestData();
-                return true;
-            case R.id.menu_re:
-                dbOperation.initDatabase();
-                return true;
-        }
-        return false;
-    }
+//    // オプションメニュー作成時の処理
+//    @Override
+//    public boolean onCreateOptionsMenu( Menu menu )
+//    {
+//        getMenuInflater().inflate( R.menu.main_menu, menu );
+//        return true;
+//    }
+//
+//    // オプションメニューのアイテム選択時の処理
+//    @Override
+//    public boolean onOptionsItemSelected( MenuItem item )
+//    {
+//        switch( item.getItemId() )
+//        {
+//            case R.id.menu_item_raspberry_config:
+//                Intent intent = new Intent(getApplication(), RaspberryConfigurationActivity.class);
+//                startActivity(intent);
+//                return true;
+//            case R.id.menu_item_init_config:
+//                insertTestData();
+//                return true;
+//            case R.id.menu_re:
+//                dbOperation.initDatabase();
+//                return true;
+//        }
+//        return false;
+//    }
 
     // 子機のリストがタップされた
     @Override
@@ -342,8 +346,42 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
 
     // 画面表示
     private void displayAmounts(){
-        setContentView(R.layout.amount_view);
-        setActionBar((Toolbar) findViewById(R.id.toolbar_main));
+        setContentView(R.layout.activity_main);
+//        setActionBar((Toolbar) findViewById(R.id.toolbar_main));
+
+        toolbar_main = findViewById(R.id.toolbar_main);
+        main_navigation = findViewById(R.id.main_drawer);
+
+        toolbar_main.addAction(R.drawable.awsb_ic_edit_animated, "Compose");
+
+        toolbar_main.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
+            @Override
+            public void onActionItemClicked(int position, ActionItem actionItem) {
+                Toast.makeText(getBaseContext(), actionItem.getText()+" clicked", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        toolbar_main.setOnMenuClickedListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                main_navigation.openDrawer(Gravity.START);
+            }
+        });
+
+//        toolbar_main.addOverflowItem("overflow 1");
+//        toolbar_main.addOverflowItem("overflow 2");
+//
+//        toolbar_main.setOverflowActionItemClickListener(new AwesomeBar.OverflowActionItemClickListener() {
+//            @Override
+//            public void onOverflowActionItemClicked(int position, String item) {
+//
+//            }
+//        });
+
+        toolbar_main.displayHomeAsUpEnabled(true);
+
+        // Set a navigation view.
+        this.setNavigationView();
 
         // GUIアイテム設定
         // リストビューの設定
@@ -354,6 +392,22 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         listView.setOnItemLongClickListener( this ); // ロングクリックリスナーオブジェクトのセット
 
         getAndSetSlavesAmountData();
+    }
+
+    /**
+     * Set a navigation view.
+     */
+
+    private void setNavigationView() {
+        NavigationView navigationView = findViewById(R.id.left_drawer);
+        navigationView.setNavigationItemSelectedListener(
+                new NavigationView.OnNavigationItemSelectedListener() {
+                    @Override
+                    public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        return true;
+                    }
+                }
+        );
     }
 
     // データの取得と表示
@@ -409,7 +463,6 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         // 不足を通知
         lacks = amountListAdapter.getLackList();
         if(lacks.size() > 0){
-            System.out.println("DEBUG LACK AMOUNT : " + lacks.size());
             AmountLackNotificationDialog amountLackNotificationDialog = new AmountLackNotificationDialog();
             amountLackNotificationDialog.show(getFragmentManager(), "amountLackNotificationDialog");
         }
@@ -454,7 +507,6 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         // 計測データ
         // 現在日時を取得
         long nowTime = System.currentTimeMillis();
-        System.out.println("DEBUG DATETIME : " + convertLongToDateFormatDefault(nowTime));
 
         dbOperation.insertData(
                 MeasurementDataTable.TABLE_NAME,
@@ -514,8 +566,8 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
                 null
         );
         for(int row=0; row<debugSlaves.length; row++){
-            System.out.println("DEBUG SLAVES SID : " + debugSlaves[row][0] );
-            System.out.println("DEBUG SLAVES NAME : " + debugSlaves[row][1] );
+            Log.d("SLAVES SID", debugSlaves[row][0] );
+            Log.d("SLAVES NAME", debugSlaves[row][1] );
         }
 
         String[] pro = {
@@ -539,10 +591,10 @@ public class AmountViewActivity extends Activity implements AdapterView.OnItemCl
         );
 
         for(int row=0; row<debug.length; row++){
-            System.out.println("DEBUG M_DATA ID : " + debug[row][0] );
-            System.out.println("DEBUG M_DATA SID : " + debug[row][1] );
-            System.out.println("DEBUG M_DATA AMOUNT : " + debug[row][2] );
-            System.out.println("DEBUG M_DATA DATETIME : " + debug[row][3] );
+            Log.d("M_DATA ID", debug[row][0] );
+            Log.d("M_DATA SID", debug[row][1] );
+            Log.d("M_DATA AMOUNT", debug[row][2] );
+            Log.d("M_DATA DATETIME", debug[row][3] );
         }
     }
 }

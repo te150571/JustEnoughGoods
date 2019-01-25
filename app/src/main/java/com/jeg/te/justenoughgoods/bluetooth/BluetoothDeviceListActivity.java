@@ -138,10 +138,8 @@ public class BluetoothDeviceListActivity extends Activity implements AdapterView
         @Override
         public void run()
         {
-            System.out.println("DEBUG HANDLER RUNNING.");
             if(raspberryBluetoothConnection.getBluetoothDevices() != null){
                 deviceListAdapter.addDeviceList( raspberryBluetoothConnection.getBluetoothDevices() );
-                System.out.println("DEBUG DEVICE ADDED. COUNT : " + raspberryBluetoothConnection.getBluetoothDevices().size());
             }
             if(!raspberryBluetoothConnection.checkScanning()) {
                 // リストの更新終了
@@ -160,7 +158,7 @@ public class BluetoothDeviceListActivity extends Activity implements AdapterView
 
         // タイトル設定
         setTitle(R.string.bluetooth_device_list_title);
-        setContentView( R.layout.bluetooth_device_list);
+        setContentView( R.layout.fragment_bluetooth_device_list);
 
         setActionBar((Toolbar) findViewById(R.id.toolbar_bluetooth));
         getActionBar().setDisplayHomeAsUpEnabled(true);

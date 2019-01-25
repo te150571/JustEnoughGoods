@@ -1,4 +1,4 @@
-package com.jeg.te.justenoughgoods.amount;
+package com.jeg.te.justenoughgoods.remaining_amount;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

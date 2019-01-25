@@ -16,20 +16,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".amount.AmountViewActivity">
+        <activity android:name=".remaining_amount.AmountViewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".LogViewActivity"
-            android:parentActivityName=".amount.AmountViewActivity"></activity>
+            android:parentActivityName=".remaining_amount.AmountViewActivity"></activity>
         <activity android:name=".SlaveConfigurationActivity"
-            android:parentActivityName=".amount.AmountViewActivity"></activity>
+            android:parentActivityName=".remaining_amount.AmountViewActivity"></activity>
         <activity android:name=".raspberry.RaspberryConfigurationActivity"
-            android:parentActivityName=".amount.AmountViewActivity"></activity>
+            android:parentActivityName=".remaining_amount.AmountViewActivity"></activity>
         <activity android:name=".bluetooth.BluetoothDeviceListActivity"
-            android:parentActivityName=".amount.AmountViewActivity"></activity>
+            android:parentActivityName=".remaining_amount.AmountViewActivity"></activity>
     </application>
 
 </manifest>

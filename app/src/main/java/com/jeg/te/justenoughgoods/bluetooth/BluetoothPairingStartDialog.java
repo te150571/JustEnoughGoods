@@ -6,7 +6,7 @@ import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
-import com.jeg.te.justenoughgoods.amount.AmountViewActivity;
+import com.jeg.te.justenoughgoods.remaining_amount.AmountViewActivity;
 import com.jeg.te.justenoughgoods.R;
 
 public class BluetoothPairingStartDialog extends DialogFragment {

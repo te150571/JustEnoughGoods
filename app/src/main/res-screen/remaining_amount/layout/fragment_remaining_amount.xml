@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical"
+    tools:context=".remaining_amount.FragmentRemainingAmount">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_remainingAmountList"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tabItem_remainingAmountAll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/tabitem_remaining_all"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tabItem_remainingAmountLacks"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/tabitem_lack" />
+
+    </android.support.design.widget.TabLayout>
+
+    <ListView
+        android:id="@+id/listView_slavesAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

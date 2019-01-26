@@ -1,10 +1,11 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.main;
 
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -12,18 +13,27 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.florent37.awesomebar.ActionItem;
 import com.github.florent37.awesomebar.AwesomeBar;
+import com.jeg.te.justenoughgoods.R;
 import com.jeg.te.justenoughgoods.bluetooth.BluetoothConnection;
+import com.jeg.te.justenoughgoods.bluetooth.BluetoothDeviceListActivity;
 import com.jeg.te.justenoughgoods.database.DbContract;
 import com.jeg.te.justenoughgoods.database.DbOperation;
 import com.jeg.te.justenoughgoods.log.FragmentMonthlyLog;
 import com.jeg.te.justenoughgoods.log.FragmentYearlyLog;
+import com.jeg.te.justenoughgoods.raspberry.FragmentRaspberryConfiguration;
 import com.jeg.te.justenoughgoods.remaining_amount.FragmentRemainingAmount;
+import com.jeg.te.justenoughgoods.slave_configuration.FragmentSlaveConfiguration;
+import com.jeg.te.justenoughgoods.slave_list.FragmentSlaveList;
+import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
+import com.jeg.te.justenoughgoods.utilities.FontUtility;
 
 import java.util.ArrayList;
 
@@ -36,6 +46,7 @@ public class ActivityMain extends AppCompatActivity {
 
     // Slaves Database operator
     private DbOperation dbOperation = null;
+    private DbOperationForSlaveData dbOperationForSlaveData;
 
     //Thread instances.
     private UpdateChecker updateChecker = null;
@@ -49,11 +60,18 @@ public class ActivityMain extends AppCompatActivity {
     private AwesomeBar toolbar_main;
     private DrawerLayout main_navigation;
 
+    private TextView navigationHeaderSlavesCountAllValue;
+    private TextView navigationHeaderSlavesCountSoonValue;
+    private TextView navigationHeaderSlavesCountLackValue;
+
     // Fragments
-    private FragmentMain fragmentMain;
+    private FragmentHome fragmentHome;
     private FragmentRemainingAmount fragmentRemainingAmount;
     private FragmentMonthlyLog fragmentMonthlyLog;
     private FragmentYearlyLog fragmentYearlyLog;
+    private FragmentSlaveList fragmentSlaveList;
+    private FragmentSlaveConfiguration fragmentSlaveConfiguration;
+    private FragmentRaspberryConfiguration fragmentRaspberryConfiguration;
 
     // Displaying Fragment flag.
     private boolean fragmentRemainingAmountIsDisplay = false;
@@ -119,6 +137,7 @@ public class ActivityMain extends AppCompatActivity {
         // Get instances.
         raspberryBluetoothConnection = BluetoothConnection.getBluetoothConnection();
         dbOperation = DbOperation.getDbOperation();
+        dbOperationForSlaveData = new DbOperationForSlaveData();
 
         // Set main view.
         setContentView(R.layout.activity_main);
@@ -133,7 +152,7 @@ public class ActivityMain extends AppCompatActivity {
             }
         });
 
-        toolbar_main.displayHomeAsUpEnabled(true);
+        toolbar_main.displayHomeAsUpEnabled(false);
 
         // Set a navigation view.
         NavigationView navigationView = findViewById(R.id.left_drawer);
@@ -142,18 +161,26 @@ public class ActivityMain extends AppCompatActivity {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         switch(menuItem.getItemId()){
-                            case R.id.nav_main:
+                            case R.id.nav_home:
                                 createFragmentMainView();
                                 break;
-                            case R.id.nav_remaining_amount_list_all:
+                            case R.id.nav_remaining_amount_list:
                                 createFragmentRemainingAmount();
                                 break;
+                            case R.id.nav_slave_list:
+                                createFragmentSlaveList();
+                                break;
+                            case R.id.menu_item_raspberry_config:
+                                createFragmentRaspberryConfiguration();
+                                break;
+
+                            // DEBUG MENU
                             case R.id.menu_debug_select_data:
                                 checkDbData();
                                 break;
                             case R.id.menu_debug_insert_data:
                                 insertTestData();
-                                if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData();
+                                if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData(false);
                                 break;
                             case R.id.menu_debug_init_database:
                                 dbOperation.initDatabase();
@@ -166,11 +193,18 @@ public class ActivityMain extends AppCompatActivity {
                 }
         );
 
+        /*
+         * 時間あればちゃんとSQL書く
+         */
+        navigationHeaderSlavesCountAllValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountAllValue);
+        navigationHeaderSlavesCountSoonValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountSoonValue);
+        navigationHeaderSlavesCountLackValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountLackValue);
+
         // Create fragment.
-        fragmentMain = new FragmentMain();
+        fragmentHome = new FragmentHome();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_contents, fragmentMain);
+        transaction.replace(R.id.frame_contents, fragmentHome);
         transaction.commit();
     }
 
@@ -195,8 +229,14 @@ public class ActivityMain extends AppCompatActivity {
                     .show();
         }
 
+        navigationHeaderSlavesCountAllValue.setText(getString(R.string.nav_header_slaves_count_all_value, dbOperationForSlaveData.getSlaveListWithIsNewParam(false).size()));
+        navigationHeaderSlavesCountSoonValue.setText(getString(R.string.nav_header_slaves_count_soon_value, 0));
+        navigationHeaderSlavesCountLackValue.setText(getString(R.string.nav_header_slaves_count_lack_value, dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size()));
+
         // Get Data and display in SlavesRemainingAmount.
 //        if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData();
+
+        checkLackingSlaveAndShowActionButton();
 
         // Start UpdateChecker.
         if(updateChecker == null) {
@@ -259,56 +299,39 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     // Action Button.
-    public void showActionButtonInLogView(final String sId, final String name, boolean isMonthly){
+    public void checkLackingSlaveAndShowActionButton(){
         toolbar_main.clearActions();
 
-        if(isMonthly){
-            toolbar_main.addAction(R.drawable.awsb_ic_edit_animated, "Year");
+        if(dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size() > 0){
+            toolbar_main.addAction(R.drawable.lack_icon, "不足あり");
             toolbar_main.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
                 @Override
                 public void onActionItemClicked(int position, ActionItem actionItem) {
-                    createFragmentYearlyLog(sId, name);
-                }
-            });
-        }
-        else{
-            toolbar_main.addAction(R.drawable.awsb_ic_edit_animated, "Month");
-            toolbar_main.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
-                @Override
-                public void onActionItemClicked(int position, ActionItem actionItem) {
-                    createFragmentMonthlyLog(sId, name);
-                }
-            });
-        }
-    }
+                    createFragmentRemainingAmount();
 
-    public void hideActionButton(){
-        toolbar_main.clearActions();
+                    toolbar_main.clearActions();
+                }
+            });
+        }
     }
 
     // Fragments creation methods.
     /**
      * Create Main view.
      */
-    private void createFragmentMainView(){
-        // Clear Action button.
-        hideActionButton();
-
+    public void createFragmentMainView(){
         // Create fragment.
-        fragmentMain = new FragmentMain();
+        fragmentHome = new FragmentHome();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        transaction.replace(R.id.frame_contents, fragmentMain);
+        transaction.replace(R.id.frame_contents, fragmentHome);
         transaction.commit();
     }
 
     /**
      * Create Remaining Amount view.
      */
-    private void createFragmentRemainingAmount(){
-        // Clear Action button.
-        hideActionButton();
-
+    public void createFragmentRemainingAmount(){
         // Create fragment.
         fragmentRemainingAmount = new FragmentRemainingAmount();
 
@@ -324,8 +347,6 @@ public class ActivityMain extends AppCompatActivity {
         // Stop UpdateChecker.
         updateCheckerIsActive = false;
         updateChecker = null;
-
-        showActionButtonInLogView(sId, name, true);
 
         // Create fragment.
         fragmentMonthlyLog = new FragmentMonthlyLog();
@@ -348,8 +369,6 @@ public class ActivityMain extends AppCompatActivity {
         updateCheckerIsActive = false;
         updateChecker = null;
 
-        showActionButtonInLogView(sId, name, false);
-
         // Create fragment.
         fragmentYearlyLog = new FragmentYearlyLog();
 
@@ -361,6 +380,65 @@ public class ActivityMain extends AppCompatActivity {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_contents, fragmentYearlyLog);
         transaction.commit();
+    }
+
+    /**
+     * Create slave list view.
+     */
+    public void createFragmentSlaveList(){
+        // Stop UpdateChecker.
+        updateCheckerIsActive = false;
+        updateChecker = null;
+
+        fragmentSlaveList = new FragmentSlaveList();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_contents, fragmentSlaveList);
+        transaction.commit();
+    }
+
+    /**
+     * Create slave configuration view.
+     */
+    public void createFragmentSlaveConfiguration(String sId, String callFrom){
+        // Stop UpdateChecker.
+        updateCheckerIsActive = false;
+        updateChecker = null;
+
+        // Create fragment.
+        fragmentSlaveConfiguration = new FragmentSlaveConfiguration();
+        Bundle args = new Bundle();
+        args.putString("sid", sId);
+        args.putString("callFrom", callFrom);
+        fragmentSlaveConfiguration.setArguments(args);
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_contents, fragmentSlaveConfiguration);
+        transaction.commit();
+    }
+
+    /**
+     * Create Raspberry Pi configuration view.
+     */
+    public void createFragmentRaspberryConfiguration(){
+        // Stop UpdateChecker.
+        updateCheckerIsActive = false;
+        updateChecker = null;
+
+        //Create fragment
+        fragmentRaspberryConfiguration = new FragmentRaspberryConfiguration();
+
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_contents, fragmentRaspberryConfiguration);
+        transaction.commit();
+    }
+
+    /**
+     * Create BluetoothDeviceList Activity.
+     */
+    public void transitionBluetoothDeviceListActivity(){
+        Intent bluetoothDeviceListActivityIntent = new Intent(getApplication(), BluetoothDeviceListActivity.class);
+        startActivity(bluetoothDeviceListActivityIntent);
     }
 
     // Slaves data operation methods.
@@ -475,16 +553,16 @@ public class ActivityMain extends AppCompatActivity {
         // Insert slaves data.
         dbOperation.insertData(
                 DbContract.SlavesTable.TABLE_NAME,
-                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.NOTIFICATION_AMOUNT},
-                new String[]{"ID00001A", "醤油", "0.2"},
-                new String[]{"string", "string", "double"}
+                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.NOTIFICATION_AMOUNT, DbContract.SlavesTable.IS_NEW},
+                new String[]{"ID00001A", "醤油", "0.2", "0"},
+                new String[]{"string", "string", "double", "int"}
         );
 
         dbOperation.insertData(
                 DbContract.SlavesTable.TABLE_NAME,
-                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.NOTIFICATION_AMOUNT},
-                new String[]{"ID00002A", "酢", "0.1"},
-                new String[]{"string", "string", "double"}
+                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.NOTIFICATION_AMOUNT, DbContract.SlavesTable.IS_NEW},
+                new String[]{"ID00002A", "酢", "0.1", "0"},
+                new String[]{"string", "string", "double", "int"}
         );
 
         dbOperation.insertData(
@@ -553,7 +631,7 @@ public class ActivityMain extends AppCompatActivity {
                 false,
                 DbContract.SlavesTable.TABLE_NAME,
                 null,
-                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME},
+                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.IS_NEW},
                 null,
                 null,
                 null,
@@ -564,6 +642,7 @@ public class ActivityMain extends AppCompatActivity {
         for(int row=0; row<debugSlaves.length; row++){
             Log.d("SLAVES SID", debugSlaves[row][0] );
             Log.d("SLAVES NAME", debugSlaves[row][1] );
+            Log.d("SLAVES IS NEW", debugSlaves[row][2] );
         }
 
         String[] pro = {

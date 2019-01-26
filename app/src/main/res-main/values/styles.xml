@@ -7,6 +7,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textColor">@color/defaultNormal</item>
+        <item name="android:textAppearance"></item>
+    </style>
+
+    <style name="defaultTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">Yu Gothic</item>
     </style>
 
     <style name="BaseActionBar" parent="Widget.AppCompat.Toolbar">
@@ -16,7 +21,7 @@
 
     <style name="ToolBarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
         <item name="android:textColorPrimary">@color/colorTitle</item>
-        <item name="android:background">@color/colorToolbarBackground</item>
+        <item name="android:background">@color/colorPrimary</item>
     </style>
 
     <style name="ToolbarTitleText" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">

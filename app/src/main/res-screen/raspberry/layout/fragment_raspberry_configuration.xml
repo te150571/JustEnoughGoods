@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:gravity="center"
     android:orientation="vertical">
 
     <Toolbar
@@ -14,14 +16,35 @@
         android:layout_width="match_parent"
         android:layout_height="20dp"/>
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="80dp"
-        android:gravity="center"
-        android:text="@string/raspberry_config_title"
-        android:textSize="23sp"/>
+        android:layout_margin="10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="0dp"
+            android:gravity="center"
+            android:text="@string/raspberry_config_title"
+            android:textSize="23sp"
+            android:textStyle=""/>
+
+        <Space
+            android:layout_width="10dp"
+            android:layout_height="wrap_content"/>
+
+        <com.beardedhen.androidbootstrap.AwesomeTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            app:bootstrapBrand="primary"
+            app:fontAwesomeIcon="fa_bluetooth_b"
+            />
+
+    </LinearLayout>
 
     <Space
         android:layout_width="match_parent"
@@ -76,7 +99,7 @@
 
     <Space
         android:layout_width="match_parent"
-        android:layout_height="30dp"/>
+        android:layout_height="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -84,27 +107,62 @@
         android:layout_margin="10dp"
         android:orientation="horizontal">
 
-        <Button
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/bt_raspberryDeviceSearch"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/raspberry_config_search"
-            android:textSize="18sp" />
+            android:textStyle="normal"
+            app:bootstrapText="@string/raspberry_config_search"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="info"
+            app:showOutline="true"
+            app:roundedCorners="true"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.3"/>
 
-        <Button
+        <com.beardedhen.androidbootstrap.BootstrapButton
             android:id="@+id/bt_raspberryDeviceDelete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="@string/raspberry_config_delete"
-            android:textSize="18sp" />
+            android:textStyle="normal"
+            app:bootstrapText="@string/raspberry_config_delete"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="danger"
+            app:roundedCorners="true"/>
+
     </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/bt_raspberryBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            app:bootstrapText="{fa-arrow-left}"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="primary"
+            app:showOutline="true"
+            app:roundedCorners="true"/>
+    </LinearLayout>
+
 </LinearLayout>

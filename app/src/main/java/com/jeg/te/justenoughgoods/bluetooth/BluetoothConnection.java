@@ -14,7 +14,7 @@ import android.os.Message;
 import android.os.SystemClock;
 import android.util.Log;
 
-import com.jeg.te.justenoughgoods.MyApplication;
+import com.jeg.te.justenoughgoods.utilities.MyApplication;
 
 import java.io.IOException;
 import java.io.InputStream;

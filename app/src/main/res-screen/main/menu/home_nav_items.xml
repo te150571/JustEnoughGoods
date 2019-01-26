@@ -4,23 +4,24 @@
         android:orderInCategory="100">
 
         <item
-            android:id="@+id/nav_main"
+            android:id="@+id/nav_home"
             android:title="@string/nav_main"
             android:orderInCategory="100"/>
 
         <item
-            android:id="@+id/nav_remaining_amount_list_all"
-            android:title="@string/nav_remaining_amount_list_all"
+            android:id="@+id/nav_remaining_amount_list"
+            android:title="@string/nav_remaining_amount_list"
             android:orderInCategory="110"/>
+
+        <item
+            android:id="@+id/nav_slave_list"
+            android:title="@string/nav_slave_list"
+            android:orderInCategory="120"/>
 
         <item
             android:id="@+id/menu_item_raspberry_config"
             android:title="@string/config_raspberry"
             android:orderInCategory="180"/>
-        <item
-            android:id="@+id/menu_item_init_config"
-            android:title="@string/config_initialize"
-            android:orderInCategory="190"/>
 
     </group>
 
@@ -45,27 +46,5 @@
 
         </menu>
     </item>
-
-    <!--<group android:checkableBehavior="single">-->
-
-    <!--<item-->
-    <!--android:id="@+id/nav_item_category_1"-->
-    <!--android:icon="@drawable/ic_launcher_foreground"-->
-    <!--android:title="CATEGORY_1" />-->
-
-    <!--<item-->
-    <!--android:id="@+id/nav_item_category_2"-->
-    <!--android:icon="@drawable/ic_launcher_foreground"-->
-    <!--android:title="CATEGORY_2" />-->
-    <!--</group>-->
-
-    <!--<item android:title="Sub items">-->
-    <!--<menu>-->
-    <!--<item-->
-    <!--android:id="@+id/nav_sub_item_1"-->
-    <!--android:icon="@drawable/ic_launcher_foreground"-->
-    <!--android:title="SUB_ITEM_1" />-->
-    <!--</menu>-->
-    <!--</item>-->
 
 </menu>

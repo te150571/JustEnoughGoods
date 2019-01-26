@@ -1,7 +1,6 @@
 package com.jeg.te.justenoughgoods.log;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -18,8 +17,8 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import static com.jeg.te.justenoughgoods.Utilities.convertMinutesToDate;
-import static com.jeg.te.justenoughgoods.Utilities.getDifferenceFromNow;
+import static com.jeg.te.justenoughgoods.utilities.DateTimeConvertUtilities.convertMinutesToDate;
+import static com.jeg.te.justenoughgoods.utilities.DateTimeConvertUtilities.getDifferenceFromNow;
 
 public class LogChartDrawer {
 

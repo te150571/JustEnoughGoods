@@ -22,7 +22,8 @@ public class DbOpenHelper extends SQLiteOpenHelper {
                     SlavesTable.NOTIFICATION_AMOUNT + " REAL NOT NULL," +
                     SlavesTable.AMOUNT_NOTIFICATION_ENABLE + " INTEGER NOT NULL DEFAULT 1," +
                     SlavesTable.EXCEPTION_FLAG + " INTEGER NOT NULL DEFAULT 0," +
-                    SlavesTable.EXCEPTION_NOTIFICATION_ENABLE + " INTEGER NOT NULL DEFAULT 1)";
+                    SlavesTable.EXCEPTION_NOTIFICATION_ENABLE + " INTEGER NOT NULL DEFAULT 1," +
+                    SlavesTable.IS_NEW + " INTEGER DEFAULT 1)";
 
     private static final String SQL_DELETE_SLAVES =
             "DROP TABLE IF EXISTS " + SlavesTable.TABLE_NAME;

@@ -1,8 +1,10 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.utilities;
 
 import android.app.Application;
 import android.content.Context;
 import android.util.TimeUtils;
+
+import com.beardedhen.androidbootstrap.TypefaceProvider;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +19,8 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = this;
+
+        TypefaceProvider.registerDefaultIconSets();
     }
 
     public static Context getContext(){

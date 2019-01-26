@@ -8,15 +8,15 @@ import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.jeg.te.justenoughgoods.MyApplication;
+import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
+import com.jeg.te.justenoughgoods.utilities.MyApplication;
 import com.jeg.te.justenoughgoods.R;
-import com.jeg.te.justenoughgoods.Slave;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import static com.jeg.te.justenoughgoods.Utilities.convertLongToDateFormatDefault;
+import static com.jeg.te.justenoughgoods.utilities.DateTimeConvertUtilities.convertLongToDateFormatDefault;
 
 public class SlavesRemainingAmountListAdapter extends BaseAdapter {
     private ArrayList<Slave> slaveList;
@@ -29,31 +29,17 @@ public class SlavesRemainingAmountListAdapter extends BaseAdapter {
         slavesInflater = activity.getLayoutInflater();
     }
 
-    // 子機リストへの追加
     public void addSlaves(Slave slave){
         if( !slaveList.contains(slave) )
-        {    // 加えられていなければ加える
+        {
             slaveList.add(slave);
-            notifyDataSetChanged();    // ListViewの更新
+            notifyDataSetChanged();
         }
     }
 
-    // 子機リストのクリア
     public void clearSlaves(){
         slaveList.clear();
-        notifyDataSetChanged();    // ListViewの更新
-    }
-
-    // 子機リストのソート
-    public void sortSlaves(){
-        Comparator<Slave> slavesComparator = new Comparator<Slave>() {
-            @Override
-            public int compare(Slave o1, Slave o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        };
-        Collections.sort(slaveList, slavesComparator);
-        notifyDataSetChanged();    // ListViewの更新
+        notifyDataSetChanged();
     }
 
     @Override
@@ -110,7 +96,6 @@ public class SlavesRemainingAmountListAdapter extends BaseAdapter {
 
         Slave slave = slaveList.get( position );
 
-        // 子機CID（非表示）と登録名
         viewHolder.viewSlaveId.setText( slave.getSId() );
         String slaveName = slave.getName();
         if( null != slaveName && 0 < slaveName.length() )
@@ -122,30 +107,26 @@ public class SlavesRemainingAmountListAdapter extends BaseAdapter {
             viewHolder.viewSlaveName.setText( R.string.unknown_slave );
         }
 
-        // 残量などの計算
         viewHolder.viewSlaveAmountBar.setMax((int) (slave.getNotificationAmount() * 5000.0));
         int amount = (int) (slave.getAmount() * 1000.0);
         int notification = (int) (slave.getNotificationAmount() * 1000.0);
 
         viewHolder.viewSlaveAmountBar.setSecondaryProgress( amount );
         viewHolder.viewSlaveAmountBar.setProgress( notification );
-        // 残量の表示
+
         if(amount < 2000){
             viewHolder.viewSlaveAmountValue.setText( MyApplication.getContext().getResources().getString(R.string.amount_now_value, (amount)) );
         }
         else {
             viewHolder.viewSlaveAmountValue.setText( MyApplication.getContext().getResources().getString(R.string.amount_now_over) );
         }
-        // 通知量までの表示
+
         viewHolder.viewSlaveMarginValue.setText( MyApplication.getContext().getResources().getString(R.string.amount_margin_value, (amount - notification)) );
 
-        // 通知量の表示
         viewHolder.viewSlaveNotificationValue.setText( MyApplication.getContext().getResources().getString(R.string.amount_notification_value, notification) );
 
-        // 最終更新日時
         viewHolder.viewSlaveLastUpdateValue.setText( MyApplication.getContext().getResources().getString( R.string.amount_date_value, convertLongToDateFormatDefault(slave.getLastUpdate())) );
 
-        // 色の変更
         if(amount < notification){
             viewHolder.viewSlaveName.setTextColor( MyApplication.getContext().getColor(R.color.amountWarning) );
             viewHolder.viewSlaveAmountValue.setTextColor( MyApplication.getContext().getColor(R.color.amountWarning) );
@@ -159,7 +140,6 @@ public class SlavesRemainingAmountListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    // 不足しているリストを取得
     public ArrayList<String> getLackList(){
         ArrayList<String> lackList = new ArrayList<>();
         for(Slave slave : slaveList){

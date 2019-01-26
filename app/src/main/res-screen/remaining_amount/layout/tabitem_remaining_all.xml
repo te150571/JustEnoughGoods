@@ -4,11 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".remaining_amount.AmountViewActivity">
+    android:background="@drawable/tab_shape_rounded_corner">
 
-    <ListView
-        android:id="@+id/listView_slavesAmount"
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/amount_all"
+        android:textSize="20sp"/>
 
 </LinearLayout>

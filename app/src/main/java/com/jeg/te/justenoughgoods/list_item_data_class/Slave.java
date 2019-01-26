@@ -1,4 +1,4 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.list_item_data_class;
 
 public class Slave {
     private String sId;
@@ -6,9 +6,10 @@ public class Slave {
     private Double amount;
     private Double notificationAmount;
     private Integer amountNotificationEnable;
-    private Integer failFlag;
-    private Integer failNotificationFlag;
+    private Integer exceptionFlag;
+    private Integer exceptionNotificationFlag;
     private Long lastUpdate;
+    private int isNew;
 
     public String getSId() {
         return sId;
@@ -30,17 +31,22 @@ public class Slave {
         return amountNotificationEnable;
     }
 
-    public Integer getFailFlag() {
-        return failFlag;
+    public Integer getExceptionFlag() {
+        return exceptionFlag;
     }
 
-    public Integer getFailNotificationFlag() {
-        return failNotificationFlag;
+    public Integer getExceptionNotificationFlag() {
+        return exceptionNotificationFlag;
     }
 
     public Long getLastUpdate() {
         return lastUpdate;
     }
+
+    public int getIsNew() {
+        return isNew;
+    }
+
 
     public void setSId(String sId) {
         this.sId = sId;
@@ -62,15 +68,19 @@ public class Slave {
         this.amountNotificationEnable = amountNotificationEnable;
     }
 
-    public void setFailFlag(Integer failFlag) {
-        this.failFlag = failFlag;
+    public void setExceptionFlag(Integer exceptionFlag) {
+        this.exceptionFlag = exceptionFlag;
     }
 
-    public void setFailNotificationFlag(Integer failNotificationFlag) {
-        this.failNotificationFlag = failNotificationFlag;
+    public void setExceptionNotificationFlag(Integer exceptionNotificationFlag) {
+        this.exceptionNotificationFlag = exceptionNotificationFlag;
     }
 
     public void setLastUpdate(Long lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public void setIsNew(int isNew) {
+        this.isNew = isNew;
     }
 }

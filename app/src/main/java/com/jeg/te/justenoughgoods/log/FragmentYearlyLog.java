@@ -7,17 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.BootstrapButton;
 import com.github.mikephil.charting.charts.LineChart;
+import com.jeg.te.justenoughgoods.main.ActivityMain;
 import com.jeg.te.justenoughgoods.R;
 
 import java.util.Calendar;
 
+/**
+ * Log Fragment (Yearly)
+ */
 public class FragmentYearlyLog extends Fragment {
     // Chart configurator instance
     private LogChartDrawer logChartDrawer;
 
     // GUIs
-    private TextView textViewYearNum;
     private LineChart logChart = null;
 
     // Slave information.
@@ -46,7 +50,7 @@ public class FragmentYearlyLog extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_log_yearly, container, false);
+        return inflater.inflate(R.layout.fragment_log, container, false);
     }
 
     // Called when view generation is complete.
@@ -54,17 +58,45 @@ public class FragmentYearlyLog extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // GUI setting.
-        logChart = view.findViewById(R.id.chart_StaticLineGraph);
-        textViewYearNum = view.findViewById(R.id.textView_logYearNum);
+        // GUI setting
+        // Hide month change buttons
+        view.findViewById(R.id.bt_logPrevious).setVisibility(View.INVISIBLE);
+        view.findViewById(R.id.bt_logNext).setVisibility(View.INVISIBLE);
 
-        // Get Year.
-        Calendar calendar = Calendar.getInstance();
-        textViewYearNum.setText( getResources().getString(R.string.log_month_num, calendar.get(Calendar.YEAR)));
+        // Change button text and set listener
+        BootstrapButton btLogChange = view.findViewById(R.id.bt_logChange);
+        btLogChange.setText(R.string.log_change_to_monthly);
+        btLogChange.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityMain activityMain = (ActivityMain) getActivity();
+                activityMain.createFragmentMonthlyLog(sId, name);
+            }
+        });
+
+        // Set slave name
+        TextView textViewSlaveName = view.findViewById(R.id.textView_logTitleName);
+        textViewSlaveName.setText(getString(R.string.log_slave_name, name));
+
+        logChart = view.findViewById(R.id.chart_log);
+
+        TextView textViewYearNum = view.findViewById(R.id.textView_logTitleNum);
+        Calendar calendar = Calendar.getInstance(); // Get Year
+        textViewYearNum.setText( getResources().getString(R.string.log_year_num, calendar.get(Calendar.YEAR)));
 
         logChartDrawer = new LogChartDrawer(sId, false, logChart); // Get instance.
+
+        // Back Button Listener
+        view.findViewById(R.id.bt_logBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityMain activityMain = (ActivityMain) getActivity();
+                activityMain.createFragmentRemainingAmount();
+            }
+        });
     }
 
+    // Called when just before the user can operate.
     @Override
     public void onResume(){
         super.onResume();

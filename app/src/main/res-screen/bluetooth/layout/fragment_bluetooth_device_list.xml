@@ -6,12 +6,15 @@
     android:orientation="vertical"
     tools:context="com.jeg.te.justenoughgoods.bluetooth.BluetoothDeviceListActivity">
 
-    <Toolbar
+    <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_bluetooth"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
-        android:titleTextColor="@color/colorTitle"/>
+        android:titleTextColor="@color/colorTitle"
+        style="@style/BaseActionBar">
+
+    </android.support.v7.widget.Toolbar>
 
     <ListView
         android:id="@+id/deviceList"

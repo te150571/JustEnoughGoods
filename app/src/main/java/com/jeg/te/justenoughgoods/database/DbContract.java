@@ -15,6 +15,7 @@ public final class DbContract {
         public static final String AMOUNT_NOTIFICATION_ENABLE = "amount_notification_enable";
         public static final String EXCEPTION_FLAG = "exception_flag";
         public static final String EXCEPTION_NOTIFICATION_ENABLE = "exception_notification_enable";
+        public static final String IS_NEW = "is_new";
     }
 
     // 計測データテーブル

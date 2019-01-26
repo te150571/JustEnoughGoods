@@ -1,11 +1,11 @@
-package com.jeg.te.justenoughgoods;
+package com.jeg.te.justenoughgoods.utilities;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-public class Utilities {
+public class DateTimeConvertUtilities {
 
     /**
      * 日付データの処理

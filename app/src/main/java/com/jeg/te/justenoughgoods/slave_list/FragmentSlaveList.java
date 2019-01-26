@@ -1,4 +1,4 @@
-package com.jeg.te.justenoughgoods.remaining_amount;
+package com.jeg.te.justenoughgoods.slave_list;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -10,36 +10,35 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
-import com.jeg.te.justenoughgoods.main.ActivityMain;
+import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.jeg.te.justenoughgoods.R;
-import com.jeg.te.justenoughgoods.database.DbContract;
-import com.jeg.te.justenoughgoods.database.DbOperation;
+import com.jeg.te.justenoughgoods.main.ActivityMain;
 import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
+import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
 
 import java.util.ArrayList;
 
 /**
- * Remainder list fragment
+ * Slave list fragment
  */
-public class FragmentRemainingAmount extends Fragment {
-    // Database operator
+public class FragmentSlaveList extends Fragment {
+
     private DbOperationForSlaveData dbOperationForSlaveData;
 
     // Slave list Adapter
-    private SlavesRemainingAmountListAdapter slavesRemainingAmountListAdapter;
+    private SlaveListAdapter slaveListAdapter;
+
+    private AwesomeTextView awesomeTextView;
 
     // Constructor
-    public FragmentRemainingAmount(){
-
-    }
+    public FragmentSlaveList(){}
 
     // Called to do initial creation of the fragment.
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get instances.
+        // Get instance.
         dbOperationForSlaveData = new DbOperationForSlaveData();
     }
 
@@ -49,7 +48,7 @@ public class FragmentRemainingAmount extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_remaining_amount, container, false);
+        return inflater.inflate(R.layout.fragment_slave_list, container, false);
     }
 
     // Called when view generation is complete.
@@ -58,42 +57,30 @@ public class FragmentRemainingAmount extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // ListView
-        slavesRemainingAmountListAdapter = new SlavesRemainingAmountListAdapter( getActivity() );
-        ListView listView = view.findViewById( R.id.listView_slavesAmount);
-        listView.setAdapter(slavesRemainingAmountListAdapter);
+        slaveListAdapter = new SlaveListAdapter(getActivity());
 
-        // List was tapped.
+        ListView listView = view.findViewById( R.id.listView_slavesList);
+        listView.setAdapter(slaveListAdapter);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 TextView textViewSlaveId = view.findViewById(R.id.textView_slaveId);
-                TextView textViewSlaveName = view.findViewById(R.id.textView_slaveName);
                 ActivityMain activityMain = (ActivityMain) getActivity();
-                activityMain.createFragmentMonthlyLog((String)textViewSlaveId.getText(), (String)textViewSlaveName.getText());
+                activityMain.createFragmentSlaveConfiguration((String)textViewSlaveId.getText(), "slaveList");
             }
         });
 
-        // List was long tapped.
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                TextView textViewSlaveId = view.findViewById(R.id.textView_slaveId);
-                ActivityMain activityMain = (ActivityMain) getActivity();
-                activityMain.createFragmentSlaveConfiguration((String)textViewSlaveId.getText(), "remaining");
-                return true;
-            }
-        });
-
-        TabLayout tabLayout = view.findViewById(R.id.tab_remainingAmountList);
+        TabLayout tabLayout = view.findViewById(R.id.tab_slaveList);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0:
-                        getAndSetSlavesRemainingAmountData(false);
+                        getAndSetSlaveData(false);
                         break;
                     case 1:
-                        getAndSetSlavesRemainingAmountData(true);
+                        getAndSetSlaveData(true);
                         break;
                 }
             }
@@ -108,6 +95,8 @@ public class FragmentRemainingAmount extends Fragment {
 
             }
         });
+
+        awesomeTextView = view.findViewById(R.id.awesomeTextView_newSlaveMark);
     }
 
     // Called when just before the user can operate.
@@ -115,18 +104,23 @@ public class FragmentRemainingAmount extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getAndSetSlavesRemainingAmountData(false); // Get Data and display it.
+        getAndSetSlaveData(false);
+
+        if(dbOperationForSlaveData.getSlaveListWithIsNewParam(true).size() > 0)
+            awesomeTextView.setVisibility(View.VISIBLE);
+        else
+            awesomeTextView.setVisibility(View.GONE);
     }
 
     // Data acquisition and display.
-    public void getAndSetSlavesRemainingAmountData(boolean onlyLack) {
-        slavesRemainingAmountListAdapter.clearSlaves();
+    private void getAndSetSlaveData(boolean onlyNew){
+        slaveListAdapter.clearSlaves();
 
-        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountData(onlyLack);
+        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithIsNewParam(onlyNew);
 
         // Add slaves.
         for (Slave slave : slaves){
-            slavesRemainingAmountListAdapter.addSlaves(slave);
+            slaveListAdapter.addSlaves(slave);
         }
     }
 }

@@ -8,8 +8,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.jeg.te.justenoughgoods.main.ActivityMain;
 import com.jeg.te.justenoughgoods.R;
 
+/**
+ * Log Fragment (Monthly)
+ */
 public class FragmentMonthlyLog extends Fragment {
     // Chart configurator instance
     private LogChartDrawer logChartDrawer;
@@ -44,7 +48,7 @@ public class FragmentMonthlyLog extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
 
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_log_monthly, container, false);
+        return inflater.inflate(R.layout.fragment_log, container, false);
     }
 
     // Called when view generation is complete.
@@ -52,16 +56,21 @@ public class FragmentMonthlyLog extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        logChart = view.findViewById(R.id.chart_StaticLineGraph);
+        // GUI setting
+        // Set slave name
+        TextView textViewSlaveName = view.findViewById(R.id.textView_logTitleName);
+        textViewSlaveName.setText(getString(R.string.log_slave_name, name));
+
+        logChart = view.findViewById(R.id.chart_log);
         logChartDrawer = new LogChartDrawer(sId, true, logChart); // Get instances.
 
-        textViewMonthNum = view.findViewById(R.id.textView_logMonthNum);
+        textViewMonthNum = view.findViewById(R.id.textView_logTitleNum);
 
-        // Initialize month num.
+        // Initialize month num
         logChartDrawer.changeShowingMonth(0);
         textViewMonthNum.setText( getResources().getString(R.string.log_month_num, logChartDrawer.getShowingMonth()));
 
-        // Previous Button Listener.
+        // Previous Button Listener
         view.findViewById(R.id.bt_logPrevious).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +80,7 @@ public class FragmentMonthlyLog extends Fragment {
             }
         });
 
-        // Next Button Listener.
+        // Next Button Listener
         view.findViewById(R.id.bt_logNext).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -80,8 +89,27 @@ public class FragmentMonthlyLog extends Fragment {
                 logChartDrawer.drawingGraph();
             }
         });
+
+        // Log Change Button Listener
+        view.findViewById(R.id.bt_logChange).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityMain activityMain = (ActivityMain) getActivity();
+                activityMain.createFragmentYearlyLog(sId, name);
+            }
+        });
+
+        // Back Button Listener
+        view.findViewById(R.id.bt_logBack).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActivityMain activityMain = (ActivityMain) getActivity();
+                activityMain.createFragmentRemainingAmount();
+            }
+        });
     }
 
+    // Called when just before the user can operate.
     @Override
     public void onResume(){
         super.onResume();

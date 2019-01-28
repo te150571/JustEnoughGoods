@@ -86,7 +86,7 @@ public class FragmentRaspberryConfiguration extends Fragment {
             @Override
             public void onClick(View view) {
                 ActivityMain activityMain = (ActivityMain) getActivity();
-                activityMain.createFragmentMainView();
+                activityMain.createFragmentHomeView();
             }
         });
     }

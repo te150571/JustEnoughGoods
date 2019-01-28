@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
     android:orientation="vertical">
 
@@ -27,15 +28,43 @@
             android:textSize="15sp"
             android:gravity="center"/>
 
-        <ProgressBar
-            android:id="@+id/progressBar_amount"
-            style="?android:attr/progressBarStyleHorizontal"
+        <com.beardedhen.androidbootstrap.BootstrapProgressBarGroup
+            android:id="@+id/progress_bar_group_remaining"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="25dp"
             android:layout_weight="3"
-            android:progressTint="@color/progressNotification"
-            android:secondaryProgressTint="@color/progressAmount"
-            android:secondaryProgressTintMode="src_over" />
+            android:layout_gravity="center_vertical"
+            app:bootstrapSize="md"
+            app:bootstrapMaxProgress="100">
+
+            <com.beardedhen.androidbootstrap.BootstrapProgressBar
+                android:id="@+id/progress_bar_notification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:animated="true"
+                app:bootstrapBrand="danger"
+                />
+
+            <com.beardedhen.androidbootstrap.BootstrapProgressBar
+                android:id="@+id/progress_bar_remaining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:animated="true"
+                app:bootstrapBrand="success"
+                app:striped="true"
+                />
+
+        </com.beardedhen.androidbootstrap.BootstrapProgressBarGroup>
+
+        <!--<ProgressBar-->
+            <!--android:id="@+id/progressBar_amount"-->
+            <!--style="?android:attr/progressBarStyleHorizontal"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="3"-->
+            <!--android:progressTint="@color/progressNotification"-->
+            <!--android:secondaryProgressTint="@color/progressAmount"-->
+            <!--android:secondaryProgressTintMode="src_over" />-->
 
     </LinearLayout>
 
@@ -115,7 +144,7 @@
 
     </LinearLayout>
 
-    <LinearLayout 
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="5dp"

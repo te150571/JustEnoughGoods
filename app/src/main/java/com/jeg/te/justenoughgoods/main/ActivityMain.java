@@ -5,7 +5,6 @@ import android.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
@@ -13,7 +12,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -33,7 +31,6 @@ import com.jeg.te.justenoughgoods.remaining_amount.FragmentRemainingAmount;
 import com.jeg.te.justenoughgoods.slave_configuration.FragmentSlaveConfiguration;
 import com.jeg.te.justenoughgoods.slave_list.FragmentSlaveList;
 import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
-import com.jeg.te.justenoughgoods.utilities.FontUtility;
 
 import java.util.ArrayList;
 
@@ -72,6 +69,8 @@ public class ActivityMain extends AppCompatActivity {
     private FragmentSlaveList fragmentSlaveList;
     private FragmentSlaveConfiguration fragmentSlaveConfiguration;
     private FragmentRaspberryConfiguration fragmentRaspberryConfiguration;
+
+    private boolean isHome = true;
 
     // Displaying Fragment flag.
     private boolean fragmentRemainingAmountIsDisplay = false;
@@ -162,7 +161,7 @@ public class ActivityMain extends AppCompatActivity {
                     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                         switch(menuItem.getItemId()){
                             case R.id.nav_home:
-                                createFragmentMainView();
+                                createFragmentHomeView();
                                 break;
                             case R.id.nav_remaining_amount_list:
                                 createFragmentRemainingAmount();
@@ -319,13 +318,29 @@ public class ActivityMain extends AppCompatActivity {
     /**
      * Create Main view.
      */
-    public void createFragmentMainView(){
+    public void createFragmentHomeView(){
         // Create fragment.
         fragmentHome = new FragmentHome();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.frame_contents, fragmentHome);
         transaction.commit();
+    }
+
+    public ArrayList<String> getNoticesText(){
+        ArrayList<String> notices = new ArrayList<>();
+
+            if(dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size() > 0){
+                notices.add(getString(R.string.home_notice_lacking));
+            }
+            if(dbOperationForSlaveData.getSlaveListWithIsNewParam(true).size() > 0){
+                notices.add(getString(R.string.home_notice_Unregistered));
+            }
+            if(raspberryBluetoothConnection.getRaspberryAddress().equals("")){
+                notices.add(getString(R.string.home_notice_not_ras));
+            }
+
+        return notices;
     }
 
     /**

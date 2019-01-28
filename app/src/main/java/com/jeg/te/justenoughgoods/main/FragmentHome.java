@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.jeg.te.justenoughgoods.R;
+import com.jeg.te.justenoughgoods.list_item_data_class.Notice;
 import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
 import com.jeg.te.justenoughgoods.remaining_amount.SlavesRemainingAmountListAdapter;
 import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
@@ -20,6 +21,7 @@ public class FragmentHome extends Fragment {
 
     // Slave list Adapter
     private SlavesRemainingAmountListAdapter slavesRemainingAmountListAdapter;
+    private HomeNoticeListAdapter homeNoticeListAdapter;
 
     // Constructor
     public FragmentHome(){}
@@ -47,11 +49,14 @@ public class FragmentHome extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        // ListView
+        homeNoticeListAdapter = new HomeNoticeListAdapter( getActivity() );
+        ListView listViewNotices = view.findViewById(R.id.listView_homeNoticeList);
+        listViewNotices.setAdapter(homeNoticeListAdapter);
+
         /*
             疲れたので残量表示用のものを流用
          */
-
-        // ListView
         slavesRemainingAmountListAdapter = new SlavesRemainingAmountListAdapter( getActivity() );
         ListView listView = view.findViewById( R.id.listView_homeLackList);
         listView.setAdapter(slavesRemainingAmountListAdapter);
@@ -63,6 +68,9 @@ public class FragmentHome extends Fragment {
         super.onResume();
 
         getAndSetSlavesRemainingAmountData(true); // Get Data and display it.
+
+        ActivityMain activityMain = (ActivityMain) getActivity();
+        getAndSetNotices(activityMain.getNoticesText());
     }
 
     // Data acquisition and display.
@@ -74,6 +82,17 @@ public class FragmentHome extends Fragment {
         // Add slaves.
         for (Slave slave : slaves){
             slavesRemainingAmountListAdapter.addSlaves(slave);
+        }
+    }
+
+    public void getAndSetNotices(ArrayList<String> notices){
+        homeNoticeListAdapter.clearNotices();
+
+        for(String noticeText : notices){
+            Notice notice = new Notice();
+            notice.setNoticeText(noticeText);
+
+            homeNoticeListAdapter.addNotices(notice);
         }
     }
 }

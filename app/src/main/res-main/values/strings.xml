@@ -30,6 +30,9 @@
     <!-- Home -->
     <string name="home_notice_title">おしらせ</string>
     <string name="home_lack_title">不足物品リスト</string>
+    <string name="home_notice_lacking">不足している物品があります。</string>
+    <string name="home_notice_Unregistered">未設定の子機があります。</string>
+    <string name="home_notice_not_ras">親機が設定されていません。</string>
 
     <!-- Remaining Amount -->
     <string name="amount_all">全て</string>

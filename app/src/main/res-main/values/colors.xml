@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#009b6b</color>
+    <color name="colorPrimaryDark">#00803d</color>
+    <color name="colorAccent">#7fc4c1</color>
+
+    <!-- Background -->
+    <color name="colorSubToolbar">#7fc4c1</color>
+
+    <!-- Text -->
+    <color name="defaultNormal">#555555</color>
+    <color name="colorTitle">#e6eef6</color>
+
+    <!-- Toolbar -->
+    <color name="colorToolbarBackground">#121d1f</color>
+    <color name="colorToolbarTextPrimary">#e6eef6</color>
+
+    <!-- ProgressBar -->
+    <color name="progressAmount">#3377ff</color>
+    <color name="progressNotification">#dd2266</color>
+
+    <!-- Amount -->
+    <color name="amountWarning">#ff2233</color>
+
+    <!-- Graph -->
+    <color name="defaultBlue">#44aaff</color>
+</resources>

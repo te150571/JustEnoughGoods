@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="5dp"
+    android:orientation="vertical"
+    tools:context=".slave_list.FragmentSlaveList">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_slaveList"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tabItem_slaveAll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/tabitem_all"/>
+
+        <android.support.design.widget.TabItem
+            android:id="@+id/tabItem_slaveUnregistered"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout="@layout/tabitem_unregistered" />
+
+    </android.support.design.widget.TabLayout>
+
+    <ListView
+        android:id="@+id/listView_slavesList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/viewPager_slaveList"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_marginTop="5dp"/>-->
+
+</LinearLayout>

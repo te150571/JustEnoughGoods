@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    tools:context=".log.FragmentMonthlyLog">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="@drawable/shape_rounded_corners"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView_logTitleName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/log_slave_name"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"/>
+
+        <TextView
+            android:id="@+id/textView_logTitleNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/log_month_num"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/chart_log"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="300dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/bt_logPrevious"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            app:bootstrapText="{fa-chevron-left}"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="info"
+            app:showOutline="true"
+            app:roundedCorners="true"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/bt_logChange"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:textStyle="normal"
+            app:bootstrapText="@string/log_change_to_yearly"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="primary"
+            app:roundedCorners="true"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"/>
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/bt_logNext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            app:bootstrapText="{fa-chevron-right}"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="info"
+            app:showOutline="true"
+            app:roundedCorners="true"/>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal">
+
+        <com.beardedhen.androidbootstrap.BootstrapButton
+            android:id="@+id/bt_logBack"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textStyle="normal"
+            app:bootstrapText="{fa-arrow-left}"
+            app:bootstrapSize="lg"
+            app:buttonMode="regular"
+            app:bootstrapBrand="primary"
+            app:showOutline="true"
+            app:roundedCorners="true"/>
+
+    </LinearLayout>
+</LinearLayout>

@@ -2,11 +2,11 @@ package com.jeg.te.justenoughgoods.database;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
-import com.jeg.te.justenoughgoods.MyApplication;
-
-import java.util.ArrayList;
+import com.jeg.te.justenoughgoods.utilities.MyApplication;
 
 public class DbOperation {
 
@@ -85,7 +85,13 @@ public class DbOperation {
             else
                 data.put(column[i], value[i]);
         }
-        return writer.update(table, data, where, whereParam);
+        try{
+            return writer.update(table, data, where, whereParam);
+        }
+        catch (SQLiteConstraintException e){
+            Log.w("SQL Update", "Failed update. " + e.getMessage());
+            return 0;
+        }
     }
 
     public void deleteData(String table, String where, String[] whereParam){
@@ -99,7 +105,7 @@ public class DbOperation {
         SQLiteDatabase.deleteDatabase(MyApplication.getContext().getDatabasePath(dbOpenHelper.getDatabaseName()));
     }
 
-    public void openConnection(){
+    private void openConnection(){
         if(dbOpenHelper == null) {
             dbOpenHelper = new DbOpenHelper(MyApplication.getContext());
         }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group
+        android:orderInCategory="100">
+
+        <item
+            android:id="@+id/nav_home"
+            android:title="@string/nav_main"
+            android:orderInCategory="100"/>
+
+        <item
+            android:id="@+id/nav_remaining_amount_list"
+            android:title="@string/nav_remaining_amount_list"
+            android:orderInCategory="110"/>
+
+        <item
+            android:id="@+id/nav_slave_list"
+            android:title="@string/nav_slave_list"
+            android:orderInCategory="120"/>
+
+        <item
+            android:id="@+id/menu_item_raspberry_config"
+            android:title="@string/config_raspberry"
+            android:orderInCategory="180"/>
+
+    </group>
+
+    <item
+        android:title="デバック用"
+        android:orderInCategory="200">
+        <menu>
+            <item
+                android:id="@+id/menu_debug_select_data"
+                android:title="テストデータ確認"
+                android:orderInCategory="210"/>
+
+            <item
+                android:id="@+id/menu_debug_insert_data"
+                android:title="テストデータ挿入"
+                android:orderInCategory="220"/>
+
+            <item
+                android:id="@+id/menu_debug_init_database"
+                android:title="データベース初期化"
+                android:orderInCategory="230"/>
+
+        </menu>
+    </item>
+
+</menu>

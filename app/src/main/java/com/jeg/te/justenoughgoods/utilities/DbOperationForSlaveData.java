@@ -27,7 +27,7 @@ public class DbOperationForSlaveData {
         // JOIN
         String tableJoin = "as s LEFT JOIN (" +
                 "SELECT * FROM "+ DbContract.MeasurementDataTable.TABLE_NAME + " a " +
-                "WHERE NOT EXISTS ( SELECT 1 FROM " + DbContract.MeasurementDataTable.TABLE_NAME + " b WHERE a.s_id = b.s_id AND a.datetime < b.datetime ) ) as m ON s.s_id = m.s_id";
+                "WHERE NOT EXISTS ( SELECT 1 FROM " + DbContract.MeasurementDataTable.TABLE_NAME + " b WHERE a.s_id = b.s_id AND a.datetime < b.datetime ) ) as m ON s.s_id = m.s_id ";
 
         // ORDER
         String sortOrder = "s." + DbContract.SlavesTable.S_ID + " ASC";

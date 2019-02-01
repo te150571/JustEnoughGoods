@@ -20,7 +20,7 @@ public class FragmentHome extends Fragment {
     private DbOperationForSlaveData dbOperationForSlaveData;
 
     // Slave list Adapter
-    private SlavesRemainingAmountListAdapter slavesRemainingAmountListAdapter;
+    private HomeLackListAdapter homeLackListAdapter;
     private HomeNoticeListAdapter homeNoticeListAdapter;
 
     // Constructor
@@ -57,9 +57,9 @@ public class FragmentHome extends Fragment {
         /*
             疲れたので残量表示用のものを流用
          */
-        slavesRemainingAmountListAdapter = new SlavesRemainingAmountListAdapter( getActivity() );
+        homeLackListAdapter = new HomeLackListAdapter( getActivity() );
         ListView listView = view.findViewById( R.id.listView_homeLackList);
-        listView.setAdapter(slavesRemainingAmountListAdapter);
+        listView.setAdapter(homeLackListAdapter);
     }
 
     // Called when just before the user can operate.
@@ -75,13 +75,13 @@ public class FragmentHome extends Fragment {
 
     // Data acquisition and display.
     public void getAndSetSlavesRemainingAmountData(boolean onlyLack) {
-        slavesRemainingAmountListAdapter.clearSlaves();
+        homeLackListAdapter.clearSlaves();
 
         ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountData(onlyLack);
 
         // Add slaves.
         for (Slave slave : slaves){
-            slavesRemainingAmountListAdapter.addSlaves(slave);
+            homeLackListAdapter.addSlaves(slave);
         }
     }
 

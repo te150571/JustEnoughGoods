@@ -57,14 +57,14 @@
         </com.beardedhen.androidbootstrap.BootstrapProgressBarGroup>
 
         <!--<ProgressBar-->
-            <!--android:id="@+id/progressBar_amount"-->
-            <!--style="?android:attr/progressBarStyleHorizontal"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="3"-->
-            <!--android:progressTint="@color/progressNotification"-->
-            <!--android:secondaryProgressTint="@color/progressAmount"-->
-            <!--android:secondaryProgressTintMode="src_over" />-->
+        <!--android:id="@+id/progressBar_amount"-->
+        <!--style="?android:attr/progressBarStyleHorizontal"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="3"-->
+        <!--android:progressTint="@color/progressNotification"-->
+        <!--android:secondaryProgressTint="@color/progressAmount"-->
+        <!--android:secondaryProgressTintMode="src_over" />-->
 
     </LinearLayout>
 
@@ -88,13 +88,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/amount_now"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView_slaveAmountValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -110,13 +110,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/amount_margin"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView_slaveMarginValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 
@@ -132,13 +132,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/amount_notification"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/textView_slaveNotificationValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
 
         </LinearLayout>
 

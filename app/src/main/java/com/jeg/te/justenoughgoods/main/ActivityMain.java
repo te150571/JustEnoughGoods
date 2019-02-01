@@ -193,7 +193,7 @@ public class ActivityMain extends AppCompatActivity {
         );
 
         /*
-         * 時間あればちゃんとSQL書く
+         * ここ時間あればちゃんとSQL書く
          */
         navigationHeaderSlavesCountAllValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountAllValue);
         navigationHeaderSlavesCountSoonValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountSoonValue);
@@ -221,7 +221,7 @@ public class ActivityMain extends AppCompatActivity {
                     .setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            // OK button pressed
+                            createFragmentRaspberryConfiguration();
                         }
                     })
                     .setNegativeButton( R.string.no, null)
@@ -360,8 +360,8 @@ public class ActivityMain extends AppCompatActivity {
      */
     public void createFragmentMonthlyLog(String sId, String name){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         // Create fragment.
         fragmentMonthlyLog = new FragmentMonthlyLog();
@@ -381,8 +381,8 @@ public class ActivityMain extends AppCompatActivity {
      */
     public void createFragmentYearlyLog(String sId, String name){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         // Create fragment.
         fragmentYearlyLog = new FragmentYearlyLog();
@@ -402,8 +402,8 @@ public class ActivityMain extends AppCompatActivity {
      */
     public void createFragmentSlaveList(){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         fragmentSlaveList = new FragmentSlaveList();
 
@@ -417,8 +417,8 @@ public class ActivityMain extends AppCompatActivity {
      */
     public void createFragmentSlaveConfiguration(String sId, String callFrom){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         // Create fragment.
         fragmentSlaveConfiguration = new FragmentSlaveConfiguration();
@@ -437,8 +437,8 @@ public class ActivityMain extends AppCompatActivity {
      */
     public void createFragmentRaspberryConfiguration(){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         //Create fragment
         fragmentRaspberryConfiguration = new FragmentRaspberryConfiguration();
@@ -490,6 +490,8 @@ public class ActivityMain extends AppCompatActivity {
      */
     private void getUpdateAndInsert() {
         updateReceiveWaiterIsActive = false;
+
+        updateReceiveWaiter = null;
 
         // Get Data.
         ArrayList<String> update = raspberryBluetoothConnection.getUpdateData();

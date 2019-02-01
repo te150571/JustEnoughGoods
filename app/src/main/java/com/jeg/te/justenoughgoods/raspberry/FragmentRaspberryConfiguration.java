@@ -60,24 +60,45 @@ public class FragmentRaspberryConfiguration extends Fragment {
         view.findViewById(R.id.bt_raspberryDeviceSearch).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityMain activityMain = (ActivityMain) getActivity();
-                activityMain.transitionBluetoothDeviceListActivity();
+//                ActivityMain activityMain = (ActivityMain) getActivity();
+//                activityMain.transitionBluetoothDeviceListActivity();
+                new AlertDialog.Builder( getContext() )
+                        .setTitle( "展示用" )
+                        .setMessage( "このボタンは無効です。" )
+                        .setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
 
         view.findViewById(R.id.bt_raspberryDeviceDelete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                new AlertDialog.Builder( getContext() )
+//                        .setTitle( R.string.raspberry_device_delete_title )
+//                        .setMessage( R.string.raspberry_device_delete_text )
+//                        .setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                clearDevice();
+//                            }
+//                        })
+//                        .setNegativeButton( R.string.no, null)
+//                        .show();
+
                 new AlertDialog.Builder( getContext() )
-                        .setTitle( R.string.raspberry_device_delete_title )
-                        .setMessage( R.string.raspberry_device_delete_text )
-                        .setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
+                        .setTitle( "展示用" )
+                        .setMessage( "このボタンは無効です。" )
+                        .setPositiveButton( R.string.ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                clearDevice();
+
                             }
                         })
-                        .setNegativeButton( R.string.no, null)
                         .show();
             }
         });

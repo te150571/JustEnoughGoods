@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
 import com.jeg.te.justenoughgoods.main.ActivityMain;
 import com.jeg.te.justenoughgoods.R;
@@ -28,6 +29,8 @@ public class FragmentRemainingAmount extends Fragment {
 
     // Slave list Adapter
     private SlavesRemainingAmountListAdapter slavesRemainingAmountListAdapter;
+
+    private AwesomeTextView awesomeTextViewLackMark;
 
     // Constructor
     public FragmentRemainingAmount(){
@@ -108,6 +111,8 @@ public class FragmentRemainingAmount extends Fragment {
 
             }
         });
+
+        awesomeTextViewLackMark = view.findViewById(R.id.awesomeTextView_lackSlaveMark);
     }
 
     // Called when just before the user can operate.
@@ -116,6 +121,11 @@ public class FragmentRemainingAmount extends Fragment {
         super.onResume();
 
         getAndSetSlavesRemainingAmountData(false); // Get Data and display it.
+
+        if(dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size() > 0)
+            awesomeTextViewLackMark.setVisibility(View.VISIBLE);
+        else
+            awesomeTextViewLackMark.setVisibility(View.GONE);
     }
 
     // Data acquisition and display.

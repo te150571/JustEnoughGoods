@@ -16,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -281,26 +282,31 @@ public class BluetoothDeviceListActivity extends AppCompatActivity implements Ad
          * アイテムを選択したときに落ちるバグあり 時間あれば対応
          */
 
-        BluetoothDevice device = (BluetoothDevice) deviceListAdapter.getItem( position );
-        if( null == device )
-        {
-            return;
+        try {
+            BluetoothDevice device = (BluetoothDevice) deviceListAdapter.getItem( position );
+            if( null == device )
+            {
+                return;
+            }
+
+            deviceName = device.getName();
+            deviceAddress = device.getAddress();
+
+            new AlertDialog.Builder( this )
+                    .setTitle( R.string.bluetooth_pairing_confirm_title )
+                    .setMessage( getString(R.string.bluetooth_pairing_confirm_text, deviceName, deviceAddress) )
+                    .setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+//                            saveDevice();
+                        }
+                    })
+                    .setNegativeButton( R.string.no, null)
+                    .show();
         }
-
-        deviceName = device.getName();
-        deviceAddress = device.getAddress();
-
-        new AlertDialog.Builder( this )
-                .setTitle( R.string.bluetooth_pairing_confirm_title )
-                .setMessage( getString(R.string.bluetooth_pairing_confirm_text, deviceName, deviceAddress) )
-                .setPositiveButton( R.string.yes, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        saveDevice();
-                    }
-                })
-                .setNegativeButton( R.string.no, null)
-                .show();
+        catch (Exception e){
+            Log.w("Bluetooth Registration", e.getMessage());
+        }
     }
 
     /**

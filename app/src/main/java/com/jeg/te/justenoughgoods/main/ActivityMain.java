@@ -269,8 +269,7 @@ public class ActivityMain extends AppCompatActivity {
      */
     private void requestBluetoothFeature()
     {
-        if( raspberryBluetoothConnection.checkBluetoothEnable() )
-        {
+        if( raspberryBluetoothConnection.checkBluetoothEnable() ) {
             return;
         }
 
@@ -284,11 +283,9 @@ public class ActivityMain extends AppCompatActivity {
      */
     @Override
     protected void onActivityResult( int requestCode, int resultCode, Intent data ) {
-        switch( requestCode )
-        {
+        switch( requestCode ) {
             case REQUEST_ENABLE_BLUETOOTH:
-                if( AppCompatActivity.RESULT_CANCELED == resultCode )
-                {
+                if( AppCompatActivity.RESULT_CANCELED == resultCode ) {
                     Toast.makeText( this, R.string.bluetooth_is_not_working, Toast.LENGTH_SHORT ).show();
                     return;
                 }

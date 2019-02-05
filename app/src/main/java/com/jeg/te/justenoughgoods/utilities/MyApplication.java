@@ -15,6 +15,10 @@ import java.util.concurrent.TimeUnit;
 public class MyApplication extends Application {
     private static Context mContext;
 
+    /*
+        Context取得するやつ
+     */
+
     @Override
     public void onCreate() {
         super.onCreate();

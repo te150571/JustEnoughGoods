@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -30,7 +31,7 @@ import com.jeg.te.justenoughgoods.raspberry.FragmentRaspberryConfiguration;
 import com.jeg.te.justenoughgoods.remaining_amount.FragmentRemainingAmount;
 import com.jeg.te.justenoughgoods.slave_configuration.FragmentSlaveConfiguration;
 import com.jeg.te.justenoughgoods.slave_list.FragmentSlaveList;
-import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
+import com.jeg.te.justenoughgoods.database.DbOperationForSlaveData;
 
 import java.util.ArrayList;
 
@@ -46,8 +47,8 @@ public class ActivityMain extends AppCompatActivity {
     private DbOperationForSlaveData dbOperationForSlaveData;
 
     //Thread instances.
-    private UpdateChecker updateChecker = null;
-    private UpdateReceiveWaiter updateReceiveWaiter = null;
+//    private UpdateChecker updateChecker = null;
+//    private UpdateReceiveWaiter updateReceiveWaiter = null;
 
     // Thread active flags.
     private boolean updateCheckerIsActive = false;
@@ -70,64 +71,101 @@ public class ActivityMain extends AppCompatActivity {
     private FragmentSlaveConfiguration fragmentSlaveConfiguration;
     private FragmentRaspberryConfiguration fragmentRaspberryConfiguration;
 
-    private boolean isHome = true;
-
     // Displaying Fragment flag.
     private boolean fragmentRemainingAmountIsDisplay = false;
 
     // Inner thread class
+    private final Handler handler = new Handler();
+
     /**
      * Confirm whether there is an update every 10 seconds
      */
-    class UpdateChecker extends Thread {
-        public void run(){
-            try{
-                if(raspberryBluetoothConnection != null){
-                    updateCheckerIsActive = true;
+    private final Runnable updateChecker = new Runnable() {
+        @Override
+        public void run() {
+            if(raspberryBluetoothConnection != null){
+                Log.d("UpdateChecker", "Running");
 
-                    while(updateCheckerIsActive){
-                        Log.d("UpdateChecker", "Running");
-                        raspberryBluetoothConnection.connect(); // Connect to Raspberry Pi with Bluetooth.
-                        if(raspberryBluetoothConnection.checkUpdatable()){
-                            Log.d("UpdateChecker", "Start UpdateReceiveWaiter.");
-                            startUpdateWaiting();
-                        }
-                        else {
-                            checkUpdate();
-                        }
-                        Thread.sleep(10000);
-                    }
-
+                raspberryBluetoothConnection.connect(); // Connect to Raspberry Pi with Bluetooth.
+                if(raspberryBluetoothConnection.checkUpdatable()){
+                    Log.d("UpdateChecker", "Start UpdateReceiveWaiter.");
+                    startUpdateWaiting();
+                    return;
                 }
-            } catch (InterruptedException e){
-                Log.w("InterruptedException", "Got throw InterruptedException in UpdateChecker. \n" + e.getMessage());
+                else {
+                    checkUpdate();
+                }
             }
+
+            handler.postDelayed(this, 10000);
         }
-    }
+    };
 
     /**
      * Called when there is an update, check reception status every 3 seconds.
      */
-    class UpdateReceiveWaiter extends Thread {
+    private final Runnable updateReceiveWaiter = new Runnable() {
+        @Override
         public void run() {
-            try {
-                if (raspberryBluetoothConnection != null) {
-                    updateReceiveWaiterIsActive = true;
-
-                    while(updateReceiveWaiterIsActive){
-                        if (!raspberryBluetoothConnection.checkReceiving()) {
-                            Log.d("UpdateReceiveWaiter", "Start Update.");
-                            getUpdateAndInsert();
-                        }
-                        Thread.sleep(3000);
-                    }
-
+            if (raspberryBluetoothConnection != null) {
+                if (!raspberryBluetoothConnection.checkReceiving()) {
+                    Log.d("UpdateReceiveWaiter", "Start Update.");
+                    getUpdateAndInsert();
+                    return;
                 }
-            } catch (InterruptedException e) {
-                Log.w("InterruptedException", "Got throw InterruptedException in UpdateReceiveWaiter. \n" + e.getMessage());
             }
+
+            handler.postDelayed(this, 3000);
         }
-    }
+    };
+
+    // 遺物
+//    class UpdateChecker extends Thread {
+//        public void run(){
+//            try{
+//                if(raspberryBluetoothConnection != null){
+//                    updateCheckerIsActive = true;
+//
+//                    while(updateCheckerIsActive){
+//                        Log.d("UpdateChecker", "Running");
+//                        raspberryBluetoothConnection.connect(); // Connect to Raspberry Pi with Bluetooth.
+//                        if(raspberryBluetoothConnection.checkUpdatable()){
+//                            Log.d("UpdateChecker", "Start UpdateReceiveWaiter.");
+//                            startUpdateWaiting();
+//                        }
+//                        else {
+//                            checkUpdate();
+//                        }
+//                        Thread.sleep(10000);
+//                    }
+//
+//                }
+//            } catch (InterruptedException e){
+//                Log.w("InterruptedException", "Got throw InterruptedException in UpdateChecker. \n" + e.getMessage());
+//            }
+//        }
+//    }
+
+//    class UpdateReceiveWaiter extends Thread {
+//        public void run() {
+//            try {
+//                if (raspberryBluetoothConnection != null) {
+//                    updateReceiveWaiterIsActive = true;
+//
+//                    while(updateReceiveWaiterIsActive){
+//                        if (!raspberryBluetoothConnection.checkReceiving()) {
+//                            Log.d("UpdateReceiveWaiter", "Start Update.");
+//                            getUpdateAndInsert();
+//                        }
+//                        Thread.sleep(3000);
+//                    }
+//
+//                }
+//            } catch (InterruptedException e) {
+//                Log.w("InterruptedException", "Got throw InterruptedException in UpdateReceiveWaiter. \n" + e.getMessage());
+//            }
+//        }
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -179,7 +217,7 @@ public class ActivityMain extends AppCompatActivity {
                                 break;
                             case R.id.menu_debug_insert_data:
                                 insertTestData();
-                                if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData(false);
+                                if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData();
                                 break;
                             case R.id.menu_debug_init_database:
                                 dbOperation.initDatabase();
@@ -192,9 +230,6 @@ public class ActivityMain extends AppCompatActivity {
                 }
         );
 
-        /*
-         * ここ時間あればちゃんとSQL書く
-         */
         navigationHeaderSlavesCountAllValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountAllValue);
         navigationHeaderSlavesCountSoonValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountSoonValue);
         navigationHeaderSlavesCountLackValue = navigationView.getHeaderView(0).findViewById(R.id.textView_slavesCountLackValue);
@@ -228,9 +263,9 @@ public class ActivityMain extends AppCompatActivity {
                     .show();
         }
 
-        navigationHeaderSlavesCountAllValue.setText(getString(R.string.nav_header_slaves_count_all_value, dbOperationForSlaveData.getSlaveListWithIsNewParam(false).size()));
+        navigationHeaderSlavesCountAllValue.setText(getString(R.string.nav_header_slaves_count_all_value, dbOperationForSlaveData.getSlaveListCountAll()));
         navigationHeaderSlavesCountSoonValue.setText(getString(R.string.nav_header_slaves_count_soon_value, 0));
-        navigationHeaderSlavesCountLackValue.setText(getString(R.string.nav_header_slaves_count_lack_value, dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size()));
+        navigationHeaderSlavesCountLackValue.setText(getString(R.string.nav_header_slaves_count_lack_value, dbOperationForSlaveData.getSlaveCountLack()));
 
         // Get Data and display in SlavesRemainingAmount.
 //        if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData();
@@ -238,17 +273,19 @@ public class ActivityMain extends AppCompatActivity {
         checkLackingSlaveAndShowActionButton();
 
         // Start UpdateChecker.
-        if(updateChecker == null) {
-            updateChecker = new UpdateChecker();
-            updateChecker.start();
-        }
+        handler.post(updateChecker);
+//        if(updateChecker == null) {
+//            updateChecker = new UpdateChecker();
+//            updateChecker.start();
+//        }
     }
 
     @Override
     public void onPause(){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+        handler.removeCallbacks(updateChecker);
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         if(raspberryBluetoothConnection != null)
             raspberryBluetoothConnection.disconnect(); // Bluetooth disconnect.
@@ -298,7 +335,7 @@ public class ActivityMain extends AppCompatActivity {
     public void checkLackingSlaveAndShowActionButton(){
         toolbar_main.clearActions();
 
-        if(dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size() > 0){
+        if(dbOperationForSlaveData.getSlaveCountLack() > 0){
             toolbar_main.addAction(R.drawable.lack_icon, "不足あり");
             toolbar_main.setActionItemClickListener(new AwesomeBar.ActionItemClickListener() {
                 @Override
@@ -316,7 +353,6 @@ public class ActivityMain extends AppCompatActivity {
      * Create Main view.
      */
     public void createFragmentHomeView(){
-        // Create fragment.
         fragmentHome = new FragmentHome();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -324,27 +360,10 @@ public class ActivityMain extends AppCompatActivity {
         transaction.commit();
     }
 
-    public ArrayList<String> getNoticesText(){
-        ArrayList<String> notices = new ArrayList<>();
-
-            if(dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size() > 0){
-                notices.add(getString(R.string.home_notice_lacking));
-            }
-            if(dbOperationForSlaveData.getSlaveListWithIsNewParam(true).size() > 0){
-                notices.add(getString(R.string.home_notice_Unregistered));
-            }
-            if(raspberryBluetoothConnection.getRaspberryAddress().equals("")){
-                notices.add(getString(R.string.home_notice_not_ras));
-            }
-
-        return notices;
-    }
-
     /**
      * Create Remaining Amount view.
      */
     public void createFragmentRemainingAmount(){
-        // Create fragment.
         fragmentRemainingAmount = new FragmentRemainingAmount();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -356,11 +375,6 @@ public class ActivityMain extends AppCompatActivity {
      * Create Log (Monthly) view.
      */
     public void createFragmentMonthlyLog(String sId, String name){
-        // Stop UpdateChecker.
-//        updateCheckerIsActive = false;
-//        updateChecker = null;
-
-        // Create fragment.
         fragmentMonthlyLog = new FragmentMonthlyLog();
 
         Bundle args = new Bundle();
@@ -377,11 +391,6 @@ public class ActivityMain extends AppCompatActivity {
      * Create Log (Monthly) view.
      */
     public void createFragmentYearlyLog(String sId, String name){
-        // Stop UpdateChecker.
-//        updateCheckerIsActive = false;
-//        updateChecker = null;
-
-        // Create fragment.
         fragmentYearlyLog = new FragmentYearlyLog();
 
         Bundle args = new Bundle();
@@ -398,10 +407,6 @@ public class ActivityMain extends AppCompatActivity {
      * Create slave list view.
      */
     public void createFragmentSlaveList(){
-        // Stop UpdateChecker.
-//        updateCheckerIsActive = false;
-//        updateChecker = null;
-
         fragmentSlaveList = new FragmentSlaveList();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -413,11 +418,6 @@ public class ActivityMain extends AppCompatActivity {
      * Create slave configuration view.
      */
     public void createFragmentSlaveConfiguration(String sId, String callFrom){
-        // Stop UpdateChecker.
-//        updateCheckerIsActive = false;
-//        updateChecker = null;
-
-        // Create fragment.
         fragmentSlaveConfiguration = new FragmentSlaveConfiguration();
         Bundle args = new Bundle();
         args.putString("sid", sId);
@@ -433,11 +433,6 @@ public class ActivityMain extends AppCompatActivity {
      * Create Raspberry Pi configuration view.
      */
     public void createFragmentRaspberryConfiguration(){
-        // Stop UpdateChecker.
-//        updateCheckerIsActive = false;
-//        updateChecker = null;
-
-        //Create fragment
         fragmentRaspberryConfiguration = new FragmentRaspberryConfiguration();
 
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -458,12 +453,12 @@ public class ActivityMain extends AppCompatActivity {
      * Get last update datetime form MeasurementDataTable and send it.
      */
     private void checkUpdate(){
-        String[][] lastUpdate = dbOperation.selectData(false, DbContract.MeasurementDataTable.TABLE_NAME, null, new String[]{"max(" + DbContract.MeasurementDataTable.DATETIME + ")"}, null, null, null, null, null, null);
-        if(lastUpdate[0][0] == null) {
+        String datetimeOfLastUpdate = dbOperationForSlaveData.getDatetimeOfLastUpdate();
+        if(datetimeOfLastUpdate == null) {
             raspberryBluetoothConnection.write("10"); // If Data is empty, send 10.
         }
         else {
-            raspberryBluetoothConnection.write(lastUpdate[0][0]);
+            raspberryBluetoothConnection.write(datetimeOfLastUpdate);
         }
     }
 
@@ -472,54 +467,37 @@ public class ActivityMain extends AppCompatActivity {
      */
     private void startUpdateWaiting(){
         // Stop UpdateChecker.
-        updateCheckerIsActive = false;
-        updateChecker = null;
+        handler.removeCallbacks(updateChecker);
+//        updateCheckerIsActive = false;
+//        updateChecker = null;
 
         // Start UpdateReceiveWaiter.
-        if(updateReceiveWaiter == null) {
-            updateReceiveWaiter = new UpdateReceiveWaiter();
-            updateReceiveWaiter.start();
-        }
+        handler.post(updateReceiveWaiter);
+//        if(updateReceiveWaiter == null) {
+//            updateReceiveWaiter = new UpdateReceiveWaiter();
+//            updateReceiveWaiter.start();
+//        }
+
+        Toast.makeText( this, R.string.amount_start_update, Toast.LENGTH_SHORT ).show();
     }
 
     /**
      * Start updating.
      */
     private void getUpdateAndInsert() {
-        updateReceiveWaiterIsActive = false;
-
-        updateReceiveWaiter = null;
+        handler.removeCallbacks(updateReceiveWaiter);
+//        updateReceiveWaiterIsActive = false;
+//        updateReceiveWaiter = null;
 
         // Get Data.
         ArrayList<String> update = raspberryBluetoothConnection.getUpdateData();
 
         if (update.size() > 1) {
-            for (String data : update) {
-                if (!data.equals("1")) {
-                    String[] splitData = data.split(",", 0);
-                    Log.d("Inserting new data", "splitData[0] + splitData[1] + splitData[2] + splitData[3]");
-                    dbOperation.insertData(
-                            DbContract.MeasurementDataTable.TABLE_NAME,
-                            new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                            new String[]{splitData[0], splitData[1], splitData[2], splitData[3]},
-                            new String[]{"string", "double", "long", "int"}
-                    );
-                }
-            }
+            dbOperationForSlaveData.putMeasurementData(update);
 
             // Detection new SID.
-            String[][] havingSlavesSId = dbOperation.selectData(false, DbContract.SlavesTable.TABLE_NAME, null, new String[]{DbContract.SlavesTable.S_ID}, null, null, null, null, null, null);
-            String[][] receivedSlavesSId = dbOperation.selectData(true, DbContract.MeasurementDataTable.TABLE_NAME, null, new String[]{DbContract.MeasurementDataTable.S_ID}, null, null, null, null, null, null);
-
-            // Make a two-dimensional array a one-dimensional array.
-            ArrayList<String> _havingSlavesSId = new ArrayList<>();
-            for (String[] tmp : havingSlavesSId) {
-                _havingSlavesSId.add(tmp[0]);
-            }
-            ArrayList<String> _receivedSlavesSId = new ArrayList<>();
-            for (String[] tmp : receivedSlavesSId) {
-                _receivedSlavesSId.add(tmp[0]);
-            }
+            ArrayList<String> _havingSlavesSId = dbOperationForSlaveData.getSIdInSlavesTable();
+            ArrayList<String> _receivedSlavesSId = dbOperationForSlaveData.getSIdInMeasurementTable();
 
             // Compare.
             ArrayList<String> newSIds = new ArrayList<>();
@@ -531,34 +509,36 @@ public class ActivityMain extends AppCompatActivity {
 
             // Register detected new SID.
             if (newSIds.size() != 0)
-                registrationNewSlaves(newSIds);
+                dbOperationForSlaveData.putNewSlave(newSIds);
         }
+
+        Toast.makeText( this, R.string.amount_finish_update, Toast.LENGTH_SHORT ).show();
 
         // Refresh remaining data.
 //        if(fragmentRemainingAmountIsDisplay) fragmentRemainingAmount.getAndSetSlavesRemainingAmountData();
 
         // Start UpdateChecker again.
-        if(updateChecker == null) {
-            updateChecker = new UpdateChecker();
-            updateChecker.start();
-        }
+        handler.post(updateChecker);
+//        if(updateChecker == null) {
+//            updateChecker = new UpdateChecker();
+//            updateChecker.start();
+//        }
     }
 
-    /**
-     * Register slaves.
-     */
-    public void registrationNewSlaves(ArrayList<String> newSlaveSIds){
-        // とりあえず登録だけ
-        for(String sid : newSlaveSIds){
-            dbOperation.insertData(
-                    DbContract.SlavesTable.TABLE_NAME,
-                    new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.NOTIFICATION_AMOUNT},
-                    new String[]{sid, "子機" + sid, "0.01"},
-                    new String[]{"string", "string", "double"}
-            );
+    public ArrayList<String> getNoticesText(){
+        ArrayList<String> notices = new ArrayList<>();
+
+        if(dbOperationForSlaveData.getSlaveCountLack() > 0){
+            notices.add(getString(R.string.home_notice_lacking));
+        }
+        if(dbOperationForSlaveData.getSlaveCountNew() > 0){
+            notices.add(getString(R.string.home_notice_Unregistered));
+        }
+        if(raspberryBluetoothConnection.getRaspberryAddress().equals("")){
+            notices.add(getString(R.string.home_notice_not_ras));
         }
 
-//        getAndSetSlavesAmountData();
+        return notices;
     }
 
 

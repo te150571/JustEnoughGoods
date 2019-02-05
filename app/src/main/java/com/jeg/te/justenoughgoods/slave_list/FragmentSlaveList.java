@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.jeg.te.justenoughgoods.R;
 import com.jeg.te.justenoughgoods.main.ActivityMain;
-import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
+import com.jeg.te.justenoughgoods.database.DbOperationForSlaveData;
 import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
 
 import java.util.ArrayList;
@@ -106,7 +106,7 @@ public class FragmentSlaveList extends Fragment {
 
         getAndSetSlaveData(false);
 
-        if(dbOperationForSlaveData.getSlaveListWithIsNewParam(true).size() > 0)
+        if(dbOperationForSlaveData.getSlaveCountNew() > 0)
             awesomeTextView.setVisibility(View.VISIBLE);
         else
             awesomeTextView.setVisibility(View.GONE);

@@ -13,6 +13,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jeg.te.justenoughgoods.database.DbOperationForSlaveData;
 import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
 import com.jeg.te.justenoughgoods.main.ActivityMain;
 import com.jeg.te.justenoughgoods.R;
@@ -25,7 +26,7 @@ import java.math.BigDecimal;
 public class FragmentSlaveConfiguration extends Fragment {
 
     // DB operator.
-    private SlaveConfigurationDbOperator slaveConfigurationDbOperator;
+    private DbOperationForSlaveData dbOperationForSlaveData;
 
     // Slave data.
     private Slave slave;
@@ -51,7 +52,7 @@ public class FragmentSlaveConfiguration extends Fragment {
         }
 
         // Get instance.
-        slaveConfigurationDbOperator = new SlaveConfigurationDbOperator();
+        dbOperationForSlaveData = new DbOperationForSlaveData();
     }
 
     // Creates and returns the view hierarchy associated with the fragment.
@@ -69,7 +70,7 @@ public class FragmentSlaveConfiguration extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         // Get slave data and display it.
-        slave = slaveConfigurationDbOperator.getSlaveDataFromSId(slave.getSId());
+        slave = dbOperationForSlaveData.getSlaveDataFromSId(slave.getSId());
 
         TextView textViewSlaveCId = view.findViewById(R.id.textView_slaveConfigTitleCIdValue);
         textViewSlaveCId.setText(slave.getSId());
@@ -168,7 +169,7 @@ public class FragmentSlaveConfiguration extends Fragment {
 
         view.findViewById(R.id.bt_slaveConfigConfirm).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                long result = slaveConfigurationDbOperator.updateSlave(slave);
+                long result = dbOperationForSlaveData.updateSlave(slave);
 
                 if(result > 0)
                     Toast.makeText(getContext(), R.string.slave_config_done, Toast.LENGTH_SHORT).show();

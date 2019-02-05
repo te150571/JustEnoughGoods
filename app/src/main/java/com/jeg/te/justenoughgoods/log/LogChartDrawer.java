@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.jeg.te.justenoughgoods.database.DbContract;
 import com.jeg.te.justenoughgoods.database.DbOperation;
+import com.jeg.te.justenoughgoods.database.DbOperationForSlaveData;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -23,6 +24,7 @@ import static com.jeg.te.justenoughgoods.utilities.DateTimeConvertUtilities.getD
 public class LogChartDrawer {
 
     // Database operator
+    private DbOperationForSlaveData dbOperationForSlaveData;
     private DbOperation dbOperation;
 
     // Slave params.
@@ -42,6 +44,7 @@ public class LogChartDrawer {
         this.lineChart = lineChart;
 
         // Get instance.
+        dbOperationForSlaveData = new DbOperationForSlaveData();
         dbOperation = DbOperation.getDbOperation();
     }
 
@@ -79,46 +82,10 @@ public class LogChartDrawer {
      * Get Log data form database.
      */
     private void getMeasurementData(){
-        // SELECT
-        String[] projection = {
-                DbContract.MeasurementDataTable.AMOUNT,
-                DbContract.MeasurementDataTable.DATETIME,
-                DbContract.MeasurementDataTable.MONTH_NUM
-        };
-
-        // WHERE
-        String selection;
-        String[] selectionArgs = new String[(isMonthly ? 2 : 1)];
-
-        // If monthly set month to where.
-        if(isMonthly){
-            selection = DbContract.MeasurementDataTable.S_ID + " = ? AND " + DbContract.MeasurementDataTable.MONTH_NUM + " = ?";
-            selectionArgs[0] = sId;
-            selectionArgs[1] = String.valueOf(showingMonth);
-        }
-        else{
-            selection = DbContract.MeasurementDataTable.S_ID + " = ?";
-            selectionArgs[0] = sId;
-        }
-
-        // ORDER BY
-        String sortOrder = DbContract.MeasurementDataTable.DATETIME + " ASC";
-
-        String[][] mData = dbOperation.selectData(
-                false,
-                DbContract.MeasurementDataTable.TABLE_NAME,
-                null,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder,
-                null
-        );
+        String[][] measurementData = dbOperationForSlaveData.getMeasurementData(sId, showingMonth, isMonthly);
 
         logData = new ArrayList<>();
-        for(String[] value : mData) {
+        for(String[] value : measurementData) {
             float datetime = getDifferenceFromNow(Long.valueOf(value[1]));
             String amount = String.valueOf(new BigDecimal(Double.valueOf(value[0])  * 1000.0 ).setScale(3, BigDecimal.ROUND_HALF_UP));
             logData.add(new Entry(datetime, Float.valueOf(amount)));

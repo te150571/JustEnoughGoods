@@ -10,8 +10,7 @@ import android.widget.ListView;
 import com.jeg.te.justenoughgoods.R;
 import com.jeg.te.justenoughgoods.list_item_data_class.Notice;
 import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
-import com.jeg.te.justenoughgoods.remaining_amount.SlavesRemainingAmountListAdapter;
-import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
+import com.jeg.te.justenoughgoods.database.DbOperationForSlaveData;
 
 import java.util.ArrayList;
 
@@ -77,7 +76,7 @@ public class FragmentHome extends Fragment {
     public void getAndSetSlavesRemainingAmountData(boolean onlyLack) {
         homeLackListAdapter.clearSlaves();
 
-        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountData(onlyLack);
+        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountDataOnlyLack();
 
         // Add slaves.
         for (Slave slave : slaves){

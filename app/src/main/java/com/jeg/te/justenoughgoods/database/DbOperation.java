@@ -50,6 +50,14 @@ public class DbOperation {
         return result;
     }
 
+    public String[][] selectDataNotWhereAndGroupHaving(boolean distinct, String table, String join, String[] projection, String sortOrder, String limit){
+        return  this.selectData(distinct, table, join, projection, null, null, null, null, sortOrder, limit);
+    }
+
+    public String[][] selectDataNotGroupAndHaving(boolean distinct, String table, String join, String[] projection, String where, String[] whereParam, String sortOrder, String limit){
+        return  this.selectData(distinct, table, join, projection, where, whereParam, null, null, sortOrder, limit);
+    }
+
     public long insertData(String table, String[] column, String[] value, String[] type){
         if(dbOpenHelper == null)
             openConnection();

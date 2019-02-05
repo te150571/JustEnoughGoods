@@ -14,9 +14,7 @@ import com.beardedhen.androidbootstrap.AwesomeTextView;
 import com.jeg.te.justenoughgoods.list_item_data_class.Slave;
 import com.jeg.te.justenoughgoods.main.ActivityMain;
 import com.jeg.te.justenoughgoods.R;
-import com.jeg.te.justenoughgoods.database.DbContract;
-import com.jeg.te.justenoughgoods.database.DbOperation;
-import com.jeg.te.justenoughgoods.utilities.DbOperationForSlaveData;
+import com.jeg.te.justenoughgoods.database.DbOperationForSlaveData;
 
 import java.util.ArrayList;
 
@@ -93,10 +91,10 @@ public class FragmentRemainingAmount extends Fragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()){
                     case 0:
-                        getAndSetSlavesRemainingAmountData(false);
+                        getAndSetSlavesRemainingAmountData();
                         break;
                     case 1:
-                        getAndSetSlavesRemainingAmountData(true);
+                        getAndSetSlavesRemainingAmountDataOnlyLack();
                         break;
                 }
             }
@@ -120,19 +118,30 @@ public class FragmentRemainingAmount extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getAndSetSlavesRemainingAmountData(false); // Get Data and display it.
+        getAndSetSlavesRemainingAmountData(); // Get Data and display it.
 
-        if(dbOperationForSlaveData.getSlaveListWithRemainingAmountData(true).size() > 0)
+        if(dbOperationForSlaveData.getSlaveCountLack() > 0)
             awesomeTextViewLackMark.setVisibility(View.VISIBLE);
         else
             awesomeTextViewLackMark.setVisibility(View.GONE);
     }
 
     // Data acquisition and display.
-    public void getAndSetSlavesRemainingAmountData(boolean onlyLack) {
+    public void getAndSetSlavesRemainingAmountData() {
         slavesRemainingAmountListAdapter.clearSlaves();
 
-        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountData(onlyLack);
+        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountData();
+
+        // Add slaves.
+        for (Slave slave : slaves){
+            slavesRemainingAmountListAdapter.addSlaves(slave);
+        }
+    }
+
+    public void getAndSetSlavesRemainingAmountDataOnlyLack() {
+        slavesRemainingAmountListAdapter.clearSlaves();
+
+        ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountDataOnlyLack();
 
         // Add slaves.
         for (Slave slave : slaves){

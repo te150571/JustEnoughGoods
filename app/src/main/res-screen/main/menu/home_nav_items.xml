@@ -26,23 +26,31 @@
     </group>
 
     <item
-        android:title="デバック用"
+        android:title=""
         android:orderInCategory="200">
         <menu>
             <item
+                android:id="@+id/menu_debug"
+                android:title=""
+                android:orderInCategory="210"/>
+
+            <item
                 android:id="@+id/menu_debug_select_data"
                 android:title="テストデータ確認"
-                android:orderInCategory="210"/>
+                android:orderInCategory="220"
+                android:visible="false"/>
 
             <item
                 android:id="@+id/menu_debug_insert_data"
                 android:title="テストデータ挿入"
-                android:orderInCategory="220"/>
+                android:orderInCategory="230"
+                android:visible="false"/>
 
             <item
                 android:id="@+id/menu_debug_init_database"
                 android:title="データベース初期化"
-                android:orderInCategory="230"/>
+                android:orderInCategory="240"
+                android:visible="false"/>
 
         </menu>
     </item>

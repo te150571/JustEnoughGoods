@@ -110,14 +110,14 @@ public class SlavesRemainingAmountListAdapter extends BaseAdapter {
             viewHolder.viewSlaveName.setText( R.string.unknown_slave );
         }
 
-        int progressMax = (int) (slave.getNotificationAmount() * 5000.0);
         int amount = (int) (slave.getAmount() * 1000.0);
         int notification = (int) (slave.getNotificationAmount() * 1000.0);
+        int progressMax = (int) (slave.getNotificationAmount() * 5000.0);
 
         viewHolder.viewSlaveNotificationBar.setProgress( 0 );
         viewHolder.viewSlaveRemainingBar.setProgress( 0 );
 
-        viewHolder.viewSlaveProgressBarGroup.setMaxProgress(progressMax);
+        viewHolder.viewSlaveProgressBarGroup.setMaxProgress( progressMax );
 
         viewHolder.viewSlaveNotificationBar.setProgress( notification );
         if(progressMax < amount)

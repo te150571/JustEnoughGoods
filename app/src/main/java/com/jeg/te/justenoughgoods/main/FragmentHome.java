@@ -5,7 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jeg.te.justenoughgoods.R;
 import com.jeg.te.justenoughgoods.list_item_data_class.Notice;
@@ -53,12 +55,18 @@ public class FragmentHome extends Fragment {
         ListView listViewNotices = view.findViewById(R.id.listView_homeNoticeList);
         listViewNotices.setAdapter(homeNoticeListAdapter);
 
-        /*
-            疲れたので残量表示用のものを流用
-         */
         homeLackListAdapter = new HomeLackListAdapter( getActivity() );
-        ListView listView = view.findViewById( R.id.listView_homeLackList);
-        listView.setAdapter(homeLackListAdapter);
+        ListView listViewLack = view.findViewById( R.id.listView_homeLackList);
+        listViewLack.setAdapter(homeLackListAdapter);
+
+        // List was tapped.
+        listViewLack.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ActivityMain activityMain = (ActivityMain) getActivity();
+                activityMain.createFragmentRemainingAmount();
+            }
+        });
     }
 
     // Called when just before the user can operate.
@@ -66,14 +74,14 @@ public class FragmentHome extends Fragment {
     public void onResume() {
         super.onResume();
 
-        getAndSetSlavesRemainingAmountData(true); // Get Data and display it.
+        getAndSetSlavesRemainingAmountData(); // Get Data and display it.
 
         ActivityMain activityMain = (ActivityMain) getActivity();
         getAndSetNotices(activityMain.getNoticesText());
     }
 
     // Data acquisition and display.
-    public void getAndSetSlavesRemainingAmountData(boolean onlyLack) {
+    public void getAndSetSlavesRemainingAmountData() {
         homeLackListAdapter.clearSlaves();
 
         ArrayList<Slave> slaves = dbOperationForSlaveData.getSlaveListWithRemainingAmountDataOnlyLack();

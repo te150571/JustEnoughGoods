@@ -169,6 +169,21 @@ public class FragmentSlaveConfiguration extends Fragment {
 
         view.findViewById(R.id.bt_slaveConfigConfirm).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if(slave.getName().equals("")){
+                    Toast.makeText(getContext(), R.string.slave_config_no_name, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(slave.getName().length() > 20){
+                    Toast.makeText(getContext(), R.string.slave_config_long_name, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if(slave.getNotificationAmount() <= 0){
+                    Toast.makeText(getContext(), R.string.slave_config_no_notification_amount, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 long result = dbOperationForSlaveData.updateSlave(slave);
 
                 if(result > 0)

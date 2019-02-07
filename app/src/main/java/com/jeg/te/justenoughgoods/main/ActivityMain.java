@@ -13,6 +13,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -51,12 +52,16 @@ public class ActivityMain extends AppCompatActivity {
 //    private UpdateReceiveWaiter updateReceiveWaiter = null;
 
     // Thread active flags.
-    private boolean updateCheckerIsActive = false;
-    private boolean updateReceiveWaiterIsActive = false;
+//    private boolean updateCheckerIsActive = false;
+//    private boolean updateReceiveWaiterIsActive = false;
 
     // GUIs
     private AwesomeBar toolbar_main;
     private DrawerLayout main_navigation;
+
+    private MenuItem select;
+    private MenuItem insert;
+    private MenuItem init;
 
     private TextView navigationHeaderSlavesCountAllValue;
     private TextView navigationHeaderSlavesCountSoonValue;
@@ -193,6 +198,10 @@ public class ActivityMain extends AppCompatActivity {
 
         // Set a navigation view.
         NavigationView navigationView = findViewById(R.id.left_drawer);
+        Menu menu = navigationView.getMenu();
+        select = menu.findItem(R.id.menu_debug_select_data);
+        insert = menu.findItem(R.id.menu_debug_insert_data);
+        init = menu.findItem(R.id.menu_debug_init_database);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
@@ -212,6 +221,16 @@ public class ActivityMain extends AppCompatActivity {
                                 break;
 
                             // DEBUG MENU
+                            case R.id.menu_debug:
+                                if (select.isVisible()){
+                                    select.setVisible(false);
+                                    insert.setVisible(false);
+                                    init.setVisible(false);
+                                }else{
+                                    select.setVisible(true);
+                                    insert.setVisible(true);
+                                    init.setVisible(true);
+                                }
                             case R.id.menu_debug_select_data:
                                 checkDbData();
                                 break;

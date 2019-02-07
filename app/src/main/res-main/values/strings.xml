@@ -82,6 +82,9 @@
     <string name="slave_config_amount_notification_off">残量通知をOFFにしました</string>
     <string name="slave_config_exception_notification_on">不具合通知をONにしました</string>
     <string name="slave_config_exception_notification_off">不具合通知をOFFにしました</string>
+    <string name="slave_config_no_name">登録名を設定してください</string>
+    <string name="slave_config_long_name">登録名が長すぎます</string>
+    <string name="slave_config_no_notification_amount">通知する残量を設定してください</string>
     <string name="slave_config_done">設定を保存しました</string>
     <string name="slave_config_failed">設定が保存できませんでした</string>
 

@@ -592,6 +592,13 @@ public class ActivityMain extends AppCompatActivity {
                 new String[]{"string", "string", "double"}
         );
 
+        dbOperation.insertData(
+                DbContract.SlavesTable.TABLE_NAME,
+                new String[]{DbContract.SlavesTable.S_ID, DbContract.SlavesTable.NAME, DbContract.SlavesTable.NOTIFICATION_AMOUNT},
+                new String[]{"10d1c2a", "展示子機1", "0.1"},
+                new String[]{"string", "string", "double"}
+        );
+
         // Insert measurement data.
         // Get datetime in milliseconds.
         long nowTime = System.currentTimeMillis();
@@ -599,42 +606,182 @@ public class ActivityMain extends AppCompatActivity {
         dbOperation.insertData(
                 DbContract.MeasurementDataTable.TABLE_NAME,
                 new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                new String[]{"ID00001A", "0.524", String.valueOf(nowTime - 86400000 * 3), "1"},
+                new String[]{"ID00001A", "0.724", String.valueOf(nowTime - 86400000 * 5), "2"},
                 new String[]{"string", "double", "long", "int"}
         );
 
         dbOperation.insertData(
                 DbContract.MeasurementDataTable.TABLE_NAME,
                 new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                new String[]{"ID00001A", "0.449", String.valueOf(nowTime - 86400000 * 2), "1"},
+                new String[]{"ID00001A", "0.624", String.valueOf(nowTime - 86400000 * 4), "2"},
                 new String[]{"string", "double", "long", "int"}
         );
 
         dbOperation.insertData(
                 DbContract.MeasurementDataTable.TABLE_NAME,
                 new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                new String[]{"ID00001A", "0.403", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"ID00001A", "0.524", String.valueOf(nowTime - 86400000 * 3), "2"},
                 new String[]{"string", "double", "long", "int"}
         );
 
         dbOperation.insertData(
                 DbContract.MeasurementDataTable.TABLE_NAME,
                 new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                new String[]{"ID00002A", "0.32345", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"ID00001A", "0.449", String.valueOf(nowTime - 86400000 * 2), "2"},
                 new String[]{"string", "double", "long", "int"}
         );
 
         dbOperation.insertData(
                 DbContract.MeasurementDataTable.TABLE_NAME,
                 new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                new String[]{"ID00003A", "2.0", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"ID00001A", "0.403", String.valueOf(nowTime - 86400000), "2"},
                 new String[]{"string", "double", "long", "int"}
         );
 
         dbOperation.insertData(
                 DbContract.MeasurementDataTable.TABLE_NAME,
                 new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
-                new String[]{"ID00004A", "0.45", String.valueOf(nowTime - 86400000), "1"},
+                new String[]{"ID00002A", "0.572", String.valueOf(nowTime - 86400000 * 5), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00002A", "0.6545", String.valueOf(nowTime - 86400000 * 5), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00002A", "0.6045", String.valueOf(nowTime - 86400000 * 4), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00002A", "0.5845", String.valueOf(nowTime - 86400000 * 3), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00002A", "0.42345", String.valueOf(nowTime - 86400000 * 2), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00002A", "0.32345", String.valueOf(nowTime - 86400000), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00003A", "2.35", String.valueOf(nowTime - 86400000 * 5), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00003A", "2.3", String.valueOf(nowTime - 86400000 * 4), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00003A", "2.1", String.valueOf(nowTime - 86400000 * 3), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00003A", "2.0", String.valueOf(nowTime - 86400000 * 2), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00003A", "1.89", String.valueOf(nowTime - 86400000), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00004A", "1.03", String.valueOf(nowTime - 86400000 * 5), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00004A", "0.80", String.valueOf(nowTime - 86400000 * 4), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00004A", "0.75", String.valueOf(nowTime - 86400000 * 3), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00004A", "0.65", String.valueOf(nowTime - 86400000 * 2), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"ID00004A", "0.45", String.valueOf(nowTime - 86400000), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"10d1c2a", "0.72", String.valueOf(nowTime - 86400000 * 5), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"10d1c2a", "0.68", String.valueOf(nowTime - 86400000 * 4), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"10d1c2a", "0.58", String.valueOf(nowTime - 86400000 * 3), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"10d1c2a", "0.55", String.valueOf(nowTime - 86400000 * 2), "2"},
+                new String[]{"string", "double", "long", "int"}
+        );
+
+        dbOperation.insertData(
+                DbContract.MeasurementDataTable.TABLE_NAME,
+                new String[]{DbContract.MeasurementDataTable.S_ID, DbContract.MeasurementDataTable.AMOUNT, DbContract.MeasurementDataTable.DATETIME, DbContract.MeasurementDataTable.MONTH_NUM},
+                new String[]{"10d1c2a", "0.45", String.valueOf(nowTime - 86400000), "2"},
                 new String[]{"string", "double", "long", "int"}
         );
     }
